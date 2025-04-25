@@ -1,0 +1,86 @@
+.main-wrapper {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    width: 100%;
+  }  
+  .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }  
+  .signin-section {
+    margin-left: 0;
+    padding-left: 0;
+  }  
+  .auth-row {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }  
+  @media (max-width: 991px) {
+    .auth-row .col-lg-6 {
+      width: 100%;
+    }
+  }  
+  .form-wrapper {
+    padding: 20px;
+  }  
+  .auth-cover .cover-image {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    top: 20px;
+    left: 0;
+    z-index: 1;
+  }  
+  .auth-cover .cover-image img {
+    width: 100%;
+    height: auto;
+    transform: scale(1.1);
+  }  
+  .auth-cover .shape-image {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    right: 0;
+    z-index: 0;
+  }  
+  .auth-cover .shape-image img {
+    width: 100%;
+    height: auto;
+    transform: rotate(10deg);
+  }
+
+
+  /* Add to your existing login styles */
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+  color: #dc3545; /* Red color for warning */
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}

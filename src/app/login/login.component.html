@@ -1,0 +1,98 @@
+<main class="main-wrapper">
+  <section class="signin-section">
+    <div class="container-fluid">
+      <div class="row g-0 auth-row">
+        <div class="col-lg-6">
+          <div class="auth-cover-wrapper bg-primary-100">
+            <div class="auth-cover">
+              <div class="title text-center">
+                <h1 class="text-primary mb-10">Get Started</h1>
+                <p class="text-medium">
+                  Start creating the best possible user experience
+                  <br class="d-sm-block" />
+                  for you customers.
+                </p>
+              </div>
+              <div class="cover-image">
+                <img src="assets/images/auth/signin-image.svg" alt="" />
+              </div>
+              <div class="shape-image">
+                <img src="assets/images/auth/shape.svg" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="signup-wrapper">
+            <div class="form-wrapper">
+              <h1 class="mb-20">Login Form</h1>
+              <p class="text-sm mb-25">
+                Start creating the best possible user experience for you
+                customers.
+              </p>
+              <form (ngSubmit)="onLogin(disabledAccountModal)">                      
+                <div class="col-12">
+                  <div class="input-style-1">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" [(ngModel)]="loginRequest.username" name="username" required>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="input-style-1">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" [(ngModel)]="loginRequest.password" name="password" required>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="button-group d-flex justify-content-center flex-wrap">
+                    <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center" [disabled]="isLoading">
+                      <span *ngIf="!isLoading">Login</span>
+                      <span *ngIf="isLoading">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Logging in...
+                      </span>
+                    </button>
+                  </div>
+                </div>
+                <div *ngIf="errorMessage" class="col-12 mt-3">
+                  <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    {{ errorMessage }}
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Disabled Account Modal -->
+<ng-template #disabledAccountModal let-modal>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-user-slash me-2"></i>
+          Account Disabled
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex align-items-center mb-3">
+          <i class="fas fa-exclamation-triangle text-warning me-3 fs-4"></i>
+          <p class="mb-0">Your account has been disabled by the administrator.</p>
+        </div>
+        <p>Please contact your system administrator to reactivate your account.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close()">
+          <i class="fas fa-check me-2"></i>
+          I Understand
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

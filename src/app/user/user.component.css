@@ -1,0 +1,8 @@
+.disabled-user {
+    opacity: 0.6;
+    background-color: #f8f9fa;
+  }
+  
+  .disabled-user td {
+    color: #6c757d;
+  }
