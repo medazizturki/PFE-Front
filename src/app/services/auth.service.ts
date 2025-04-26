@@ -14,7 +14,6 @@ export class AuthService {
   login(loginRequest: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/login`, loginRequest).pipe(
       catchError(error => {
-        // Check if this is a disabled account error (adjust based on your backend response)
         if (error.status === 401 && error.error?.error_description?.includes('disabled')) {
           return throwError(() => new Error('ACCOUNT_DISABLED'));
         }
@@ -26,26 +25,26 @@ export class AuthService {
       switchMap(() => this.getUserInfo())
     );
   }
+
+  verifyFace(verifyRequest: { username: string, faceDescriptor: number[] }): Observable<{ valid: boolean }> {
+    return this.http.post<{ valid: boolean }>(`${this.baseUrl}/verify-face`, verifyRequest);
+  }
+
   getUserInfo(): Observable<any> {
     const token = JSON.parse(localStorage.getItem('token') || '{}').access_token;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
     return this.http.get(`${this.baseUrl}/user/info`, { headers }).pipe(
       tap(userInfo => {
-        // Store the user profile data in localStorage
         localStorage.setItem('user', JSON.stringify(userInfo));
       })
     );
   }
-
-
 
   updateUserRole(userId: string, role: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/users/${userId}/role`, { role });
   }
 
   updateUser(user: any): Observable<any> {
-    // Add responseType: 'text' to handle plain text responses
     return this.http.put(`${this.baseUrl}/${user.userId}`, user, { responseType: 'text' });
   }
 
@@ -53,10 +52,8 @@ export class AuthService {
     const params = new HttpParams().set('userId', userId);
     return this.http.post(`${this.baseUrl}/logout`, null, { params, responseType: 'text' });
   }
-  
+
   getLoggedInUser(): any {
     return JSON.parse(localStorage.getItem('user') || '{}');
   }
-  
-
 }
