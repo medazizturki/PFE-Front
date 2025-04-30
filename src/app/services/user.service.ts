@@ -7,14 +7,13 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
   private baseUrl = 'http://localhost:8081/api/v1/auth';
+  private faceRecognitionUrl = 'http://localhost:8081/api/face-recognition';
 
   constructor(private http: HttpClient) {}
 
   getAllUsers(): Observable<any> {
     return this.http.get(`${this.baseUrl}/users`);
   }
-
-
 
   registerUser(user: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/signup`, user);
@@ -36,4 +35,11 @@ export class UserService {
     return this.http.post(`${this.baseUrl}/enable/${userId}`, null, { responseType: 'text' });
   }
 
+  faceLogin(descriptor: number[]): Observable<any> {
+    return this.http.post(`${this.faceRecognitionUrl}/login`, { descriptor });
+  }
+
+  registerFace(userId: string, descriptor: number[]): Observable<any> {
+    return this.http.post(`${this.faceRecognitionUrl}/register-face/${userId}`, { descriptor });
+  }
 }

@@ -7,6 +7,7 @@ import { tap, switchMap, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
+  private faceRecognitionUrl = 'http://localhost:8081/api/face-recognition';
   private baseUrl = 'http://localhost:8081/api/v1/auth';
 
   constructor(private http: HttpClient) {}
@@ -26,9 +27,7 @@ export class AuthService {
     );
   }
 
-  verifyFace(verifyRequest: { username: string, faceDescriptor: number[] }): Observable<{ valid: boolean }> {
-    return this.http.post<{ valid: boolean }>(`${this.baseUrl}/verify-face`, verifyRequest);
-  }
+
 
   getUserInfo(): Observable<any> {
     const token = JSON.parse(localStorage.getItem('token') || '{}').access_token;
@@ -48,7 +47,7 @@ export class AuthService {
     return this.http.put(`${this.baseUrl}/${user.userId}`, user, { responseType: 'text' });
   }
 
-  logout(userId: string): Observable<string> {
+  logout(userId: string): Observable<any> {
     const params = new HttpParams().set('userId', userId);
     return this.http.post(`${this.baseUrl}/logout`, null, { params, responseType: 'text' });
   }
@@ -56,4 +55,17 @@ export class AuthService {
   getLoggedInUser(): any {
     return JSON.parse(localStorage.getItem('user') || '{}');
   }
+
+
+    // New method for face login
+    faceLogin(descriptor: number[]): Observable<any> {
+      return this.http.post(`${this.faceRecognitionUrl}/login`, { descriptor });
+    }
+
+    isLoggedIn(): boolean {
+      const token = localStorage.getItem('token');
+      console.log('Token:', token);
+      return token != null;
+    }
+    
 }

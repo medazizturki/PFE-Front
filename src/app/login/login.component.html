@@ -25,7 +25,7 @@
                 Start creating the best possible user experience for you
                 customers.
               </p>
-              <form (ngSubmit)="onLogin(disabledAccountModal)">                      
+              <form (ngSubmit)="onLogin(disabledAccountModal)">
                 <div class="col-12">
                   <div class="input-style-1">
                     <label for="username">Username:</label>
@@ -56,15 +56,60 @@
                   </div>
                 </div>
               </form>
+              <div class="col-12 mt-4">
+                <div class="text-center">
+                  <button type="button" class="btn btn-outline-primary" (click)="toggleFaceLogin()">
+                    <i class="fas fa-user-circle me-2"></i>
+                    {{ showFaceLogin ? 'Hide Face Login' : 'Login with Face Recognition' }}
+                  </button>
+                </div>
+            
+                <div *ngIf="showFaceLogin" class="face-login-container mt-4 p-3 border rounded">
+                  <div class="camera-frame mb-3 mx-auto" style="width: 320px; height: 240px;">
+                    <div class="camera-overlay">
+                      <div class="face-guide"></div>
+                    </div>
+                    <video #faceVideo width="320" height="240" autoplay muted playsinline></video>
+                    <canvas #faceCanvas width="320" height="240" class="d-none"></canvas>
+                    <img #facePhoto class="preview-image d-none" alt="Your face">
+                  </div>
+            
+                  <div class="text-center">
+                    <button type="button" class="btn btn-primary me-2" (click)="startFaceCamera()" [disabled]="isFaceCameraOn">
+                      <i class="fas fa-video me-1"></i> Start Camera
+                    </button>
+                    <button type="button" class="btn btn-success me-2" (click)="recognizeFace()" [disabled]="!isFaceCameraOn">
+                      <i class="fas fa-camera me-1"></i> Recognize
+                    </button>
+                    <button type="button" class="btn btn-danger" (click)="stopFaceCamera()" [disabled]="!isFaceCameraOn">
+                      <i class="fas fa-stop me-1"></i> Stop
+                    </button>
+                  </div>
+            
+                  <div *ngIf="faceLoginStatus" class="alert mt-3" [ngClass]="{
+                    'alert-info': faceLoginStatus.type === 'info',
+                    'alert-success': faceLoginStatus.type === 'success',
+                    'alert-danger': faceLoginStatus.type === 'error'
+                  }">
+                    <i class="fas" [ngClass]="{
+                      'fa-info-circle': faceLoginStatus.type === 'info',
+                      'fa-check-circle': faceLoginStatus.type === 'success',
+                      'fa-exclamation-circle': faceLoginStatus.type === 'error'
+                    }"></i>
+                    {{ faceLoginStatus.message }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+  
+
 </main>
 
-<!-- Disabled Account Modal -->
 <ng-template #disabledAccountModal let-modal>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">

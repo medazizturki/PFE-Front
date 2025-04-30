@@ -2,7 +2,7 @@
   <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
       <a class="sidebar-brand" href="/home">
-        <span class="align-middle">BDMS</span>
+        <img src="assets/images/logo_BDMS.png" class="align-middle" style="height: 30px;">
       </a>
       <ul class="sidebar-nav">
         <li class="sidebar-header">Pages</li>
@@ -55,6 +55,56 @@
     </div>
     </nav>
 
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Face Recognition Setup</h5>
+      </div>
+      <div class="card-body">
+        <div class="face-capture-container text-center">
+          <div class="camera-frame mb-3">
+            <div class="camera-overlay">
+              <div class="face-guide"></div>
+            </div>
+            <video #videoElement width="320" height="240" autoplay muted playsinline></video>
+            <canvas #canvasElement width="320" height="240" class="d-none"></canvas>
+            <img #photoElement class="preview-image d-none" alt="Your face">
+          </div>
+          <div class="camera-controls mb-3">
+            <button type="button" class="btn btn-primary me-2" (click)="startCamera()">
+              <i class="fas fa-video me-1"></i> Start Camera
+            </button>
+            <button type="button" class="btn btn-success me-2" (click)="captureFace()" [disabled]="!isCameraOn">
+              <i class="fas fa-camera me-1"></i> Capture
+            </button>
+            <button type="button" class="btn btn-danger" (click)="stopCamera()" [disabled]="!isCameraOn">
+              <i class="fas fa-stop me-1"></i> Stop
+            </button>
+          </div>
+    
+          <div *ngIf="faceStatus" class="alert" [ngClass]="{
+            'alert-info': faceStatus.type === 'info',
+            'alert-success': faceStatus.type === 'success',
+            'alert-danger': faceStatus.type === 'error'
+          }">
+            <i class="fas" [ngClass]="{
+              'fa-info-circle': faceStatus.type === 'info',
+              'fa-check-circle': faceStatus.type === 'success',
+              'fa-exclamation-circle': faceStatus.type === 'error'
+            }"></i>
+            {{ faceStatus.message }}
+          </div>
+    
+          <button *ngIf="faceData" type="button" class="btn btn-primary mt-2" (click)="registerFace()">
+            Save Face Data
+          </button>
+    
+          <button *ngIf="faceData" type="button" class="btn btn-secondary mt-2 ms-2" (click)="faceLogin()">
+            Login with Face
+          </button>
+        </div>
+      </div>
+    </div>
+    
     <div class="container">
       <br><br><br>
       <div class="row justify-content-center">

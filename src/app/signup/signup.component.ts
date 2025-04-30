@@ -16,7 +16,7 @@ export class SignupComponent {
     password: '',
     image: '',
     adresse: '',
-    sex: '',
+    sexe: '',
     phone: '',
     verified: false
   };

@@ -22,7 +22,7 @@ export class UserComponent implements OnInit {
     password: '',
     image: '',
     adresse: '',
-    sex: '',
+    sexe: '',
     phone: ''
   };
 
@@ -137,7 +137,7 @@ onSignup(): void {
       password: '',
       image: '',
       adresse: '',
-      sex: '',
+      sexe: '',
       phone: ''
     };
   }
