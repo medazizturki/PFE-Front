@@ -188,7 +188,7 @@ onSignup(): void {
 
   
   logout(): void {
-    const userId = this.user?.sub;
+    const userId = this.user?.sub || this.user?.id || this.user?.attributes?.sub?.[0];
     if (userId) {
       this.authService.logout(userId).subscribe({
         next: () => {

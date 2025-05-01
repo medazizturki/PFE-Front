@@ -158,39 +158,40 @@ export class LoginComponent implements OnDestroy {
         this.showFaceStatus('Verifying identity...', 'info');
 
         this.authService.faceLogin(descriptor).subscribe({
-            next: (response: any) => {
-                if (response.success) {
-                    this.showFaceStatus('Login successful! Redirecting...', 'success');
-                    localStorage.setItem('token', response.token);
-                    localStorage.setItem('username', response.username);
-
-                    // Store user information in local storage
-                    const user = {
-                        sub: response.sub, // Assuming 'username' is the unique identifier
-                        preferred_username: response.username,
-                        firstName: response.firstName,
-                        lastName: response.lastName,
-                        email: response.email,
-                        image: response.image,
-                        adresse: response.adresse,
-                        sexe: response.sexe,
-                        phone: response.phone,
-                        faceData: response.faceData
-                    };
-                    localStorage.setItem('user', JSON.stringify(user));
-
-                    // Stop the camera
-                    this.stopFaceCamera();
-
-                    this.router.navigate(['/home']);
-                } else {
-                    this.showFaceStatus(response.message || 'Face not recognized', 'error');
-                }
-            },
-            error: (error) => {
-                console.error('Face login error:', error);
-                this.showFaceStatus(error.error?.message || 'Error during face recognition', 'error');
+          next: (response: any) => {
+            if (response.success) {
+              this.showFaceStatus('Login successful! Redirecting...', 'success');
+              localStorage.setItem('token', response.token);
+              localStorage.setItem('sub', response.id);
+      
+              // Store user information in local storage
+              const user = {
+                id: response.id,
+                preferred_username: response.username,
+                firstName: response.firstName,
+                lastName: response.lastName,
+                email: response.email,
+                image: response.image || response.attributes?.image?.[0],
+                adresse: response.adresse || response.attributes?.adresse?.[0],
+                sexe: response.sexe || response.attributes?.sexe?.[0],
+                phone: response.phone || response.attributes?.phone?.[0],
+                faceData: response.faceData || response.attributes?.faceDescriptor?.[0],
+                attributes: response.attributes // Include the full attributes object
+              };
+              localStorage.setItem('user', JSON.stringify(user));
+      
+              // Stop the camera
+              this.stopFaceCamera();
+      
+              this.router.navigate(['/home']);
+            } else {
+              this.showFaceStatus(response.message || 'Face not recognized', 'error');
             }
+          },
+          error: (error) => {
+            console.error('Face login error:', error);
+            this.showFaceStatus(error.error?.message || 'Error during face recognition', 'error');
+          }
         });
     } catch (error) {
         console.error('Face recognition error:', error);

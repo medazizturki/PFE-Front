@@ -57,11 +57,35 @@ export class AuthService {
   }
 
 
-    // New method for face login
-    faceLogin(descriptor: number[]): Observable<any> {
-      return this.http.post(`${this.faceRecognitionUrl}/login`, { descriptor });
-    }
-
+  faceLogin(descriptor: number[]): Observable<any> {
+    return this.http.post(`${this.faceRecognitionUrl}/login`, { descriptor }).pipe(
+      tap((response: any) => {
+        if (response.success) {
+          // Store token and user ID
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('sub', response.id);
+  
+          // Prepare user info
+          const user = {
+            id: response.id,
+            preferred_username: response.username,
+            firstName: response.firstName,
+            lastName: response.lastName,
+            email: response.email,
+            image: response.image || response.attributes?.image?.[0],
+            adresse: response.adresse || response.attributes?.adresse?.[0],
+            sexe: response.sexe || response.attributes?.sexe?.[0],
+            phone: response.phone || response.attributes?.phone?.[0],
+            faceData: response.faceData || response.attributes?.faceDescriptor?.[0],
+            attributes: response.attributes
+          };
+  
+          localStorage.setItem('user', JSON.stringify(user));
+        }
+      })
+    );
+  }
+  
     isLoggedIn(): boolean {
       const token = localStorage.getItem('token');
       console.log('Token:', token);

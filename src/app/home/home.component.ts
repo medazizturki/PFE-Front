@@ -13,24 +13,18 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      this.user = JSON.parse(userStr);
-      console.log('User loaded:', this.user);
-    } else {
-      console.warn('No user found in localStorage');
-    }
+    this.loadCurrentUser();
   }
 
   logout(): void {
-    const userId = this.user?.sub;
+    const userId = this.user?.sub || this.user?.id || this.user?.attributes?.sub?.[0];
     if (userId) {
       this.authService.logout(userId).subscribe({
         next: () => {
           localStorage.clear();
           this.router.navigate(['/login']);
         },
-        error: err => {
+        error: (err) => {
           console.error('Logout failed:', err);
         }
       });
@@ -39,32 +33,33 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  
-loadCurrentUser(): void {
-  const userStr = localStorage.getItem('user');
-  this.user = userStr ? JSON.parse(userStr) : null;
-  
-  console.log('Current user object:', this.user);
-  if (this.user) {
-    console.log('User attributes:', this.user.attributes);
-    console.log('Image path:', this.getUserImagePath());
+  loadCurrentUser(): void {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      this.user = JSON.parse(userStr);
+      console.log('User loaded:', this.user);
+      console.log('User attributes:', this.user.attributes || 'No attributes found');
+      console.log('Image path:', this.getUserImagePath());
+    } else {
+      console.warn('No user found in localStorage');
+      // Optionally redirect to login if no user is found
+      this.router.navigate(['/login']);
+    }
   }
-}
 
-getUserImagePath(): string {
-  if (!this.user) return '';
-  
-  // Try different possible locations for the image
-  if (this.user.image) {
-    return '/assets/uploads-images/' + this.user.image;
+  getUserImagePath(): string {
+    if (!this.user) return '';
+
+    // Check for image in different possible locations
+    if (this.user.image) {
+      return `/assets/uploads-images/${this.user.image}`;
+    }
+    if (this.user.attributes?.image?.[0]) {
+      return `/assets/uploads-images/${this.user.attributes.image[0]}`;
+    }
+    if (this.user.attributes?.picture) {
+      return `/assets/uploads-images/${this.user.attributes.picture}`;
+    }
+    return ''; // Fallback to empty string if no image is found
   }
-  if (this.user.attributes?.image?.[0]) {
-    return '/assets/uploads-images/' + this.user.attributes.image[0];
-  }
-  if (this.user.attributes?.picture) {
-    return '/assets/uploads-images/' + this.user.attributes.picture;
-  }
-  return '';
-}
-  
 }

@@ -113,10 +113,7 @@ export class ProfileComponent implements OnInit {
 
       const detections = await faceapi.detectAllFaces(
         canvas,
-        new faceapi.TinyFaceDetectorOptions({
-          inputSize: 512,
-          scoreThreshold: 0.5
-        })
+        new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.5 })
       ).withFaceLandmarks().withFaceDescriptors();
 
       if (detections.length === 0) {
@@ -129,19 +126,12 @@ export class ProfileComponent implements OnInit {
         return;
       }
 
-      // Get full descriptor
-      const fullDescriptor = Array.from(detections[0].descriptor);
-      console.log('Full face descriptor length:', fullDescriptor.length);
-          
-      // Use the full descriptor without truncating
       const descriptor = Array.from(detections[0].descriptor);
-      console.log('Face descriptor length:', descriptor.length);
-
       const imageData = canvas.toDataURL('image/jpeg');
 
       this.faceData = {
         image: imageData,
-        descriptor: descriptor, // Use full descriptor
+        descriptor,
         timestamp: new Date().toISOString()
       };
 
@@ -168,7 +158,6 @@ export class ProfileComponent implements OnInit {
     this.showFaceStatus('Camera stopped', 'info');
   }
 
-
   showFaceStatus(message: string, type: 'info' | 'success' | 'error') {
     this.faceStatus = { message, type };
   }
@@ -176,20 +165,17 @@ export class ProfileComponent implements OnInit {
   getUserImagePath(): string {
     if (!this.user) return '';
 
-    if (this.user.image) {
-      return '/assets/uploads-images/' + this.user.image;
-    }
-    if (this.user.attributes?.image?.[0]) {
-      return '/assets/uploads-images/' + this.user.attributes.image[0];
-    }
-    if (this.user.attributes?.picture) {
-      return '/assets/uploads-images/' + this.user.attributes.picture;
-    }
-    return '';
+    return this.user.image
+      ? '/assets/uploads-images/' + this.user.image
+      : this.user.attributes?.image?.[0]
+      ? '/assets/uploads-images/' + this.user.attributes.image[0]
+      : this.user.attributes?.picture
+      ? '/assets/uploads-images/' + this.user.attributes.picture
+      : '';
   }
 
   logout(): void {
-    const userId = this.user?.sub;
+    const userId = this.user?.sub || this.user?.id || this.user?.attributes?.sub?.[0];
     if (userId) {
       this.authService.logout(userId).subscribe({
         next: () => {
@@ -206,54 +192,48 @@ export class ProfileComponent implements OnInit {
   }
 
   updateUser() {
-      if (!this.user?.sub) {
-        this.errorMessage = 'No user ID available for update';
-        return;
+    const userId = this.user?.sub || this.user?.id || this.user?.attributes?.sub?.[0];
+    if (!userId) {
+      this.errorMessage = 'No user ID available for update';
+      return;
+    }
+  
+    this.isUpdating = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+  
+    const userToUpdate = {
+      preferred_username: this.user.preferred_username ?? '',
+      firstName: typeof this.user.firstName === 'string' ? this.user.firstName : '',
+      lastName: typeof this.user.lastName === 'string' ? this.user.lastName : '',
+      email: typeof this.user.email === 'string' ? this.user.email : '',
+      image: typeof this.user.image === 'string' ? this.user.image : '',
+      adresse: typeof this.user.adresse === 'string' ? this.user.adresse : '',
+      sexe: typeof this.user.sexe === 'string' ? this.user.sexe : '',
+      phone: typeof this.user.phone === 'string' ? this.user.phone : '',
+      faceData : typeof this.user.faceData === 'string' ? this.user.faceData : '',
+      userId: userId
+    };
+  
+    this.authService.updateUser(userToUpdate).subscribe({
+      next: (response) => {
+        console.log('Update response:', response);
+        this.isUpdating = false;
+        this.successMessage = 'Profile updated successfully!';
+        const updatedUser = { ...this.user, ...userToUpdate };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setTimeout(() => (this.successMessage = ''), 3000);
+      },
+      error: (error) => {
+        console.error('Failed to update user', error);
+        this.isUpdating = false;
+        this.errorMessage =
+          error.error?.message || error.error || 'Unknown error occurred';
+        setTimeout(() => (this.errorMessage = ''), 5000);
       }
-
-      this.isUpdating = true;
-      this.errorMessage = '';
-      this.successMessage = '';
-
-      const userToUpdate = {
-        preferred_username: this.user.preferred_username,
-        firstName: this.user.firstName,
-        lastName: this.user.lastName,
-        email: this.user.email,
-        image: this.user.image,
-        adresse: this.user.adresse,
-        sexe: this.user.sexe,
-        phone: this.user.phone,
-        userId: this.user.sub,
-        faceData: this.user.faceData
-      };
-
-      this.authService.updateUser(userToUpdate).subscribe({
-        next: (response) => {
-          console.log('Update response:', response);
-          this.isUpdating = false;
-          this.successMessage = response;
-
-          const updatedUser = { ...this.user, ...userToUpdate };
-          localStorage.setItem('user', JSON.stringify(updatedUser));
-
-          setTimeout(() => this.successMessage = '', 3000);
-        },
-        error: (error) => {
-          console.error('Failed to update user', error);
-          this.isUpdating = false;
-
-          if (error.error instanceof ErrorEvent) {
-            this.errorMessage = `Error: ${error.error.message}`;
-          } else {
-            this.errorMessage = error.error || error.message || 'Unknown error occurred';
-          }
-
-          setTimeout(() => this.errorMessage = '', 5000);
-        }
-      });
+    });
   }
-
+  
 
   onFileSelectedAjout(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -271,21 +251,15 @@ export class ProfileComponent implements OnInit {
   loadCurrentUser(): void {
     const userStr = localStorage.getItem('user');
     this.user = userStr ? JSON.parse(userStr) : {};
-
     console.log('Current user object:', this.user);
-    if (this.user) {
-      console.log('User attributes:', this.user.attributes);
-      console.log('Image path:', this.getUserImagePath());
-    }
   }
+
   faceLogin() {
     if (!this.faceData) {
       this.showFaceStatus('No face data captured', 'error');
       return;
     }
 
-    console.log('Sending login descriptor with length:', this.faceData.descriptor.length);
-    
     this.userService.faceLogin(this.faceData.descriptor).subscribe({
       next: (response) => {
         if (response.success) {
@@ -306,29 +280,32 @@ export class ProfileComponent implements OnInit {
 
   registerFace() {
     if (!this.faceData) {
-        this.showFaceStatus('No face data captured', 'error');
-        return;
+      this.showFaceStatus('No face data captured', 'error');
+      return;
     }
-
-    // Truncate the descriptor to the first 10 elements
+  
+    const userId = this.user?.sub || this.user?.id || this.user?.attributes?.sub?.[0];
+    if (!userId) {
+      this.showFaceStatus('No user ID found. Please log in again.', 'error');
+      return;
+    }
+  
     const truncatedDescriptor = this.faceData.descriptor.slice(0, 10);
-    console.log('Sending registration descriptor with length:', truncatedDescriptor.length);
-
-    this.userService.registerFace(this.user.sub, truncatedDescriptor).subscribe({
-        next: (response) => {
-            if (response.success) {
-                this.showFaceStatus('Face registered successfully!', 'success');
-                this.user.faceData = this.faceData;
-                localStorage.setItem('user', JSON.stringify(this.user));
-            } else {
-                this.showFaceStatus('Face registration failed: ' + response.message, 'error');
-            }
-        },
-        error: (error) => {
-            console.error('Face registration error:', error);
-            this.showFaceStatus('Registration error: ' + (error.error?.message || 'Unknown error'), 'error');
+    this.userService.registerFace(userId, truncatedDescriptor).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.showFaceStatus('Face registered successfully!', 'success');
+          this.user.faceData = this.faceData;
+          localStorage.setItem('user', JSON.stringify(this.user));
+        } else {
+          this.showFaceStatus('Face registration failed: ' + response.message, 'error');
         }
+      },
+      error: (error) => {
+        console.error('Face registration error:', error);
+        this.showFaceStatus('Registration error: ' + (error.error?.message || 'Unknown error'), 'error');
+      }
     });
-}
-
+  }
+  
 }
