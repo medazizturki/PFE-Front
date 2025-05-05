@@ -28,88 +28,36 @@
 
       <div class="navbar-collapse collapse">
         <ul class="navbar-nav navbar-align">
-            <li class="nav-item dropdown">
-                <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown" aria-expanded="false" id="mobileDropdown">
-                    <i class="align-middle" data-feather="settings"></i>
-                </a>
-                <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                    <!-- Image with fallback -->
-                    <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'"
-                         class="avatar img-fluid rounded me-1"
-                         style="width: 32px; height: 32px; object-fit: cover;"
-                         onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
-                    
-                    <span class="text-dark" *ngIf="user">
-                      {{ user.username || user.preferred_username || user.name || 'No username' }}
-                    </span>
-                  </a>            
-                <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
-                    <a class="dropdown-item" href="#" (click)="logout(); $event.preventDefault()">
-                        <i class="align-middle me-1" data-feather="log-out"></i> Log out
-                      </a>
-                                  
-                </div>
-            </li>
+          <li class="nav-item dropdown">
+            <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown" aria-expanded="false" id="mobileDropdown">
+              <i class="align-middle" data-feather="settings"></i>
+            </a>
+            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+              <!-- Image with fallback -->
+              <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'"
+                   class="avatar img-fluid me-1"
+                   style="width: 32px; height: 32px; object-fit: cover;"
+                   onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
+              <span class="text-dark" *ngIf="user">
+                {{ user.username || user.preferred_username || user.name || 'No username' }}
+              </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+              <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+              <a class="dropdown-item" href="#" (click)="logout(); $event.preventDefault()">
+                <i class="align-middle me-1" data-feather="log-out"></i> Log out
+              </a>
+            </div>
+          </li>
         </ul>
-    </div>
+      </div>
     </nav>
 
-    <div class="card mb-4">
-      <div class="card-header">
-        <h5 class="mb-0">Face Recognition Setup</h5>
-      </div>
-      <div class="card-body">
-        <div class="face-capture-container text-center">
-          <div class="camera-frame mb-3">
-            <div class="camera-overlay">
-              <div class="face-guide"></div>
-            </div>
-            <video #videoElement width="320" height="240" autoplay muted playsinline></video>
-            <canvas #canvasElement width="320" height="240" class="d-none"></canvas>
-            <img #photoElement class="preview-image d-none" alt="Your face">
-          </div>
-          <div class="camera-controls mb-3">
-            <button type="button" class="btn btn-primary me-2" (click)="startCamera()">
-              <i class="fas fa-video me-1"></i> Start Camera
-            </button>
-            <button type="button" class="btn btn-success me-2" (click)="captureFace()" [disabled]="!isCameraOn">
-              <i class="fas fa-camera me-1"></i> Capture
-            </button>
-            <button type="button" class="btn btn-danger" (click)="stopCamera()" [disabled]="!isCameraOn">
-              <i class="fas fa-stop me-1"></i> Stop
-            </button>
-          </div>
-    
-          <div *ngIf="faceStatus" class="alert" [ngClass]="{
-            'alert-info': faceStatus.type === 'info',
-            'alert-success': faceStatus.type === 'success',
-            'alert-danger': faceStatus.type === 'error'
-          }">
-            <i class="fas" [ngClass]="{
-              'fa-info-circle': faceStatus.type === 'info',
-              'fa-check-circle': faceStatus.type === 'success',
-              'fa-exclamation-circle': faceStatus.type === 'error'
-            }"></i>
-            {{ faceStatus.message }}
-          </div>
-    
-          <button *ngIf="faceData" type="button" class="btn btn-primary mt-2" (click)="registerFace()">
-            Save Face Data
-          </button>
-    
-          <button *ngIf="faceData" type="button" class="btn btn-secondary mt-2 ms-2" (click)="faceLogin()">
-            Login with Face
-          </button>
-        </div>
-      </div>
-    </div>
-    
     <div class="container">
       <br><br><br>
       <div class="row justify-content-center">
         <div class="col-md-8 col-lg-8">
-          <div class="card">
+          <div class="card profile-card">
             <div class="card-header text-center">
               <h5 class="card-title mb-0">Profile Details</h5>
             </div>
@@ -118,9 +66,9 @@
               <div class="user-image-container mb-4">
                 <div class="user-image-circle mx-auto">
                   <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'"
-                         class="avatar img-fluid rounded me-1"
-                         style="width: 100px; height: 100px; object-fit: cover;"
-                         onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
+                       class="avatar img-fluid rounded-circle me-1"
+                       style="width: 120px; height: 120px; object-fit: cover;"
+                       onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
                 </div>
               </div>
 
@@ -139,46 +87,97 @@
               <div *ngIf="successMessage" class="alert alert-success mt-3">
                 {{ successMessage }}
               </div>
-
+              <div class="text-center">
+                <button type="button" class="btn btn-outline-primary btn-custom-outline" (click)="openFaceModal()">
+                  <i class="fas fa-user-circle me-2"></i>
+                  {{ displayModalFaceUpdate ? 'Hide Face Login' : 'Update Face Login' }}
+                </button>
+              </div>
+              
               <!-- Profile form -->
               <div class="profile-form-container">
-                <form (ngSubmit)="updateUser()" class="text-start">
+                <form (ngSubmit)="updateUser()" class="text-start" #profileForm="ngForm">
+
                   <div class="mb-3">
-                    <label for="preferred_username" class="form-label">Username:</label>
+                    <label for="preferred_username" class="form-label">Username <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="preferred_username"
-                           [(ngModel)]="user.preferred_username" name="preferred_username" required disabled>
+                          [(ngModel)]="user.preferred_username" name="preferred_username" required disabled>
                   </div>
+
                   <div class="mb-3">
-                    <label for="firstName" class="form-label">First Name:</label>
+                    <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="firstName"
-                           [(ngModel)]="user.firstName" name="firstName" required>
+                          [(ngModel)]="user.firstName" name="firstName" required
+                          minlength="2" maxlength="50" pattern="[a-zA-ZÀ-ÿ '-]*"
+                          #firstName="ngModel">
+                    <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="text-danger">
+                      <div *ngIf="firstName.errors?.['required']">First name is required</div>
+                      <div *ngIf="firstName.errors?.['minlength']">Minimum 2 characters</div>
+                      <div *ngIf="firstName.errors?.['maxlength']">Maximum 50 characters</div>
+                      <div *ngIf="firstName.errors?.['pattern']">Only letters, spaces, hyphens and apostrophes allowed</div>
+                    </div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="lastName" class="form-label">Last Name:</label>
+                    <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="lastName"
-                           [(ngModel)]="user.lastName" name="lastName" required>
+                          [(ngModel)]="user.lastName" name="lastName" required
+                          minlength="2" maxlength="50" pattern="[a-zA-ZÀ-ÿ '-]*"
+                          #lastName="ngModel">
+                    <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="text-danger">
+                      <div *ngIf="lastName.errors?.['required']">Last name is required</div>
+                      <div *ngIf="lastName.errors?.['minlength']">Minimum 2 characters</div>
+                      <div *ngIf="lastName.errors?.['maxlength']">Maximum 50 characters</div>
+                      <div *ngIf="lastName.errors?.['pattern']">Only letters, spaces, hyphens and apostrophes allowed</div>
+                    </div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="email" class="form-label">Email:</label>
+                    <label for="email" class="form-label">Email <span class="text-danger">*</span>:</label>
                     <input type="email" class="form-control" id="email"
-                           [(ngModel)]="user.email" name="email" required disabled>
+                          [(ngModel)]="user.email" name="email" required disabled
+                          #email="ngModel">
+                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+                      <div *ngIf="email.errors?.['required']">Email is required</div>
+                      <div *ngIf="email.errors?.['email']">Invalid email format</div>
+                    </div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="image" class="form-label">Importer une image</label>
+                    <label for="image" class="form-label">Importer une image <span class="text-danger">*</span> </label>
                     <input type="file" class="form-control" id="image" accept="image/*" (change)="onFileSelectedAjout($event)">
+                    <!-- Pas de validation pour l'image -->
                   </div>
+
                   <div class="mb-3">
-                    <label for="adresse" class="form-label">Address:</label>
+                    <label for="adresse" class="form-label">Address <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="adresse"
-                           [(ngModel)]="user.adresse" name="adresse">
+                          [(ngModel)]="user.adresse" name="adresse"
+                          maxlength="100"
+                          #adresse="ngModel" required>
+                    <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)" class="text-danger">
+                      <div *ngIf="adresse.errors?.['maxlength']">Maximum 100 characters</div>
+                    </div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="phone" class="form-label">Phone:</label>
+                    <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="phone"
-                           [(ngModel)]="user.phone" name="phone">
+                          [(ngModel)]="user.phone" name="phone"
+                          pattern="[0-9]*" maxlength="15"
+                          #phone="ngModel" required>
+                    <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger">
+                      <div *ngIf="phone.errors?.['pattern']">Only numbers and + allowed</div>
+                      <div *ngIf="phone.errors?.['maxlength']">Maximum 15 characters</div>
+                    </div>
                   </div>
+
                   <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid || isUpdating">
+                      <span *ngIf="!isUpdating">Update Profile</span>
+                      <span *ngIf="isUpdating" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <span *ngIf="isUpdating"> Updating...</span>
+                    </button>
                   </div>
                 </form>
               </div>
@@ -189,3 +188,50 @@
     </div>
   </div>
 </div>
+
+<p-dialog [(visible)]="displayModalFaceUpdate" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false" header="Face Recognition">
+  <div class="card mb-4">
+
+    <div class="card-body">
+      <div class="face-capture-container text-center">
+        <div class="camera-frame mb-3">
+          <div class="camera-overlay">
+            <div class="face-guide"></div>
+          </div>
+          <video #videoElement width="320" height="240" autoplay muted playsinline></video>
+          <canvas #canvasElement width="320" height="240" class="d-none"></canvas>
+          <img #photoElement class="preview-image d-none" alt="Your face">
+        </div>
+        <div class="camera-controls mb-3">
+          <button type="button" class="btn btn-primary me-2" (click)="startCamera()">
+            <i class="fas fa-video me-1"></i> Start Camera
+          </button>
+          <button type="button" class="btn btn-success me-2" (click)="captureFace()" [disabled]="!isCameraOn">
+            <i class="fas fa-camera me-1"></i> Capture
+          </button>
+          <button type="button" class="btn btn-danger" (click)="stopCamera()" [disabled]="!isCameraOn">
+            <i class="fas fa-stop me-1"></i> Stop
+          </button>
+        </div>
+
+        <div *ngIf="faceStatus" class="alert" [ngClass]="{
+          'alert-info': faceStatus.type === 'info',
+          'alert-success': faceStatus.type === 'success',
+          'alert-danger': faceStatus.type === 'error'
+        }">
+          <i class="fas" [ngClass]="{
+            'fa-info-circle': faceStatus.type === 'info',
+            'fa-check-circle': faceStatus.type === 'success',
+            'fa-exclamation-circle': faceStatus.type === 'error'
+          }"></i>
+          {{ faceStatus.message }}
+        </div>
+
+        <button *ngIf="faceData" type="button" class="btn btn-primary mt-2" (click)="registerFace()" (click)="stopCamera()">
+          Save Face Data
+        </button>
+
+      </div>
+    </div>
+  </div>
+</p-dialog>

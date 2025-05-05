@@ -1,114 +1,100 @@
-<main class="main-wrapper">
-  <section class="signin-section">
-    <div class="container-fluid">
-      <div class="row g-0 auth-row">
-        <div class="col-lg-6">
-          <div class="auth-cover-wrapper bg-primary-100">
-            <div class="auth-cover">
-              <div class="title text-center">
-                <h1 class="text-primary mb-30">Get Started</h1>
-                <p class="text-medium">
-                  Start exploring the best investment opportunities,
-                </p>
-              </div>
-              <div class="cover-image">
-                <img src="assets/images/auth/bource.jpg" alt="Image de couverture" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="signup-wrapper">
-            <div class="form-wrapper">
-              <h1 class="mb-20">Login Form</h1>
-              <p class="text-sm mb-25">
-                Start creating the best possible user experience for you
-                customers.
-              </p>
-              <form (ngSubmit)="onLogin(disabledAccountModal)">
-                <div class="col-12">
-                  <div class="input-style-1">
-                    <label for="username">Username:</label>
-                    <input placeholder="Username" type="text" id="username" [(ngModel)]="loginRequest.username" name="username" required>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="input-style-1">
-                    <label for="password">Password:</label>
-                    <input placeholder="Password" type="password" id="password" [(ngModel)]="loginRequest.password" name="password" required>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="button-group d-flex justify-content-center flex-wrap">
-                    <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center" [disabled]="isLoading">
-                      <span *ngIf="!isLoading">Login</span>
-                      <span *ngIf="isLoading">
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        Logging in...
-                      </span>
-                    </button>
-                  </div>
-                </div>
-                <div *ngIf="errorMessage" class="col-12 mt-3">
-                  <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    {{ errorMessage }}
-                  </div>
-                </div>
-              </form>
-              <div class="col-12 mt-4">
-                <div class="text-center">
-                  <button type="button" class="btn btn-outline-primary" (click)="toggleFaceLogin()">
-                    <i class="fas fa-user-circle me-2"></i>
-                    {{ showFaceLogin ? 'Hide Face Login' : 'Login with Face Recognition' }}
-                  </button>
-                </div>
-            
-                <div *ngIf="showFaceLogin" class="face-login-container mt-4 p-3 border rounded">
-                  <div class="camera-frame mb-3 mx-auto" style="width: 320px; height: 240px;">
-                    <div class="camera-overlay">
-                      <div class="face-guide"></div>
-                    </div>
-                    <video #faceVideo width="320" height="240" autoplay muted playsinline></video>
-                    <canvas #faceCanvas width="320" height="240" class="d-none"></canvas>
-                    <img #facePhoto class="preview-image d-none" alt="Your face">
-                  </div>
-            
-                  <div class="text-center">
-                    <button type="button" class="btn btn-primary me-2" (click)="startFaceCamera()" [disabled]="isFaceCameraOn">
-                      <i class="fas fa-video me-1"></i> Start Camera
-                    </button>
-                    <button type="button" class="btn btn-success me-2" (click)="recognizeFace()" [disabled]="!isFaceCameraOn">
-                      <i class="fas fa-camera me-1"></i> Recognize
-                    </button>
-                    <button type="button" class="btn btn-danger" (click)="stopFaceCamera()" [disabled]="!isFaceCameraOn">
-                      <i class="fas fa-stop me-1"></i> Stop
-                    </button>
-                  </div>
-            
-                  <div *ngIf="faceLoginStatus" class="alert mt-3" [ngClass]="{
-                    'alert-info': faceLoginStatus.type === 'info',
-                    'alert-success': faceLoginStatus.type === 'success',
-                    'alert-danger': faceLoginStatus.type === 'error'
-                  }">
-                    <i class="fas" [ngClass]="{
-                      'fa-info-circle': faceLoginStatus.type === 'info',
-                      'fa-check-circle': faceLoginStatus.type === 'success',
-                      'fa-exclamation-circle': faceLoginStatus.type === 'error'
-                    }"></i>
-                    {{ faceLoginStatus.message }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
+<div class="login-page">
+  <!-- Arrière-plan avec l'image -->
+  <div class="background-image"></div>
 
-</main>
+  <!-- Overlay blanc semi-transparent -->
+  <div class="overlay"></div>
+
+  <!-- Conteneur du formulaire de connexion -->
+  <div class="login-form">
+    <div class="login-container">
+      <div class="form-header">
+        <h1>Se connecter</h1>
+      </div>
+
+      <!-- Formulaire de connexion -->
+
+      <form (ngSubmit)="onLogin()">
+        <div class="col-12">
+          <div class="input-style-1">
+            <label for="username">Username:</label>
+            <input placeholder="Username" type="text" id="username" [(ngModel)]="loginRequest.username" name="username" required>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="input-style-1">
+            <label for="password">Password:</label>
+            <input placeholder="Password" type="password" id="password" [(ngModel)]="loginRequest.password" name="password" required>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="button-group d-flex justify-content-center flex-wrap">
+            <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center" [disabled]="isLoading">
+              <span *ngIf="!isLoading">Login</span>
+              <span *ngIf="isLoading">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Logging in...
+              </span>
+            </button>
+          </div>
+        </div>
+        
+        <div *ngIf="errorMessage" class="col-12 mt-3">
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            {{ errorMessage }}
+          </div>
+        </div>
+      </form>
+    </div>
+    <br>
+    <div class="text-center">
+      <button type="button" class="btn btn-outline-primary" (click)="openFaceModal()">
+        <i class="fas fa-user-circle me-2"></i>
+        {{ displayModalFace ? 'Hide Face Login' : 'Login with Face Recognition' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<p-dialog [(visible)]="displayModalFace" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false" header="Face Recognition">
+  <div class="face-login-container p-3">
+    <div class="camera-frame mb-3 mx-auto" style="width: 320px; height: 240px;">
+      <div class="camera-overlay">
+        <div class="face-guide"></div>
+      </div>
+      <video #faceVideo width="320" height="240" autoplay muted playsinline></video>
+      <canvas #faceCanvas width="320" height="240" class="d-none"></canvas>
+      <img #facePhoto class="preview-image d-none" alt="Your face">
+    </div>
+
+    <div class="text-center">
+      <button type="button" class="btn btn-primary me-2" (click)="startFaceCamera()" [disabled]="isFaceCameraOn">
+        <i class="fas fa-video me-1"></i> Start Camera
+      </button>
+      <button type="button" class="btn btn-success me-2" (click)="recognizeFace()" [disabled]="!isFaceCameraOn">
+        <i class="fas fa-camera me-1"></i> Recognize
+      </button>
+      <button type="button" class="btn btn-danger" (click)="stopFaceCamera()" [disabled]="!isFaceCameraOn">
+        <i class="fas fa-stop me-1"></i> Stop
+      </button>
+    </div>
+
+    <div *ngIf="faceLoginStatus" class="alert mt-3" [ngClass]="{
+      'alert-info': faceLoginStatus.type === 'info',
+      'alert-success': faceLoginStatus.type === 'success',
+      'alert-danger': faceLoginStatus.type === 'error'
+    }">
+      <i class="fas" [ngClass]="{
+        'fa-info-circle': faceLoginStatus.type === 'info',
+        'fa-check-circle': faceLoginStatus.type === 'success',
+        'fa-exclamation-circle': faceLoginStatus.type === 'error'
+      }"></i>
+      {{ faceLoginStatus.message }}
+    </div>
+  </div>
+</p-dialog>
 
 <ng-template #disabledAccountModal let-modal>
   <div class="modal-dialog modal-dialog-centered">

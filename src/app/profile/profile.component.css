@@ -102,3 +102,69 @@
     left: 0;
   }
   
+  
+
+/* Profile Card Styling */
+.profile-card {
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.profile-card .card-header {
+  background-color: #12375f;
+  color: white;
+}
+
+.user-image-circle img {
+  border: 2px solid #12375f;
+}
+
+/* Form Styling */
+.profile-form-container {
+  margin-top: 20px;
+}
+
+.profile-form-container .form-label {
+  font-weight: bold;
+}
+
+.profile-form-container .form-control {
+  border-radius: 5px;
+}
+
+.profile-form-container .btn-primary {
+  background-color: #12375f;
+  border: none;
+}
+
+.profile-form-container .btn-primary:hover {
+  background-color: #12375f;
+}
+
+
+/* Alert Styling */
+.alert {
+  border-radius: 5px;
+}
+
+/* Spinner Styling */
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+}
+
+.btn-custom-outline {
+  border-color: #12375f;
+  color: #12375f;
+}
+
+.btn-custom-outline:hover {
+  background-color: #12375f;
+  color: white;
+}

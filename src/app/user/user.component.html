@@ -1,175 +1,222 @@
 <div class="wrapper">
-    <nav id="sidebar" class="sidebar js-sidebar">
-        <div class="sidebar-content js-simplebar">
-            <a class="sidebar-brand" href="/home">
-              <img src="assets/images/logo_BDMS.png" class="align-middle" style="height: 30px;">
-    </a>
-            <ul class="sidebar-nav">
-                <li class="sidebar-header">
-                    Pages
-                </li>            
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/home">
-                <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
-                    </a>
-                </li>
-                <li class="sidebar-item active">
-                    <a class="sidebar-link" href="/users">
-                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">Liste des utilisateurs</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    
-    <div class="main">
-        <nav class="navbar navbar-expand navbar-light navbar-bg">
-            <a class="sidebar-toggle js-sidebar-toggle">
-              <i class="hamburger align-self-center"></i>
+  <nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+      <a class="sidebar-brand" href="/home">
+        <img src="assets/images/logo_BDMS.png" class="align-middle" style="height: 30px;">
+      </a>
+      <ul class="sidebar-nav">
+        <li class="sidebar-header">Pages</li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/home">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+          </a>
+        </li>
+        <li class="sidebar-item active">
+          <a class="sidebar-link" href="/users">
+            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Liste des utilisateurs</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="main">
+    <nav class="navbar navbar-expand navbar-light navbar-bg">
+      <a class="sidebar-toggle js-sidebar-toggle">
+        <i class="hamburger align-self-center"></i>
+      </a>
+      <div class="navbar-collapse collapse">
+        <ul class="navbar-nav navbar-align">
+          <li class="nav-item dropdown">
+            <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="align-middle" data-feather="settings"></i>
             </a>
-          
-            <div class="navbar-collapse collapse">
-              <ul class="navbar-nav navbar-align">
-                <li class="nav-item dropdown">
-                  <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="align-middle" data-feather="settings"></i>
-                  </a>
-                  <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                    <!-- Image with fallback -->
-                    <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'"
-                         class="avatar img-fluid rounded me-1"
-                         style="width: 32px; height: 32px; object-fit: cover;"
-                         onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
-                    
-                    <span class="text-dark" *ngIf="user">
-                      {{ user.username || user.preferred_username || user.name || 'No username' }}
-                    </span>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
-                    <a class="dropdown-item" href="#" (click)="logout(); $event.preventDefault()">
-                      <i class="align-middle me-1" data-feather="log-out"></i> Log out
-                    </a>
-                  </div>
-                </li>
-              </ul>
+            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+              <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'"
+                   class="avatar img-fluid rounded me-1"
+                   style="width: 32px; height: 32px; object-fit: cover;"
+                   onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
+              <span class="text-dark" *ngIf="user">
+                {{ user.username || user.preferred_username || user.name || 'No username' }}
+              </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+              <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+              <a class="dropdown-item" href="#" (click)="logout(); $event.preventDefault()">
+                <i class="align-middle me-1" data-feather="log-out"></i> Log out
+              </a>
             </div>
-          </nav>
-          
-    
+          </li>
+        </ul>
+      </div>
+    </nav>
+
     <div class="container">
-        <h1>Liste des utilisateurs</h1>
-        
-        <!-- Button to open modal -->
-            <div class="d-flex justify-content-end mb-3">
-                <button class="btn btn-primary" (click)="openSignupModal(signupModalTemplate)">
-                <i class="align-middle me-1" data-feather="user-plus"></i> Ajouter un utilisateur
-                </button>
-            </div>
-  
-        
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Nom d'utilisateur</th>
-              <th>Email</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Address</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of users">
-              <td>
-                <img *ngIf="user.attributes?.image?.[0]" 
-                     [src]="'/assets/uploads-images/' + user.attributes.image[0]" 
-                     class="img-thumbnail" 
-                     style="width: 100px; height: 100px; object-fit: cover;">
-              </td>
-              <td>{{ user.username }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.firstName }}</td>
-              <td>{{ user.lastName }}</td>
-              <!-- Accès correct à l'adresse -->
-              <td>{{ user.attributes?.adresse && user.attributes.adresse[0] ? user.attributes.adresse[0] : '-' }}</td>
-             <!-- Replace the actions column in your table -->
-             <td>
-              <span *ngIf="user.enabled" class="badge bg-success">Enabled</span>
-              <span *ngIf="!user.enabled" class="badge bg-danger">Disabled</span>
-            </td>
-            <!-- Actions Column -->
-            <td>
-              <button class="btn btn-warning btn-sm me-2" (click)="disableUser(user.id)" *ngIf="user.enabled">
-                Désactiver
-              </button>
-              <button class="btn btn-success btn-sm me-2" (click)="enableUser(user.id)" *ngIf="!user.enabled">
-                Activer
-              </button>
-              <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id)">Supprimer</button>
-            </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="header-container">
+        <div class="header-blue-line"></div>
+        <div class="header-bar">
+          <h2>Liste des Stocks</h2>
+          <button class="btn-add" (click)="openSignupModal()" routerLink="/stock/add">
+            <span class="add-icon">+</span> Ajouter un utilisateur
+          </button>
+        </div>
       </div>
 
-<!-- Signup Modal Template -->
-<ng-template #signupModalTemplate let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title">Ajouter un utilisateur</h5>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+      <!-- Card with Table -->
+      <div class="card shadow-sm card-square">
+        <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Address</th>
+                <th>Etat</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users">
+                <td>
+                  <img *ngIf="user.attributes?.image?.[0]"
+                       [src]="'/assets/uploads-images/' + user.attributes.image[0]"
+                       class="img-thumbnail"
+                       style="width: 100px; height: 100px; object-fit: cover;">
+                </td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td>{{ user.attributes?.adresse && user.attributes.adresse[0] ? user.attributes.adresse[0] : '-' }}</td>
+                <td class="text-center">
+                  <!-- Green checkmark icon for enabled users -->
+                  <i *ngIf="user.enabled" class="pi pi-check-circle" style="font-size: 1.5rem; color: green;"></i>
+
+                  <!-- Red X icon for disabled users -->
+                  <i *ngIf="!user.enabled" class="pi pi-times-circle" style="font-size: 1.5rem; color: red;"></i>
+                </td>
+                <td>
+                  <!-- Lock button for enabled users (to disable/lock them) -->
+                  <button class="btn btn-light btn-sm shake-btn" style="padding: 6px 12px; border: none;" (click)="disableUser(user.id)" *ngIf="user.enabled" title="Verrouiller">
+                    <i class="pi pi-lock" style="font-size: 1.1rem; color: #ffc107;"></i>
+                  </button>
+
+                  <!-- Unlock button for disabled users (to enable/unlock them) -->
+                  <button class="btn btn-light btn-sm shake-btn" style="padding: 6px 12px; border: none;" (click)="enableUser(user.id)" *ngIf="!user.enabled" title="Déverrouiller">
+                    <i class="pi pi-lock-open" style="font-size: 1.1rem; color: #28a745;"></i>
+                  </button>
+                  <button class="btn btn-light btn-sm shake-btn"
+                          (click)="deleteUser(user.id)"
+                          title="Supprimer"
+                          style="padding: 6px 12px; border: none;">
+                    <i class="pi pi-trash" style="font-size: 1.1rem; color: #dc3545;"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <div class="modal-body">
-      <form (ngSubmit)="onSignup()">
-        <div class="row">          
-            <div class="mb-3">
-              <label for="image" class="form-label">Importer une image</label>
-              <input type="file" class="form-control" id="image" accept="image/*" (change)="onFileSelectedAjout($event)">
-              <img *ngIf="newUser.image" [src]="selectedImage" alt="Aperçu de l'image" class="img-thumbnail mt-2" style="max-height: 100px;">
+
+    <!-- Signup Modal Template -->
+    <p-dialog [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false" header="Ajouter un utilisateur">
+      <form [formGroup]="signupForm" (ngSubmit)="confirmAddUser()">
+        <div class="row">
+          <div class="mb-3">
+            <label for="image" class="form-label">Importer une image</label>
+            <input type="file" class="form-control" id="image" accept="image/*" (change)="onFileSelectedAjout($event)">
+            <img *ngIf="newUser.image" [src]="selectedImage" alt="Aperçu de l'image" class="img-thumbnail mt-2" style="max-height: 100px;">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Username <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="userName" [ngClass]="{'is-invalid': signupForm.get('userName')?.invalid && signupForm.get('userName')?.touched}">
+            <div *ngIf="signupForm.get('userName')?.invalid && signupForm.get('userName')?.touched" class="invalid-feedback">
+              <div *ngIf="signupForm.get('userName')?.errors?.['required']">Le nom d'utilisateur est requis.</div>
+              <div *ngIf="signupForm.get('userName')?.errors?.['minlength']">Le nom d'utilisateur doit contenir au moins 3 caractères.</div>
             </div>
-          <div class="col-md-6 mb-3">
-            <label>Username:</label>
-            <input type="text" class="form-control" [(ngModel)]="newUser.userName" name="username" required>
           </div>
           <div class="col-md-6 mb-3">
-            <label>Email:</label>
-            <input type="email" class="form-control" [(ngModel)]="newUser.email" name="email" required>
+            <label>Email <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" formControlName="email" [ngClass]="{'is-invalid': signupForm.get('email')?.invalid && signupForm.get('email')?.touched}">
+            <div *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched" class="invalid-feedback">
+              <div *ngIf="signupForm.get('email')?.errors?.['required']">L'email est requis.</div>
+              <div *ngIf="signupForm.get('email')?.errors?.['email']">Veuillez entrer un email valide.</div>
+            </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label>First Name:</label>
-            <input type="text" class="form-control" [(ngModel)]="newUser.firstName" name="firstName" required>
+            <label>First Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="firstName" [ngClass]="{'is-invalid': signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched}">
+            <div *ngIf="signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched" class="invalid-feedback">
+              <div *ngIf="signupForm.get('firstName')?.errors?.['required']">Le prénom est requis.</div>
+              <div *ngIf="signupForm.get('firstName')?.errors?.['minlength']">Le prénom doit contenir au moins 2 caractères.</div>
+            </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label>Last Name:</label>
-            <input type="text" class="form-control" [(ngModel)]="newUser.lastName" name="lastName" required>
+            <label>Last Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="lastName" [ngClass]="{'is-invalid': signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched}">
+            <div *ngIf="signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched" class="invalid-feedback">
+              <div *ngIf="signupForm.get('lastName')?.errors?.['required']">Le nom de famille est requis.</div>
+              <div *ngIf="signupForm.get('lastName')?.errors?.['minlength']">Le nom de famille doit contenir au moins 2 caractères.</div>
+            </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label>Password:</label>
-            <input type="password" class="form-control" [(ngModel)]="newUser.password" name="password" required>
+            <label>Password <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" formControlName="password" [ngClass]="{'is-invalid': signupForm.get('password')?.invalid && signupForm.get('password')?.touched}">
+            <div *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched" class="invalid-feedback">
+              <div *ngIf="signupForm.get('password')?.errors?.['required']">Le mot de passe est requis.</div>
+            </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label>Phone:</label>
-            <input type="text" class="form-control" [(ngModel)]="newUser.phone" name="phone" maxlength="9" pattern="[0-9]{0,9}">
+            <label>Phone <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="phone" [ngClass]="{'is-invalid': signupForm.get('phone')?.invalid && signupForm.get('phone')?.touched}">
+            <div *ngIf="signupForm.get('phone')?.invalid && signupForm.get('phone')?.touched" class="invalid-feedback">
+              <div *ngIf="signupForm.get('phone')?.errors?.['required']">Le numéro de téléphone est requis.</div>
+              <div *ngIf="signupForm.get('phone')?.errors?.['pattern']">Le numéro de téléphone doit contenir 8 chiffres.</div>
+            </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label>Address:</label>
-            <input type="text" class="form-control" [(ngModel)]="newUser.adresse" name="adresse">
+            <label>Address <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="adresse" [ngClass]="{'is-invalid': signupForm.get('adresse')?.invalid && signupForm.get('adresse')?.touched}">
+            <div *ngIf="signupForm.get('adresse')?.invalid && signupForm.get('adresse')?.touched" class="invalid-feedback">
+              <div *ngIf="signupForm.get('adresse')?.errors?.['required']">L'adresse est requise.</div>
+            </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label>Sexe:</label>
-            <select class="form-select" [(ngModel)]="newUser.sexe" name="sexe" required>
+            <label>Sexe <span class="text-danger">*</span></label>
+            <select class="form-select" formControlName="sexe" [ngClass]="{'is-invalid': signupForm.get('sexe')?.invalid && signupForm.get('sexe')?.touched}">
               <option value="" disabled selected>Choisir le sexe</option>
               <option value="MALE">Homme</option>
               <option value="FEMALE">Femme</option>
             </select>
+            <div *ngIf="signupForm.get('sexe')?.invalid && signupForm.get('sexe')?.touched" class="invalid-feedback">
+              <div *ngIf="signupForm.get('sexe')?.errors?.['required']">Le sexe est requis.</div>
+            </div>
           </div>
         </div>
-        <button type="submit" class="btn btn-success">Ajouter</button>
+        <button type="submit" class="btn btn-success" [disabled]="signupForm.invalid">Ajouter</button>
       </form>
-    </div>
-  </ng-template>
-  
+    </p-dialog>
 
-    </div>
-    </div>
+    <!-- Confirmation Dialog -->
+    <p-toast></p-toast>
+    <p-confirmDialog #cd>
+      <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
+        <div class="flex flex-col items-center p-8 bg-surface-0 dark:bg-surface-900 rounded">
+          <div class="rounded-full bg-primary text-primary-contrast inline-flex justify-center items-center h-24 w-24 -mt-20">
+            <i class="pi pi-question !text-5xl"></i>
+          </div>
+          <span class="font-bold text-2xl block mb-2 mt-6">{{ message.header }}</span>
+          <p class="mb-0">{{ message.message }}</p>
+          <div class="flex items-center gap-2 mt-6">
+            <p-button label="Save" (onClick)="onAccept()" styleClass="w-32"></p-button>
+            <p-button label="Cancel" styleClass="p-button-outlined w-32" (onClick)="onReject()"></p-button>
+          </div>
+        </div>
+      </ng-template>
+    </p-confirmDialog>
+  </div>
+</div>

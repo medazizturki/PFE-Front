@@ -17,8 +17,7 @@ export class LoginComponent implements OnDestroy {
   loginRequest = { username: '', password: '' };
   isLoading = false;
   errorMessage = '';
-
-  showFaceLogin = false;
+  displayModalFace: boolean = false;
   isFaceCameraOn = false;
   faceLoginStatus: { message: string, type: string } | null = null;
   private faceStream: MediaStream | null = null;
@@ -31,7 +30,20 @@ export class LoginComponent implements OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    //this.stopFaceCamera();
+    // Make sure to stop the camera when component is destroyed
+    this.stopFaceCamera();
+  }
+
+  openFaceModal() {
+    this.displayModalFace = true;
+    // Load face models when the modal is opened
+    this.loadFaceModels();
+  }
+
+  closeFaceModal(): void {
+    this.displayModalFace = false;
+    // Stop the camera when closing the modal
+    this.stopFaceCamera();
   }
 
   onLogin(disabledAccountModal?: any) {
@@ -56,18 +68,13 @@ export class LoginComponent implements OnDestroy {
       }
     });
   }
-  
-
-  toggleFaceLogin() {
-    this.showFaceLogin = !this.showFaceLogin;
-    if (this.showFaceLogin) {
-      this.loadFaceModels();
-    } else {
-      this.stopFaceCamera();
-    }
-  }
 
   async loadFaceModels() {
+    if (this.faceModelsLoaded) {
+      // If models are already loaded, no need to load again
+      return;
+    }
+    
     try {
       this.showFaceStatus('Loading face recognition models...', 'info');
 
@@ -121,7 +128,6 @@ export class LoginComponent implements OnDestroy {
       this.showFaceStatus(`Camera error: ${(error as Error).message}`, 'error');
     }
   }
-    
 
   async recognizeFace() {
     if (!this.faceStream) {
@@ -180,8 +186,9 @@ export class LoginComponent implements OnDestroy {
               };
               localStorage.setItem('user', JSON.stringify(user));
       
-              // Stop the camera
+              // Stop the camera and close the modal
               this.stopFaceCamera();
+              this.displayModalFace = false;
       
               this.router.navigate(['/home']);
             } else {
@@ -197,9 +204,7 @@ export class LoginComponent implements OnDestroy {
         console.error('Face recognition error:', error);
         this.showFaceStatus(`Error: ${(error as Error).message}`, 'error');
     }
-}
-
-
+  }
 
   stopFaceCamera() {
     if (this.faceStream) {
@@ -207,8 +212,11 @@ export class LoginComponent implements OnDestroy {
       this.faceStream = null;
     }
 
-    this.faceVideo.nativeElement.srcObject = null;
-    this.faceVideo.nativeElement.style.display = 'none';
+    if (this.faceVideo?.nativeElement) {
+      this.faceVideo.nativeElement.srcObject = null;
+      this.faceVideo.nativeElement.style.display = 'none';
+    }
+    
     this.isFaceCameraOn = false;
     this.showFaceStatus('Camera stopped', 'info');
   }

@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
   faceStatus: { message: string, type: string } | null = null;
   private stream: MediaStream | null = null;
   private modelsLoaded = false;
+  displayModalFaceUpdate : boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -35,6 +36,18 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.loadCurrentUser();
+    this.loadFaceAPIModels();
+  }
+
+  openFaceModal() {
+    this.displayModalFaceUpdate = true;
+    // Load face models when the modal is opened
+    this.loadFaceAPIModels();
+  }
+
+  closeFaceModal(): void {
+    this.displayModalFaceUpdate = false;
+    // Stop the camera when closing the modal
     this.loadFaceAPIModels();
   }
 
