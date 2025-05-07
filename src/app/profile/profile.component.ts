@@ -26,7 +26,9 @@ export class ProfileComponent implements OnInit {
   faceStatus: { message: string, type: string } | null = null;
   private stream: MediaStream | null = null;
   private modelsLoaded = false;
-  displayModalFaceUpdate : boolean = false;
+  displayModalFaceUpdate: boolean = false;
+
+  errors: any = {};
 
   constructor(
     private authService: AuthService,
@@ -41,14 +43,12 @@ export class ProfileComponent implements OnInit {
 
   openFaceModal() {
     this.displayModalFaceUpdate = true;
-    // Load face models when the modal is opened
     this.loadFaceAPIModels();
   }
 
   closeFaceModal(): void {
     this.displayModalFaceUpdate = false;
-    // Stop the camera when closing the modal
-    this.loadFaceAPIModels();
+    this.stopCamera();
   }
 
   async loadFaceAPIModels() {
@@ -210,11 +210,11 @@ export class ProfileComponent implements OnInit {
       this.errorMessage = 'No user ID available for update';
       return;
     }
-  
+
     this.isUpdating = true;
     this.errorMessage = '';
     this.successMessage = '';
-  
+
     const userToUpdate = {
       preferred_username: this.user.preferred_username ?? '',
       firstName: typeof this.user.firstName === 'string' ? this.user.firstName : '',
@@ -224,10 +224,10 @@ export class ProfileComponent implements OnInit {
       adresse: typeof this.user.adresse === 'string' ? this.user.adresse : '',
       sexe: typeof this.user.sexe === 'string' ? this.user.sexe : '',
       phone: typeof this.user.phone === 'string' ? this.user.phone : '',
-      faceData : typeof this.user.faceData === 'string' ? this.user.faceData : '',
+      faceData: typeof this.user.faceData === 'string' ? this.user.faceData : '',
       userId: userId
     };
-  
+
     this.authService.updateUser(userToUpdate).subscribe({
       next: (response) => {
         console.log('Update response:', response);
@@ -240,13 +240,11 @@ export class ProfileComponent implements OnInit {
       error: (error) => {
         console.error('Failed to update user', error);
         this.isUpdating = false;
-        this.errorMessage =
-          error.error?.message || error.error || 'Unknown error occurred';
-        setTimeout(() => (this.errorMessage = ''), 5000);
+        this.errors = error.error?.errors || {}; // Assuming backend returns field-specific errors
+        setTimeout(() => (this.errors = {}), 5000);
       }
     });
   }
-  
 
   onFileSelectedAjout(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -296,13 +294,13 @@ export class ProfileComponent implements OnInit {
       this.showFaceStatus('No face data captured', 'error');
       return;
     }
-  
+
     const userId = this.user?.sub || this.user?.id || this.user?.attributes?.sub?.[0];
     if (!userId) {
       this.showFaceStatus('No user ID found. Please log in again.', 'error');
       return;
     }
-  
+
     const truncatedDescriptor = this.faceData.descriptor.slice(0, 10);
     this.userService.registerFace(userId, truncatedDescriptor).subscribe({
       next: (response) => {
@@ -320,5 +318,4 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
-  
 }

@@ -96,90 +96,95 @@
               
               <!-- Profile form -->
               <div class="profile-form-container">
-                <form (ngSubmit)="updateUser()" class="text-start" #profileForm="ngForm">
+                <!-- Profile form -->
+                <div class="profile-form-container">
+                  <form (ngSubmit)="updateUser()" class="text-start" #profileForm="ngForm">
 
-                  <div class="mb-3">
-                    <label for="preferred_username" class="form-label">Username <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="preferred_username"
-                          [(ngModel)]="user.preferred_username" name="preferred_username" required disabled>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="firstName"
-                          [(ngModel)]="user.firstName" name="firstName" required
-                          minlength="2" maxlength="50" pattern="[a-zA-ZÀ-ÿ '-]*"
-                          #firstName="ngModel">
-                    <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="text-danger">
-                      <div *ngIf="firstName.errors?.['required']">First name is required</div>
-                      <div *ngIf="firstName.errors?.['minlength']">Minimum 2 characters</div>
-                      <div *ngIf="firstName.errors?.['maxlength']">Maximum 50 characters</div>
-                      <div *ngIf="firstName.errors?.['pattern']">Only letters, spaces, hyphens and apostrophes allowed</div>
+                    <div class="mb-3">
+                      <label for="preferred_username" class="form-label">Username <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="preferred_username"
+                            [(ngModel)]="user.preferred_username" name="preferred_username" required disabled>
                     </div>
-                  </div>
 
-                  <div class="mb-3">
-                    <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="lastName"
-                          [(ngModel)]="user.lastName" name="lastName" required
-                          minlength="2" maxlength="50" pattern="[a-zA-ZÀ-ÿ '-]*"
-                          #lastName="ngModel">
-                    <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="text-danger">
-                      <div *ngIf="lastName.errors?.['required']">Last name is required</div>
-                      <div *ngIf="lastName.errors?.['minlength']">Minimum 2 characters</div>
-                      <div *ngIf="lastName.errors?.['maxlength']">Maximum 50 characters</div>
-                      <div *ngIf="lastName.errors?.['pattern']">Only letters, spaces, hyphens and apostrophes allowed</div>
+                    <div class="mb-3">
+                      <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="firstName"
+                            [(ngModel)]="user.firstName" name="firstName" required
+                            minlength="2" maxlength="50" pattern="[a-zA-ZÀ-ÿ '-]*"
+                            #firstName="ngModel">
+                      <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="text-danger">
+                        <div *ngIf="firstName.errors?.['required']">First name is required</div>
+                        <div *ngIf="firstName.errors?.['minlength']">Minimum 2 characters</div>
+                        <div *ngIf="firstName.errors?.['maxlength']">Maximum 50 characters</div>
+                        <div *ngIf="firstName.errors?.['pattern']">Only letters, spaces, hyphens and apostrophes allowed</div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="mb-3">
-                    <label for="email" class="form-label">Email <span class="text-danger">*</span>:</label>
-                    <input type="email" class="form-control" id="email"
-                          [(ngModel)]="user.email" name="email" required disabled
-                          #email="ngModel">
-                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
-                      <div *ngIf="email.errors?.['required']">Email is required</div>
-                      <div *ngIf="email.errors?.['email']">Invalid email format</div>
+                    <div class="mb-3">
+                      <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="lastName"
+                            [(ngModel)]="user.lastName" name="lastName" required
+                            minlength="2" maxlength="50" pattern="[a-zA-ZÀ-ÿ '-]*"
+                            #lastName="ngModel">
+                      <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="text-danger">
+                        <div *ngIf="lastName.errors?.['required']">Last name is required</div>
+                        <div *ngIf="lastName.errors?.['minlength']">Minimum 2 characters</div>
+                        <div *ngIf="lastName.errors?.['maxlength']">Maximum 50 characters</div>
+                        <div *ngIf="lastName.errors?.['pattern']">Only letters, spaces, hyphens and apostrophes allowed</div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="mb-3">
-                    <label for="image" class="form-label">Importer une image <span class="text-danger">*</span> </label>
-                    <input type="file" class="form-control" id="image" accept="image/*" (change)="onFileSelectedAjout($event)">
-                    <!-- Pas de validation pour l'image -->
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="adresse" class="form-label">Address <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="adresse"
-                          [(ngModel)]="user.adresse" name="adresse"
-                          maxlength="100"
-                          #adresse="ngModel" required>
-                    <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)" class="text-danger">
-                      <div *ngIf="adresse.errors?.['maxlength']">Maximum 100 characters</div>
+                    <div class="mb-3">
+                      <label for="email" class="form-label">Email <span class="text-danger">*</span>:</label>
+                      <input type="email" class="form-control" id="email"
+                            [(ngModel)]="user.email" name="email" required disabled
+                            #email="ngModel">
+                      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+                        <div *ngIf="email.errors?.['required']">Email is required</div>
+                        <div *ngIf="email.errors?.['email']">Invalid email format</div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="mb-3">
-                    <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="phone"
-                          [(ngModel)]="user.phone" name="phone"
-                          pattern="[0-9]*" maxlength="15"
-                          #phone="ngModel" required>
-                    <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger">
-                      <div *ngIf="phone.errors?.['pattern']">Only numbers and + allowed</div>
-                      <div *ngIf="phone.errors?.['maxlength']">Maximum 15 characters</div>
+                    <div class="mb-3">
+                      <label for="image" class="form-label">Importer une image <span class="text-danger">*</span> </label>
+                      <input type="file" class="form-control" id="image" accept="image/*" (change)="onFileSelectedAjout($event)">
+                      <!-- Pas de validation pour l'image -->
                     </div>
-                  </div>
 
-                  <div class="text-center">
-                    <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid || isUpdating">
-                      <span *ngIf="!isUpdating">Update Profile</span>
-                      <span *ngIf="isUpdating" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                      <span *ngIf="isUpdating"> Updating...</span>
-                    </button>
-                  </div>
-                </form>
+                    <div class="mb-3">
+                      <label for="adresse" class="form-label">Address <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="adresse"
+                            [(ngModel)]="user.adresse" name="adresse"
+                            maxlength="100"
+                            #adresse="ngModel" required>
+                      <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)" class="text-danger">
+                        <div *ngIf="adresse.errors?.['maxlength']">Maximum 100 characters</div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="phone"
+                             [(ngModel)]="user.phone" name="phone"
+                             pattern="[0-9]*" maxlength="8"
+                             #phone="ngModel" required>
+                      <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger">
+                        <div *ngIf="phone.errors?.['pattern']">Only numbers allowed</div>
+                        <div *ngIf="phone.errors?.['maxlength']">Maximum 8 digits</div>
+                      </div>
+                      <div *ngIf="errors?.phone" class="text-danger">{{ errors.phone }}</div>
+                    </div>
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid || isUpdating">
+                        <span *ngIf="!isUpdating">Update Profile</span>
+                        <span *ngIf="isUpdating" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span *ngIf="isUpdating"> Updating...</span>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
               </div>
             </div>
           </div>
