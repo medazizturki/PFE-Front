@@ -1,0 +1,183 @@
+<!-- ✅ commision-hors-elec.component.html -->
+<div class="wrapper">
+  <nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+      <a class="sidebar-brand" href="/home">
+        <img src="assets/images/logo_BDMS.png" class="align-middle" style="height: 30px;">
+      </a>
+            <ul class="sidebar-nav">
+            <li class="sidebar-header">
+                Pages
+            </li>            
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="home">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/users">
+                <i class="align-middle" data-feather="user"></i> <span class="align-middle">Liste des utilisateurs</span>
+                </a>
+            </li>
+            <li class="sidebar-header">
+                Administration
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/jourferie">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Jour Férié</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/typeteneur">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Type Teneur</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/compteteneur">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Compte Teneur</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/tmm">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">TMM</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/devises">
+                <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Devises</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/tauxcharge">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Taux Charges</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/typemarche">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Type Marche</span>
+                </a>
+            </li>
+            <li class="sidebar-item active">
+                <a class="sidebar-link" href="/commissionHE">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Commision HorsElec</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/commissionE">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Commision Elec</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/categorieavoir">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Categorie d'Avoir</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+  </nav>
+
+  <div class="main">
+    <nav class="navbar navbar-expand navbar-light navbar-bg">
+      <a class="sidebar-toggle js-sidebar-toggle">
+        <i class="hamburger align-self-center"></i>
+      </a>
+      <div class="navbar-collapse collapse">
+        <ul class="navbar-nav navbar-align">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+              <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'" class="avatar img-fluid rounded me-1" style="width: 32px; height: 32px; object-fit: cover;">
+              <span class="text-dark" *ngIf="user">{{ user.username || user.name }}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+              <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+              <a class="dropdown-item" href="#" (click)="logout()"><i class="align-middle me-1" data-feather="log-out"></i> Log out</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="header-container">
+        <div class="header-blue-line"></div>
+        <div class="header-bar">
+          <h2>Liste des Commissions Hors Elec</h2>
+          <button class="btn-add" (click)="openSignupModal()">
+            <span class="add-icon">+</span> Ajouter une Commission
+          </button>
+        </div>
+      </div>
+
+      <div class="card shadow-sm card-square">
+        <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Titre</th>
+                <th>Type</th>
+                <th>Rate</th>
+                <th>Minimum</th>
+                <th>Maximum</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let commission of commissions">
+                <td>{{ commission.titre }}</td>
+                <td>{{ commission.type }}</td>
+                <td>{{ commission.rate }}</td>
+                <td>{{ commission.minimum }}</td>
+                <td>{{ commission.maximum }}</td>
+                <td>
+                  <button class="btn btn-light btn-sm me-2 shake-btn" (click)="editCommission(commission)" title="Modifier">
+                    <i class="pi pi-pencil" style="font-size: 1.1rem; color: #0d6efd;"></i>
+                  </button>
+                  <button class="btn btn-light btn-sm shake-btn" (click)="confirmDelete(commission.id)" title="Supprimer">
+                    <i class="pi pi-trash" style="font-size: 1.1rem; color: #dc3545;"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <p-dialog [(visible)]="displayModal" [modal]="true" [style]="{width: '40vw'}" [draggable]="false" [resizable]="false"
+      [header]="isEdit ? 'Modifier une Commission' : 'Ajouter une Commission'">
+      <form [formGroup]="commissionForm" (ngSubmit)="confirmSave()">
+        <div class="row">
+          <div class="mb-3">
+            <label for="titre" class="form-label">Titre <span class="text-danger">*</span></label>
+            <input id="titre" type="text" formControlName="titre" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
+            <input id="type" type="text" formControlName="type" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="rate" class="form-label">Taux <span class="text-danger">*</span></label>
+            <input id="rate" type="number" formControlName="rate" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="minimum" class="form-label">Minimum <span class="text-danger">*</span></label>
+            <input id="minimum" type="number" formControlName="minimum" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="maximum" class="form-label">Maximum <span class="text-danger">*</span></label>
+            <input id="maximum" type="number" formControlName="maximum" class="form-control" />
+          </div>
+        </div>
+        <div class="text-end">
+          <button type="submit" class="btn btn-success" [disabled]="commissionForm.invalid">
+            {{ isEdit ? 'Modifier' : 'Ajouter' }}
+          </button>
+        </div>
+      </form>
+    </p-dialog>
+
+    <!-- Toast et confirmation -->
+    <p-toast></p-toast>
+    <p-confirmDialog></p-confirmDialog>
+  </div>
+</div>

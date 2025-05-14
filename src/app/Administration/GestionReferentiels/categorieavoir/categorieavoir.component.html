@@ -1,0 +1,190 @@
+<div class="wrapper">
+  <nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+      <a class="sidebar-brand" href="/home">
+        <img src="assets/images/logo_BDMS.png" class="align-middle" style="height: 30px;">
+      </a>
+      <ul class="sidebar-nav">
+            <li class="sidebar-header">
+                Pages
+            </li>            
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="home">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/users">
+                <i class="align-middle" data-feather="user"></i> <span class="align-middle">Liste des utilisateurs</span>
+                </a>
+            </li>
+            <li class="sidebar-header">
+                Administration
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/jourferie">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Jour Férié</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/typeteneur">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Type Teneur</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/compteteneur">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Compte Teneur</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/tmm">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">TMM</span>
+                </a>
+            </li>
+            <li class="sidebar-item active">
+                <a class="sidebar-link" href="/devises">
+                <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Devises</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/tauxcharge">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Taux Charges</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/typemarche">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Type Marche</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/commissionHE">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Commision HorsElec</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/commissionE">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Commision Elec</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/categorieavoir">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Categorie d'Avoir</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+  </nav>
+
+  <div class="main">
+    <nav class="navbar navbar-expand navbar-light navbar-bg">
+      <a class="sidebar-toggle js-sidebar-toggle"><i class="hamburger align-self-center"></i></a>
+      <div class="navbar-collapse collapse">
+        <ul class="navbar-nav navbar-align">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+              <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'" class="avatar img-fluid rounded me-1" style="width: 32px; height: 32px; object-fit: cover;">
+              <span class="text-dark" *ngIf="user">{{ user.username || user.name }}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+              <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+              <a class="dropdown-item" href="#" (click)="logout()"><i class="align-middle me-1" data-feather="log-out"></i> Log out</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="header-container">
+        <div class="header-blue-line"></div>
+        <div class="header-bar">
+          <h2>Liste des Catégories d’avoir</h2>
+          <button class="btn-add" (click)="openSignupModal()">
+            <span class="add-icon">+</span> Ajouter une Catégorie
+          </button>
+        </div>
+      </div>
+
+      <div class="card shadow-sm card-square">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                <thead>
+                    <tr>
+                    <th>Code BVMT</th>
+                    <th>Code NSC</th>
+                    <th>Code Optique</th>
+                    <th>Code TC</th>
+                    <th>Libellé FR</th>
+                    <th>Libellé C FR</th>
+                    <th>Libellé AR</th>
+                    <th>Libellé C AR</th>
+                    <th>Libellé EN</th>
+                    <th>Libellé C EN</th>
+                    <th>Taux CTB</th>
+                    <th>Taux RUS</th>
+                    <th>Taux CEB_ENR</th>
+                    <th>Taux RUS_ENR</th>
+                    <th>Modifier</th>
+                    <th>Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cat of categories">
+                    <td>{{ cat.codeBVMT }}</td>
+                    <td>{{ cat.codeNSC }}</td>
+                    <td>{{ cat.codeOptique }}</td>
+                    <td>{{ cat.codeTc }}</td>
+                    <td>{{ cat.libellefr }}</td>
+                    <td>{{ cat.libellecourtefr }}</td>
+                    <td>{{ cat.libellear }}</td>
+                    <td>{{ cat.libellecourtear }}</td>
+                    <td>{{ cat.libelleen }}</td>
+                    <td>{{ cat.libellecourteen }}</td>
+                    <td>{{ cat.tauxreductionCTB }}</td>
+                    <td>{{ cat.tauxreductionRUS }}</td>
+                    <td>{{ cat.tauxreductionCEB_ENR }}</td>
+                    <td>{{ cat.tauxreductionRUS_ENR }}</td>
+                    <td>
+                        <button class="btn btn-light btn-sm me-2 shake-btn" (click)="editCategorie(cat)">
+                        <i class="pi pi-pencil" style="font-size: 1.1rem; color: #0d6efd;"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light btn-sm shake-btn" (click)="confirmDelete(cat.id)">
+                        <i class="pi pi-trash" style="font-size: 1.1rem; color: #dc3545;"></i>
+                        </button>
+                    </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <p-dialog [(visible)]="displayModal" [modal]="true" [style]="{width: '60vw'}" [draggable]="false" [resizable]="false"
+      [header]="isEdit ? 'Modifier Catégorie' : 'Ajouter Catégorie'">
+      <form [formGroup]="categorieForm" (ngSubmit)="confirmSave()">
+        <div class="row">
+          <div class="col-md-6 mb-3" *ngFor="let key of ['codeBVMT', 'codeNSC', 'codeOptique', 'codeTc', 'libellefr', 'libellecourtefr', 'libellear', 'libellecourtear', 'libelleen', 'libellecourteen']">
+            <label class="form-label">{{ key }}</label>
+            <input type="text" class="form-control" [formControlName]="key" />
+          </div>
+          <div class="col-md-6 mb-3" *ngFor="let key of ['tauxreductionCTB', 'tauxreductionRUS', 'tauxreductionCEB_ENR', 'tauxreductionRUS_ENR']">
+            <label class="form-label">{{ key }}</label>
+            <input type="number" class="form-control" [formControlName]="key" />
+          </div>
+        </div>
+        <div class="text-end">
+          <button type="submit" class="btn btn-success" [disabled]="categorieForm.invalid">
+            {{ isEdit ? 'Modifier' : 'Ajouter' }}
+          </button>
+        </div>
+      </form>
+    </p-dialog>
+
+    <p-toast></p-toast>
+    <p-confirmDialog></p-confirmDialog>
+  </div>
+</div>

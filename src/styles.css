@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+.fc .fc-button {
+    background-color: #023a8d !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 10px 20px rgba(2, 58, 141, 0.3) !important;
+    transition: 0.3s ease;
+    padding: 0.4rem 0.75rem !important;
+    border-radius: 4px !important;
+  }
+  
+  .fc .fc-button:hover {
+    background-color: #022e70 !important;
+  }
+  
