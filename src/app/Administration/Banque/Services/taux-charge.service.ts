@@ -29,4 +29,10 @@ export class TauxChargeService {
       responseType: 'text' as 'json'
     });
   }
+
+  downloadPdf(): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/pdf`, {
+      responseType: 'blob'
+    });
+  }
 }

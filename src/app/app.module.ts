@@ -34,6 +34,10 @@ import { TypeMarcheComponent } from './Administration/GestionReferentiels/type-m
 import { CommisionHorsElecComponent } from './Administration/GestionReferentiels/commision-hors-elec/commision-hors-elec.component';
 import { CommissionElecComponent } from './Administration/GestionReferentiels/commission-elec/commission-elec.component';
 import { CategorieavoirComponent } from './Administration/GestionReferentiels/categorieavoir/categorieavoir.component';
+import { TableModule } from 'primeng/table';
+import { GroupesComponent } from './Administration/GestionReferentiels/groupes/groupes.component';
+import { IndiceSectorielComponent } from './Administration/GestionReferentiels/indice-sectoriel/indice-sectoriel.component';
+import { NatureReferentielsComponent } from './Administration/GestionReferentiels/nature-referentiels/nature-referentiels.component';
 
 
 @NgModule({
@@ -54,6 +58,9 @@ import { CategorieavoirComponent } from './Administration/GestionReferentiels/ca
     CommisionHorsElecComponent,
     CommissionElecComponent,
     CategorieavoirComponent,
+    GroupesComponent,
+    IndiceSectorielComponent,
+    NatureReferentielsComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,7 +76,8 @@ import { CategorieavoirComponent } from './Administration/GestionReferentiels/ca
     BrowserAnimationsModule,
     ConfirmDialogModule,
     FullCalendarModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    TableModule
   ],
   providers: [
     DialogService,

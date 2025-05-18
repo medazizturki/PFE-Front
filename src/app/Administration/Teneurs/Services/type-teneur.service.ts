@@ -34,4 +34,11 @@ export class TypeTeneurService {
       const params = new HttpParams().set('userId', userId);
       return this.http.post(`${this.baseUrl}/logout`, null, { params, responseType: 'text' });
     }
+
+
+  downloadPdf(): Observable<Blob> {
+  return this.http.get(`${this.baseUrl}/pdf`, {
+    responseType: 'blob'
+  });
+  }
 }

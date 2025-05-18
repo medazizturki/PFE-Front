@@ -16,6 +16,9 @@ import { TypeMarcheComponent } from './Administration/GestionReferentiels/type-m
 import { CommisionHorsElecComponent } from './Administration/GestionReferentiels/commision-hors-elec/commision-hors-elec.component';
 import { CommissionElecComponent } from './Administration/GestionReferentiels/commission-elec/commission-elec.component';
 import { CategorieavoirComponent } from './Administration/GestionReferentiels/categorieavoir/categorieavoir.component';
+import { GroupesComponent } from './Administration/GestionReferentiels/groupes/groupes.component';
+import { IndiceSectorielComponent } from './Administration/GestionReferentiels/indice-sectoriel/indice-sectoriel.component';
+import { NatureReferentielsComponent } from './Administration/GestionReferentiels/nature-referentiels/nature-referentiels.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -33,6 +36,9 @@ const routes: Routes = [
   { path: 'commissionHE', component: CommisionHorsElecComponent, canActivate: [AuthGuard] },
   { path: 'commissionE', component: CommissionElecComponent, canActivate: [AuthGuard] },
   { path: 'categorieavoir', component: CategorieavoirComponent, canActivate: [AuthGuard] },
+  { path: 'groupes', component: GroupesComponent, canActivate: [AuthGuard] },
+  { path: 'indicesectoriel', component: IndiceSectorielComponent, canActivate: [AuthGuard] },
+  { path: 'naturereferentiel', component: NatureReferentielsComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
 

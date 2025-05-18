@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TypeTeneurService } from '../Services/type-teneur.service';
@@ -14,9 +14,19 @@ export class TypeTeneurComponent implements OnInit {
   typeForm!: FormGroup;
   isEdit = false;
   editedId: number | null = null;
-  displayModal: boolean = false;
-
+  displayModal = false;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
+
+  // Filtrage
+  filterCode = '';
+  filterLibelle = '';
+  showFilterCode = false;
+  showFilterLibelle = false;
+
+  @ViewChild('codeToggler')    codeToggler!: ElementRef;
+  @ViewChild('codeFilter')     codeFilter!: ElementRef;
+  @ViewChild('libelleToggler') libelleToggler!: ElementRef;
+  @ViewChild('libelleFilter')  libelleFilter!: ElementRef;
 
   constructor(
     private fb: FormBuilder,
@@ -28,42 +38,80 @@ export class TypeTeneurComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.loadTypes();
-    this.getUserImagePath();
   }
 
   initForm(): void {
     this.typeForm = this.fb.group({
-      code: ['', Validators.required],
+      id:      [null],
+      code:    ['', Validators.required],
       libelle: ['', Validators.required]
     });
   }
 
   loadTypes(): void {
     this.service.getAll().subscribe(data => {
-      this.types = data;
+      // newest first
+      this.types = data.sort((a, b) => b.id - a.id);
     });
   }
 
-  openSignupModal() {
-    this.displayModal = true;
-    this.isEdit = false;
-    this.typeForm.reset();
+  get filteredTypes(): any[] {
+    return this.types
+      .filter(t =>
+        t.code.toLowerCase().includes(this.filterCode.toLowerCase()) &&
+        t.libelle.toLowerCase().includes(this.filterLibelle.toLowerCase())
+      )
+      .sort((a, b) => b.id - a.id);
   }
 
-  closeModal(): void {
-    this.displayModal = false;
+  toggleFilter(column: 'code' | 'libelle'): void {
+    if (column === 'code') {
+      this.showFilterCode = !this.showFilterCode;
+      if (!this.showFilterCode) this.filterCode = '';
+    } else {
+      this.showFilterLibelle = !this.showFilterLibelle;
+      if (!this.showFilterLibelle) this.filterLibelle = '';
+    }
+  }
+
+  clearFilter(column: 'code' | 'libelle') {
+    if (column === 'code') {
+      this.filterCode = '';
+    } else {
+      this.filterLibelle = '';
+    }
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  onClickOutside(target: HTMLElement) {
+    if (this.showFilterCode &&
+        !this.codeToggler.nativeElement.contains(target) &&
+        !this.codeFilter.nativeElement.contains(target)) {
+      this.showFilterCode = false;
+    }
+    if (this.showFilterLibelle &&
+        !this.libelleToggler.nativeElement.contains(target) &&
+        !this.libelleFilter.nativeElement.contains(target)) {
+      this.showFilterLibelle = false;
+    }
+  }
+
+  openSignupModal(): void {
+    this.isEdit = false;
+    this.editedId = null;
+    this.typeForm.reset();
+    this.displayModal = true;
   }
 
   editType(type: any): void {
-    this.displayModal = true;
     this.isEdit = true;
     this.editedId = type.id;
     this.typeForm.patchValue(type);
+    this.displayModal = true;
   }
 
   confirmSaveType(): void {
     if (this.typeForm.invalid) return;
-
     this.confirmationService.confirm({
       message: this.isEdit ? 'Confirmer la modification ?' : 'Confirmer l’ajout ?',
       header: 'Confirmation',
@@ -74,20 +122,19 @@ export class TypeTeneurComponent implements OnInit {
 
   saveType(): void {
     const data = this.typeForm.value;
+    const op = this.isEdit && this.editedId != null
+      ? this.service.update(this.editedId, data)
+      : this.service.add(data);
 
-    if (this.isEdit && this.editedId !== null) {
-      this.service.update(this.editedId, data).subscribe(() => {
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Type modifié avec succès' });
-        this.displayModal = false;
-        this.loadTypes();
+    op.subscribe(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: this.isEdit ? 'Modifié' : 'Ajouté',
+        detail: this.isEdit ? 'Type modifié avec succès' : 'Type ajouté avec succès'
       });
-    } else {
-      this.service.add(data).subscribe(() => {
-        this.messageService.add({ severity: 'success', summary: 'Ajouté', detail: 'Type ajouté avec succès' });
-        this.displayModal = false;
-        this.loadTypes();
-      });
-    }
+      this.displayModal = false;
+      this.loadTypes();
+    });
   }
 
   confirmDelete(id: number): void {
@@ -96,10 +143,7 @@ export class TypeTeneurComponent implements OnInit {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => this.deleteType(id),
-      reject: () => {
-        this.messageService.add({ severity: 'info', summary: 'Annulé', detail: 'Suppression annulée' });
-        this.loadTypes();
-      }
+      reject: () => this.messageService.add({ severity: 'info', summary: 'Annulé', detail: 'Suppression annulée' })
     });
   }
 
@@ -107,15 +151,14 @@ export class TypeTeneurComponent implements OnInit {
     this.service.delete(id).subscribe(
       () => {
         this.types = this.types.filter(t => t.id !== id);
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Type supprimé avec succès' });
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Type supprimé' });
       },
-      (err) => {
+      err => {
         console.error('Erreur de suppression :', err);
         this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la suppression' });
       }
     );
   }
-    
 
   logout(): void {
     localStorage.clear();
@@ -124,9 +167,35 @@ export class TypeTeneurComponent implements OnInit {
 
   getUserImagePath(): string {
     if (!this.user) return '';
-    if (this.user.image) return `/assets/uploads-images/${this.user.image}`;
+    if (this.user.image)                  return `/assets/uploads-images/${this.user.image}`;
     if (this.user.attributes?.image?.[0]) return `/assets/uploads-images/${this.user.attributes.image[0]}`;
-    if (this.user.attributes?.picture) return `/assets/uploads-images/${this.user.attributes.picture}`;
+    if (this.user.attributes?.picture)    return `/assets/uploads-images/${this.user.attributes.picture}`;
     return '';
+  }
+
+  /** Appelé depuis le bouton Exporter en PDF */
+  generatePDF(): void {
+    this.service.downloadPdf().subscribe(blob => {
+      // Créer un URL temporaire
+      const url = window.URL.createObjectURL(blob);
+      // Créer un <a> pour forcer le téléchargement
+      const a = document.createElement('a');
+      a.href = url;
+      // Vous pouvez adapter le nom si besoin
+      a.download = this.makeFileName();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      // Libérer la mémoire
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+  /** Génère un nom de fichier horodaté (sans caractères interdits) */
+  private makeFileName(): string {
+    const now = new Date();
+    // format ISO sans ms, remplacer ":" par "." pour Windows
+    const ts = now.toISOString().slice(0,19).replace(/:/g, '.');
+    return `types-teneur-${ts}.pdf`;
   }
 }

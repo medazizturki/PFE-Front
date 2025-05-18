@@ -1,0 +1,308 @@
+<div class="wrapper">
+  <nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+      <a class="sidebar-brand" href="/home">
+        <img src="assets/images/logo_BDMS.png" class="align-middle" style="height: 30px;">
+      </a>
+      <ul class="sidebar-nav">
+            <li class="sidebar-header">
+                Pages
+            </li>            
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="home">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/users">
+                <i class="align-middle" data-feather="user"></i> <span class="align-middle">Liste des utilisateurs</span>
+                </a>
+            </li>
+            <li class="sidebar-header">
+                Administration
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/jourferie">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Jour Férié</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/typeteneur">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Type Teneur</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/compteteneur">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Compte Teneur</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/tmm">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">TMM</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/devises">
+                <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Devises</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/tauxcharge">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Taux Charges</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/typemarche">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Type Marche</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/commissionHE">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Commision HorsElec</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/commissionE">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Commision Elec</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/categorieavoir">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Categorie d'Avoir</span>
+                </a>
+            </li>
+            <li class="sidebar-item active">
+                <a class="sidebar-link" href="/groupes">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Groupes</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/indicesectoriel">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Indice Sectoriel</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/naturereferentiel">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
+                </a>
+            </li>
+            <li>a</li>
+            <li>bb</li>
+        </ul>
+    </div>
+  </nav>
+
+    <div class="main">
+      <nav class="navbar navbar-expand navbar-light navbar-bg">
+        <a class="sidebar-toggle js-sidebar-toggle">
+          <i class="hamburger align-self-center"></i>
+        </a>
+  
+        <div class="navbar-collapse collapse">
+          <ul class="navbar-nav navbar-align">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <!-- Image with fallback -->
+                <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'"
+                     class="avatar img-fluid rounded me-1"
+                     style="width: 32px; height: 32px; object-fit: cover;"
+                     onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
+                
+                <span class="text-dark" *ngIf="user">
+                  {{ user.username || user.preferred_username || user.name || 'No username' }}
+                </span>
+              </a>  
+              <div class="dropdown-menu dropdown-menu-end">
+                <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+                <a class="dropdown-item" href="#" (click)="logout(); $event.preventDefault()"><i class="align-middle me-1" data-feather="log-out"></i> Log out</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+    <div class="container">
+      <div class="header-container">
+        <div class="header-blue-line"></div>
+        <div class="header-bar">
+          <h2>Liste des Catégories d’avoir</h2>
+          <button class="btn-add" (click)="openModal()">
+            <span class="add-icon">+</span> Ajouter un Groupe
+          </button>
+          <button class="btn-add" (click)="generatePDF()">
+            <i class="pi pi-file-pdf"></i> Exporter en PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="card shadow-sm card-square bg-white">
+        <div class="card-body">
+  <p-table [value]="filteredGroupes" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5,10,20]"
+               tableStyleClass="table table-striped mb-0"
+                   headerStyleClass="bg-primary text-white"
+                   [responsiveLayout]="'scroll'">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="position-relative">
+              Code
+              <span #codeToggler class="search-toggler" (click)="toggleFilter('code')">
+                <i class="pi pi-search"></i>
+              </span>
+              <div *ngIf="showFilterCode" #codeFilter class="filter-container">
+                <input type="text" class="filter-input" placeholder="Filtrer…" [(ngModel)]="filterCode"/>
+              </div>
+            </th>
+            <!-- similarly for Marche, Categorie, etc… -->
+            <th class="position-relative">
+              Marché
+              <span #marcheToggler class="search-toggler" (click)="toggleFilter('marche')">
+                <i class="pi pi-search"></i>
+              </span>
+              <div *ngIf="showFilterMarche" #marcheFilter class="filter-container">
+                <input type="text" class="filter-input" [(ngModel)]="filterMarche"/>
+              </div>
+            </th>
+            <th class="position-relative">
+              Catégorie
+              <span #catToggler class="search-toggler" (click)="toggleFilter('categorie')">
+                <i class="pi pi-search"></i>
+              </span>
+              <div *ngIf="showFilterCategorie" #catFilter class="filter-container">
+                <input type="text" class="filter-input" [(ngModel)]="filterCategorie"/>
+              </div>
+            </th>
+            <th class="position-relative">
+              Unité Cotation
+              <span #uniteToggler class="search-toggler" (click)="toggleFilter('unite')">
+                <i class="pi pi-search"></i>
+              </span>
+              <div *ngIf="showFilterUnite" #uniteFilter class="filter-container">
+                <input type="text" class="filter-input" [(ngModel)]="filterUnite"/>
+              </div>
+            </th>
+            <th class="position-relative">
+              Devise
+              <span #deviseToggler class="search-toggler" (click)="toggleFilter('devise')">
+                <i class="pi pi-search"></i>
+              </span>
+              <div *ngIf="showFilterDevise" #deviseFilter class="filter-container">
+                <input type="text" class="filter-input" [(ngModel)]="filterDevise"/>
+              </div>
+            </th>
+            <th class="position-relative">
+              Mode
+              <span #modeToggler class="search-toggler" (click)="toggleFilter('mode')">
+                <i class="pi pi-search"></i>
+              </span>
+              <div *ngIf="showFilterMode" #modeFilter class="filter-container">
+                <input type="text" class="filter-input" [(ngModel)]="filterMode"/>
+              </div>
+            </th>
+            <th class="position-relative">
+              Description
+              <span #descToggler class="search-toggler" (click)="toggleFilter('desc')">
+                <i class="pi pi-search"></i>
+              </span>
+              <div *ngIf="showFilterDesc" #descFilter class="filter-container">
+                <input type="text" class="filter-input" [(ngModel)]="filterDesc"/>
+              </div>
+            </th>
+            <th class="text-center">Modifier</th>
+            <th class="text-center">Supprimer</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-g>
+          <tr>
+            <td>{{g.code}}</td>
+            <td>{{g.marche}}</td>
+            <td>{{g.categorie}}</td>
+            <td>{{g.unitecotation}}</td>
+            <td>{{g.devises?.code}}</td>
+            <td>{{g.modeCotation}}</td>
+            <td>{{g.description}}</td>
+            <td class="text-center">
+                  <button
+                    class="btn btn-light btn-sm me-2"
+                    (click)="editGroupe(g)"
+                    title="Modifier"
+                    style="padding:6px 12px;border:none;"
+                  >
+                    <i class="pi pi-pencil" style="font-size:1.1rem;color:#0d6efd;"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button
+                    class="btn btn-light btn-sm"
+                    (click)="confirmDelete(g.id)"
+                    title="Supprimer"
+                    style="padding:6px 12px;border:none;"
+                  >
+                    <i class="pi pi-trash" style="font-size:1.1rem;color:#dc3545;"></i>
+                  </button>
+                </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+ <p-dialog [(visible)]="displayModal" [modal]="true" [style]="{width:'40vw'}"
+                header="{{isEdit?'Modifier Groupe':'Ajouter Groupe'}}">
+        <form [formGroup]="groupeForm" (ngSubmit)="saveGroupe()">
+          <div class="row">
+            <div class="mb-3">
+              <label>Code</label>
+              <input pInputText formControlName="code" class="form-control"/>
+            </div>
+            <div class="mb-3">
+              <label>Marché</label>
+              <p-dropdown [options]="marcheOptions"
+                          formControlName="marche"
+                          placeholder="Sélectionnez…"
+                          class="w-100"/>
+            </div>
+            <div class="mb-3">
+              <label>Catégorie</label>
+              <p-dropdown [options]="categorieOptions"
+                          formControlName="categorie"
+                          placeholder="Sélectionnez…"
+                          class="w-100"/>
+            </div>
+            <div class="mb-3">
+              <label>Unité Cotation</label>
+              <input pInputText formControlName="unitecotation" class="form-control"/>
+            </div>
+            <div class="mb-3">
+            <label class="form-label">Devises</label>
+            <p-autoComplete
+              formControlName="devises"
+              [suggestions]="filteredDevises"
+              (completeMethod)="filterDevises($event)"
+              field="code"
+              placeholder="type"
+            ></p-autoComplete>
+          </div>
+            <div class="mb-3">
+              <label>Mode Cotation</label>
+              <p-dropdown [options]="modeOptions"
+                          formControlName="modeCotation"
+                          placeholder="Sélectionnez…"
+                          class="w-100"/>
+            </div>
+            <div class="mb-3">
+              <label>Description</label>
+              <textarea pInputTextarea formControlName="description" class="form-control"></textarea>
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-success" [disabled]="groupeForm.invalid">
+              {{ isEdit ? 'Modifier' : 'Ajouter' }}
+            </button>
+            </div>
+          </div>
+        </form>
+      </p-dialog>
+
+
+           <p-toast></p-toast>
+      <p-confirmDialog></p-confirmDialog>
+    </div>
+  </div>
+</div>

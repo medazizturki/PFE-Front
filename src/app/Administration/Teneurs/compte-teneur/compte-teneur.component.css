@@ -142,3 +142,83 @@
     border-radius: 3;
   }
   
+
+      /* Style personnalisé pour .card-square */
+  .card-square {
+    border-radius: 0.3rem;
+    border: 0.2px #012a68;       /* bordure primaire */
+    transition: transform 0.2s, box-shadow 0.2s;
+    max-width: 1050px;                /* largeur max */
+    margin: 1.5rem auto;             /* centrer et espacer verticalement */
+  }
+
+  .card-square:hover {
+    box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.25);
+  }
+
+
+  
+  /* Conteneur de l’icône search */
+.search-toggler {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: #f1f3f5;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  margin-left: 0.5rem;
+}
+
+.search-toggler:hover {
+  background-color: #e2e6ea;
+  transform: scale(1.1);
+}
+
+/* Style de l’icône à l’intérieur */
+.search-toggler .pi-search {
+  font-size: 1rem;
+  color: #495057;
+}
+
+/* Conteneur pour positionner l’input */
+.filter-container {
+  position: absolute;
+  right: 0;              /* aligné à droite du <th> */
+  left: auto;     
+  top: 2px;
+  width: 160px;
+  padding: 0.5rem;
+  background: white;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+  z-index: 20;
+}
+
+/* Le champ de filtre */
+.filter-input {
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #adb5bd;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+  outline: none;
+}
+
+
+
+/* Target the actual PrimeNG p-table header row */
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background-color: #d8e5f8 !important; /* Bootstrap primary blue */
+  color: black !important;
+  
+}

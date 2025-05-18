@@ -71,25 +71,42 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Categorie d'Avoir</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/groupes">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Groupes</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/indicesectoriel">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Indice Sectoriel</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/naturereferentiel">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
+                </a>
+            </li>
         </ul>
     </div>
   </nav>
 
   <div class="main">
     <nav class="navbar navbar-expand navbar-light navbar-bg">
-      <a class="sidebar-toggle js-sidebar-toggle">
-        <i class="hamburger align-self-center"></i>
-      </a>
+      <a class="sidebar-toggle js-sidebar-toggle"><i class="hamburger align-self-center"></i></a>
       <div class="navbar-collapse collapse">
         <ul class="navbar-nav navbar-align">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-              <img src="assets/images/default-avatar.png" class="avatar img-fluid rounded me-1" style="width: 32px; height: 32px; object-fit: cover;">
-              <span class="text-dark">Utilisateur</span>
+            <a class="nav-link dropdown-toggle d-none d-sm-inline-block"
+               href="#" data-bs-toggle="dropdown">
+              <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'"
+                   class="avatar img-fluid rounded me-1"
+                   style="width:32px;height:32px;object-fit:cover;"
+                   onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
+              <span class="text-dark" *ngIf="user">{{ user.username || user.name }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
               <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
-              <a class="dropdown-item" href="/login"><i class="align-middle me-1" data-feather="log-out"></i> Log out</a>
+              <a class="dropdown-item" href="#" (click)="logout(); $event.preventDefault()"><i class="align-middle me-1" data-feather="log-out"></i> Log out</a>
             </div>
           </li>
         </ul>
@@ -101,30 +118,81 @@
         <div class="header-blue-line"></div>
         <div class="header-bar">
           <h2>Liste des Devises</h2>
-          <button class="btn-add" (click)="openSignupModal()">
-            <span class="add-icon">+</span> Ajouter une Devise
+          <button class="btn-add" (click)="openSignupModal()"><span class="add-icon">+</span> Ajouter une Devise</button>
+          <button class="btn-add" (click)="generatePDF()">
+            <i class="pi pi-file-pdf"></i> Exporter en PDF
           </button>
         </div>
       </div>
 
-      <!-- Card with Table -->
-      <div class="card shadow-sm card-square">
+      <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
-          <table class="table table-striped">
-            <thead>
+          <p-table
+            [value]="filteredDevises"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[5,10,20]"
+            tableStyleClass="table table-striped mb-0"
+            headerStyleClass="bg-primary text-white"
+            [responsiveLayout]="'scroll'"
+          >
+            <ng-template pTemplate="header">
               <tr>
-                <th>Code</th>
-                <th>Libellé (Fr)</th>
-                <th>Libellé courte (Fr)</th>
-                <th>Libellé (Ar)</th>
-                <th>Libellé courte (Ar)</th>
-                <th>Libellé (En)</th>
-                <th>Libellé courte (En)</th>
-                <th>Actions</th>
+                <th class="position-relative">
+                  Code
+                  <span #codeToggler class="search-toggler" (click)="toggleFilter('code')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterCode" #codeFilter class="filter-container">
+                    <input type="text" class="filter-input" placeholder="Filtrer par code…" [(ngModel)]="filterCode"/>
+                  </div>
+                </th>
+                <th class="position-relative">
+                  Libellé (Fr)
+                  <span #libFrToggler class="search-toggler" (click)="toggleFilter('libFr')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibFr" #libFrFilter class="filter-container">
+                    <input type="text" class="filter-input" placeholder="Filtrer par libellé Fr…" [(ngModel)]="filterLibFr"/>
+                  </div>
+                </th>
+                <th class="position-relative">
+                  Libellé courte (Fr)
+                  <span #libCfrToggler class="search-toggler" (click)="toggleFilter('libCfr')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibCfr" #libCfrFilter class="filter-container">
+                    <input type="text" class="filter-input" placeholder="Filtrer par lib courte Fr…" [(ngModel)]="filterLibCfr"/>
+                  </div>
+                </th>
+                <th class="position-relative">
+                  Libellé (Ar)
+                  <span #libArToggler class="search-toggler" (click)="toggleFilter('libAr')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibAr" #libArFilter class="filter-container">
+                    <input type="text" class="filter-input" placeholder="Filtrer par lib Ar…" [(ngModel)]="filterLibAr"/>
+                  </div>
+                </th>
+                <th class="position-relative">
+                  Lib courte (Ar)
+                  <span #libCarToggler class="search-toggler" (click)="toggleFilter('libCar')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibCar" #libCarFilter class="filter-container">
+                    <input type="text" class="filter-input" placeholder="Filtrer par lib courte Ar…" [(ngModel)]="filterLibCar"/>
+                  </div>
+                </th>
+                <th class="position-relative">
+                  Libellé (En)
+                  <span #libEnToggler class="search-toggler" (click)="toggleFilter('libEn')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibEn" #libEnFilter class="filter-container">
+                    <input type="text" class="filter-input" placeholder="Filtrer par lib En…" [(ngModel)]="filterLibEn"/>
+                  </div>
+                </th>
+                <th class="position-relative">
+                  Lib courte (En)
+                  <span #libCenToggler class="search-toggler" (click)="toggleFilter('libCen')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibCen" #libCenFilter class="filter-container">
+                    <input type="text" class="filter-input" placeholder="Filtrer par lib courte En…" [(ngModel)]="filterLibCen"/>
+                  </div>
+                </th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
               </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let devise of devisesList">
+            </ng-template>
+            <ng-template pTemplate="body" let-devise>
+              <tr>
                 <td>{{ devise.code }}</td>
                 <td>{{ devise.libellefr }}</td>
                 <td>{{ devise.libelleCfr }}</td>
@@ -132,60 +200,34 @@
                 <td>{{ devise.libelleCar }}</td>
                 <td>{{ devise.libelleen }}</td>
                 <td>{{ devise.libelleCen }}</td>
-                <td>
-                  <button class="btn btn-light btn-sm me-2 shake-btn"
-                          (click)="editDevises(devise)"
-                          title="Modifier"
-                          style="padding: 6px 12px; border: none;">
-                    <i class="pi pi-pencil" style="font-size: 1.1rem; color: #0d6efd;"></i>
+                <td class="text-center">
+                  <button class="btn btn-light btn-sm me-2 shake-btn" (click)="editDevises(devise)" title="Modifier" style="padding:6px 12px;border:none;">
+                    <i class="pi pi-pencil" style="font-size:1.1rem;color:#0d6efd;"></i>
                   </button>
-                  <button class="btn btn-light btn-sm shake-btn"
-                          (click)="confirmDelete(devise.id)"
-                          title="Supprimer"
-                          style="padding: 6px 12px; border: none;">
-                    <i class="pi pi-trash" style="font-size: 1.1rem; color: #dc3545;"></i>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-light btn-sm shake-btn" (click)="confirmDelete(devise.id)" title="Supprimer" style="padding:6px 12px;border:none;">
+                    <i class="pi pi-trash" style="font-size:1.1rem;color:#dc3545;"></i>
                   </button>
                 </td>
               </tr>
-            </tbody>
-          </table>
+            </ng-template>
+          </p-table>
         </div>
       </div>
     </div>
 
-    <!-- Modal Dialog -->
-    <p-dialog [(visible)]="displayModal" [modal]="true" [style]="{width: '40vw'}" [draggable]="false" [resizable]="false"
-      [header]="isEdit ? 'Modifier une Devise' : 'Ajouter une Devise'">
+    <p-dialog [(visible)]="displayModal" [modal]="true" [style]="{width:'40vw'}" [resizable]="false"
+              [header]="isEdit ? 'Modifier une Devise' : 'Ajouter une Devise'">
       <form [formGroup]="devisesForm" (ngSubmit)="confirmSaveDevises()">
         <div class="row">
-          <div class="mb-3">
-            <label for="code" class="form-label">Code <span class="text-danger">*</span></label>
-            <input id="code" type="text" formControlName="code" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label for="libellefr" class="form-label">Libellé Français <span class="text-danger">*</span></label>
-            <input id="libellefr" type="text" formControlName="libellefr" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label for="libelleCfr" class="form-label">Libellé Courte Français </label>
-            <input id="libelleCfr" type="text" formControlName="libelleCfr" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label for="libellear" class="form-label">Libellé Arabe</label>
-            <input id="libellear" type="text" formControlName="libellear" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label for="libelleCar" class="form-label">Libellé Courte Arabe</label>
-            <input id="libelleCar" type="text" formControlName="libelleCar" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label for="libelleen" class="form-label">Libellé Anglais</label>
-            <input id="libelleen" type="text" formControlName="libelleen" class="form-control" />
-          </div>
-          <div class="mb-3">
-            <label for="libelleCen" class="form-label">Libellé Courte Anglais</label>
-            <input id="libelleCen" type="text" formControlName="libelleCen" class="form-control" />
-          </div>
+          <div class="mb-3"><label class="form-label">Code *</label><input type="text" formControlName="code" class="form-control"/></div>
+          <div class="mb-3"><label class="form-label">Libellé Fr *</label><input type="text" formControlName="libellefr" class="form-control"/></div>
+          <div class="mb-3"><label class="form-label">Lib courte Fr</label><input type="text" formControlName="libelleCfr" class="form-control"/></div>
+          <div class="mb-3"><label class="form-label">Libellé Ar</label><input type="text" formControlName="libellear" class="form-control"/></div>
+          <div class="mb-3"><label class="form-label">Lib courte Ar</label><input type="text" formControlName="libelleCar" class="form-control"/></div>
+          <div class="mb-3"><label class="form-label">Libellé En</label><input type="text" formControlName="libelleen" class="form-control"/></div>
+          <div class="mb-3"><label class="form-label">Lib courte En</label><input type="text" formControlName="libelleCen" class="form-control"/></div>
         </div>
         <div class="text-end">
           <button type="submit" class="btn btn-success" [disabled]="devisesForm.invalid">
@@ -195,7 +237,6 @@
       </form>
     </p-dialog>
 
-    <!-- Toast and Confirmation Dialog -->
     <p-toast></p-toast>
     <p-confirmDialog></p-confirmDialog>
   </div>

@@ -142,3 +142,17 @@
     border-radius: 3;
   }
   
+
+
+          /* Style personnalisé pour .card-square */
+  .card-square {
+    border-radius: 0.3rem;
+    border: 0.2px #012a68;       /* bordure primaire */
+    transition: transform 0.2s, box-shadow 0.2s;
+    max-width: 1050px;                /* largeur max */
+    margin: 1.5rem auto;             /* centrer et espacer verticalement */
+  }
+
+  .card-square:hover {
+    box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.25);
+  }

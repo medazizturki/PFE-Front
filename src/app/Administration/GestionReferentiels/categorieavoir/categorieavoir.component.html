@@ -41,7 +41,7 @@
                 <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">TMM</span>
                 </a>
             </li>
-            <li class="sidebar-item active">
+            <li class="sidebar-item">
                 <a class="sidebar-link" href="/devises">
                 <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Devises</span>
                 </a>
@@ -66,33 +66,60 @@
                 <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Commision Elec</span>
                 </a>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item active">
                 <a class="sidebar-link" href="/categorieavoir">
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Categorie d'Avoir</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/groupes">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Groupes</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/indicesectoriel">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Indice Sectoriel</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/naturereferentiel">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
+                </a>
+            </li>
+            <li>a</li>
+            <li>bb</li>
         </ul>
     </div>
   </nav>
 
-  <div class="main">
-    <nav class="navbar navbar-expand navbar-light navbar-bg">
-      <a class="sidebar-toggle js-sidebar-toggle"><i class="hamburger align-self-center"></i></a>
-      <div class="navbar-collapse collapse">
-        <ul class="navbar-nav navbar-align">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-              <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'" class="avatar img-fluid rounded me-1" style="width: 32px; height: 32px; object-fit: cover;">
-              <span class="text-dark" *ngIf="user">{{ user.username || user.name }}</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end">
-              <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
-              <a class="dropdown-item" href="#" (click)="logout()"><i class="align-middle me-1" data-feather="log-out"></i> Log out</a>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <div class="main">
+      <nav class="navbar navbar-expand navbar-light navbar-bg">
+        <a class="sidebar-toggle js-sidebar-toggle">
+          <i class="hamburger align-self-center"></i>
+        </a>
+  
+        <div class="navbar-collapse collapse">
+          <ul class="navbar-nav navbar-align">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <!-- Image with fallback -->
+                <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'"
+                     class="avatar img-fluid rounded me-1"
+                     style="width: 32px; height: 32px; object-fit: cover;"
+                     onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
+                
+                <span class="text-dark" *ngIf="user">
+                  {{ user.username || user.preferred_username || user.name || 'No username' }}
+                </span>
+              </a>  
+              <div class="dropdown-menu dropdown-menu-end">
+                <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+                <a class="dropdown-item" href="#" (click)="logout(); $event.preventDefault()"><i class="align-middle me-1" data-feather="log-out"></i> Log out</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
 
     <div class="container">
       <div class="header-container">
@@ -102,63 +129,143 @@
           <button class="btn-add" (click)="openSignupModal()">
             <span class="add-icon">+</span> Ajouter une Catégorie
           </button>
+          <button class="btn-add" (click)="generatePDF()">
+            <i class="pi pi-file-pdf"></i> Exporter en PDF
+          </button>
         </div>
       </div>
 
-      <div class="card shadow-sm card-square">
+
+      <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped">
-                <thead>
-                    <tr>
-                    <th>Code BVMT</th>
-                    <th>Code NSC</th>
-                    <th>Code Optique</th>
-                    <th>Code TC</th>
-                    <th>Libellé FR</th>
-                    <th>Libellé C FR</th>
-                    <th>Libellé AR</th>
-                    <th>Libellé C AR</th>
-                    <th>Libellé EN</th>
-                    <th>Libellé C EN</th>
-                    <th>Taux CTB</th>
-                    <th>Taux RUS</th>
-                    <th>Taux CEB_ENR</th>
-                    <th>Taux RUS_ENR</th>
-                    <th>Modifier</th>
-                    <th>Supprimer</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let cat of categories">
-                    <td>{{ cat.codeBVMT }}</td>
-                    <td>{{ cat.codeNSC }}</td>
-                    <td>{{ cat.codeOptique }}</td>
-                    <td>{{ cat.codeTc }}</td>
-                    <td>{{ cat.libellefr }}</td>
-                    <td>{{ cat.libellecourtefr }}</td>
-                    <td>{{ cat.libellear }}</td>
-                    <td>{{ cat.libellecourtear }}</td>
-                    <td>{{ cat.libelleen }}</td>
-                    <td>{{ cat.libellecourteen }}</td>
-                    <td>{{ cat.tauxreductionCTB }}</td>
-                    <td>{{ cat.tauxreductionRUS }}</td>
-                    <td>{{ cat.tauxreductionCEB_ENR }}</td>
-                    <td>{{ cat.tauxreductionRUS_ENR }}</td>
-                    <td>
-                        <button class="btn btn-light btn-sm me-2 shake-btn" (click)="editCategorie(cat)">
-                        <i class="pi pi-pencil" style="font-size: 1.1rem; color: #0d6efd;"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-light btn-sm shake-btn" (click)="confirmDelete(cat.id)">
-                        <i class="pi pi-trash" style="font-size: 1.1rem; color: #dc3545;"></i>
-                        </button>
-                    </td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
+          <p-table [value]="filteredCategories"
+                   [paginator]="true"
+                   [rows]="10"
+                   [rowsPerPageOptions]="[5, 10, 20]"
+                   tableStyleClass="table table-striped mb-0"
+                   headerStyleClass="bg-primary text-white"
+                   [responsiveLayout]="'scroll'">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="position-relative">Code BVMT
+                  <span #codeBVMTToggler class="search-toggler" (click)="toggleFilter('codeBVMT')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterCodeBVMT" #codeBVMTFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par code BVMT ..." [(ngModel)]="filterCodeBVMT">
+                  </div>
+                </th>
+                <th class="position-relative">Code NSC
+                  <span #codeNSCToggler class="search-toggler" (click)="toggleFilter('codeNSC')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterCodeNSC" #codeNSCFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par code NSC ..." [(ngModel)]="filterCodeNSC">
+                  </div>
+                </th>
+                <th class="position-relative">Code Optique
+                  <span #codeOptiqueToggler class="search-toggler" (click)="toggleFilter('codeOptique')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterCodeOptique" #codeOptiqueFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par code Optique ..." [(ngModel)]="filterCodeOptique">
+                  </div>
+                </th>
+                <th class="position-relative">Code TC
+                  <span #codeTcToggler class="search-toggler" (click)="toggleFilter('codeTc')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterCodeTc" #codeTcFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par Code TC" [(ngModel)]="filterCodeTc">
+                  </div>
+                </th>
+                <th class="position-relative">Libellé FR
+                  <span #libFrToggler class="search-toggler" (click)="toggleFilter('libFr')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibFr" #libFrFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par libelle (FR)" [(ngModel)]="filterLibFr">
+                  </div>
+                </th>
+                <th class="position-relative">Libellé C FR
+                  <span #libCFrToggler class="search-toggler" (click)="toggleFilter('libCFr')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibCFr" #libCFrFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par libelle C (FR)" [(ngModel)]="filterLibCFr">
+                  </div>
+                </th>
+                <th class="position-relative">Libellé AR
+                  <span #libArToggler class="search-toggler" (click)="toggleFilter('libAr')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibAr" #libArFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par libelle (AR)" [(ngModel)]="filterLibAr">
+                  </div>
+                </th>
+                <th class="position-relative">Libellé C AR
+                  <span #libCArToggler class="search-toggler" (click)="toggleFilter('libCAr')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibCAr" #libCArFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par libelle C (AR)" [(ngModel)]="filterLibCAr">
+                  </div>
+                </th>
+                <th class="position-relative">Libellé EN
+                  <span #libEnToggler class="search-toggler" (click)="toggleFilter('libEn')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibEn" #libEnFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par libelle (EN)" [(ngModel)]="filterLibEn">
+                  </div>
+                </th>
+                <th class="position-relative">Libellé C EN
+                  <span #libCEnToggler class="search-toggler" (click)="toggleFilter('libCEn')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterLibCEn" #libCEnFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par libelle C (EN)" [(ngModel)]="filterLibCEn">
+                  </div>
+                </th>
+                <th class="position-relative">Taux CTB
+                  <span #tauxCTBToggler class="search-toggler" (click)="toggleFilter('tauxCTB')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterTauxCTB" #tauxCTBFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par Taux CTB" [(ngModel)]="filterTauxCTB">
+                  </div>
+                </th>
+                <th class="position-relative">Taux RUS
+                  <span #tauxRUSToggler class="search-toggler" (click)="toggleFilter('tauxRUS')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterTauxRUS" #tauxRUSFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer Par Taux RUS" [(ngModel)]="filterTauxRUS">
+                  </div>
+                </th>
+                <th class="position-relative">Taux CEB_ENR
+                  <span #tauxCEB_ENRToggler class="search-toggler" (click)="toggleFilter('tauxCEB_ENR')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterTauxCEB_ENR" #tauxCEB_ENRFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer pat Taux CEB_ENR " [(ngModel)]="filterTauxCEB_ENR">
+                  </div>
+                </th>
+                <th class="position-relative">Taux RUS_ENR
+                  <span #tauxRUS_ENRToggler class="search-toggler" (click)="toggleFilter('tauxRUS_ENR')"><i class="pi pi-search"></i></span>
+                  <div *ngIf="showFilterTauxRUS_ENR" #tauxRUS_ENRFilter class="filter-container">
+                    <input class="filter-input" placeholder="Filtrer par Taux RUS_ENR" [(ngModel)]="filterTauxRUS_ENR">
+                  </div>
+                </th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-cat>
+              <tr>
+                <td>{{ cat.codeBVMT }}</td>
+                <td>{{ cat.codeNSC }}</td>
+                <td>{{ cat.codeOptique }}</td>
+                <td>{{ cat.codeTc }}</td>
+                <td>{{ cat.libellefr }}</td>
+                <td>{{ cat.libellecourtefr }}</td>
+                <td>{{ cat.libellear }}</td>
+                <td>{{ cat.libellecourtear }}</td>
+                <td>{{ cat.libelleen }}</td>
+                <td>{{ cat.libellecourteen }}</td>
+                <td>{{ cat.tauxreductionCTB }}</td>
+                <td>{{ cat.tauxreductionRUS }}</td>
+                <td>{{ cat.tauxreductionCEB_ENR }}</td>
+                <td>{{ cat.tauxreductionRUS_ENR }}</td>
+                <td>
+                  <button class="btn btn-light btn-sm me-2" (click)="editCategorie(cat)">
+                    <i class="pi pi-pencil" style="font-size:1.1rem;color:#0d6efd;"></i>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-light btn-sm" (click)="confirmDelete(cat.id)">
+                    <i class="pi pi-trash" style="font-size:1.1rem;color:#dc3545;"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
         </div>
       </div>
     </div>

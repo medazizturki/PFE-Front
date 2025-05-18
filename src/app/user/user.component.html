@@ -70,6 +70,21 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Categorie d'Avoir</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/groupes">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Groupes</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/indicesectoriel">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Indice Sectoriel</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/naturereferentiel">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
+                </a>
+            </li>
         </ul>
     </div>
   </nav>
@@ -117,10 +132,10 @@
       </div>
 
       <!-- Card with Table -->
-      <div class="card shadow-sm card-square">
+      <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
           <table class="table table-striped">
-            <thead>
+            <thead class="table-primary">
               <tr>
                 <th>Image</th>
                 <th>Username</th>
@@ -129,7 +144,8 @@
                 <th>Last Name</th>
                 <th>Address</th>
                 <th>Etat</th>
-                <th>Actions</th>
+                <th>Activer / Désactiver</th>
+                <th>Supprimer</th>
               </tr>
             </thead>
             <tbody>
@@ -153,8 +169,10 @@
                   <i *ngIf="!user.enabled" class="pi pi-times-circle" style="font-size: 1.5rem; color: red;"></i>
                 </td>
                 <td>
+                                
+                <div class="d-flex justify-content-center gap-2">
                   <!-- Lock button for enabled users (to disable/lock them) -->
-                  <button class="btn btn-light btn-sm shake-btn" style="padding: 6px 12px; border: none;" (click)="disableUser(user.id)" *ngIf="user.enabled" title="Verrouiller">
+                  <button class="btn btn-light btn-sm shake-btn center" style="padding: 6px 12px; border: none;" (click)="disableUser(user.id)" *ngIf="user.enabled" title="Verrouiller">
                     <i class="pi pi-lock" style="font-size: 1.1rem; color: #ffc107;"></i>
                   </button>
 
@@ -162,6 +180,10 @@
                   <button class="btn btn-light btn-sm shake-btn" style="padding: 6px 12px; border: none;" (click)="enableUser(user.id)" *ngIf="!user.enabled" title="Déverrouiller">
                     <i class="pi pi-lock-open" style="font-size: 1.1rem; color: #28a745;"></i>
                   </button>
+                  
+                </div>
+                </td>
+                <td>
                   <button class="btn btn-light btn-sm shake-btn"
                           (click)="deleteUser(user.id)"
                           title="Supprimer"

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TMMService } from '../Services/tmm.service';
@@ -14,9 +14,19 @@ export class TMMComponent implements OnInit {
   tmmForm!: FormGroup;
   isEdit = false;
   editedId: number | null = null;
-  displayModal: boolean = false;
-
+  displayModal = false;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
+
+  // ─── Filtrage ───────────────────────────────────────────────────────────────
+  filterMois = '';
+  filterTMM  = '';
+  showFilterMois = false;
+  showFilterTMM  = false;
+
+  @ViewChild('moisToggler') moisToggler!: ElementRef;
+  @ViewChild('moisFilter')  moisFilter!: ElementRef;
+  @ViewChild('tmmToggler')  tmmToggler!: ElementRef;
+  @ViewChild('tmmFilter')   tmmFilter!: ElementRef;
 
   constructor(
     private fb: FormBuilder,
@@ -28,78 +38,103 @@ export class TMMComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.fetchTMMs();
-    this.getUserImagePath();
   }
 
   initForm(): void {
     this.tmmForm = this.fb.group({
       mois: ['', Validators.required],
-      tmm: [null, Validators.required]
+      tmm:  [null, Validators.required]
     });
   }
 
   fetchTMMs(): void {
     this.tmmService.getAllTMM().subscribe(data => {
-      this.tmmList = data;
+      // newest first by id
+      this.tmmList = data.sort((a, b) => b.id - a.id);
     });
   }
 
-  openSignupModal() {
+  get filteredTMMs(): any[] {
+    return this.tmmList
+      .filter(item => {
+        const moisText = item.mois?.split('T')[0] || '';
+        return moisText.includes(this.filterMois)
+            && String(item.tmm).includes(this.filterTMM);
+      });
+  }
+
+  toggleFilter(column: 'mois' | 'tmm'): void {
+    if (column === 'mois') {
+      this.showFilterMois = !this.showFilterMois;
+      if (!this.showFilterMois) this.filterMois = '';
+    } else {
+      this.showFilterTMM = !this.showFilterTMM;
+      if (!this.showFilterTMM) this.filterTMM = '';
+    }
+  }
+
+  clearFilter(column: 'mois' | 'tmm'): void {
+    if (column === 'mois') this.filterMois = '';
+    else this.filterTMM = '';
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  onClickOutside(target: HTMLElement) {
+    if (this.showFilterMois &&
+        !this.moisToggler.nativeElement.contains(target) &&
+        !this.moisFilter.nativeElement.contains(target)) {
+      this.showFilterMois = false;
+    }
+    if (this.showFilterTMM &&
+        !this.tmmToggler.nativeElement.contains(target) &&
+        !this.tmmFilter.nativeElement.contains(target)) {
+      this.showFilterTMM = false;
+    }
+  }
+
+  openSignupModal(): void {
     this.displayModal = true;
     this.isEdit = false;
     this.tmmForm.reset();
   }
 
-  closeModal(): void {
-    this.displayModal = false;
+  editTMM(tmm: any): void {
+    this.displayModal = true;
+    this.isEdit = true;
+    this.editedId = tmm.id;
+    const formattedDate = tmm.mois?.split('T')[0] || '';
+    this.tmmForm.patchValue({ mois: formattedDate, tmm: tmm.tmm });
   }
-
-editTMM(tmm: any): void {
-  this.displayModal = true;
-  this.isEdit = true;
-  this.editedId = tmm.id;
-
-  const formattedDate = tmm.mois ? tmm.mois.split('T')[0] : ''; // 👉 extrait juste la date
-
-  this.tmmForm.patchValue({
-    mois: formattedDate,
-    tmm: tmm.tmm
-  });
-}
-
 
   confirmSaveTMM(): void {
     if (this.tmmForm.invalid) return;
-
     this.confirmationService.confirm({
-      message: this.isEdit ? 'Confirmer la modification ?' : 'Confirmer l’ajout ?',
+      message: this.isEdit
+        ? 'Confirmer la modification ?'
+        : 'Confirmer l’ajout ?',
       header: 'Confirmation',
       icon: 'pi pi-check',
       accept: () => this.saveTMM()
     });
   }
 
-saveTMM(): void {
-  const data = this.tmmForm.value;
-
-  if (this.isEdit && this.editedId !== null) {
-    // ✅ Injecter l'ID dans le payload
-    data.id = this.editedId;
-
-    this.tmmService.updateTMM(this.editedId, data).subscribe(() => {
-      this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'TMM modifié avec succès' });
-      this.displayModal = false;
-      this.fetchTMMs();
-    });
-  } else {
-    this.tmmService.addTMM(data).subscribe(() => {
-      this.messageService.add({ severity: 'success', summary: 'Ajouté', detail: 'TMM ajouté avec succès' });
-      this.displayModal = false;
-      this.fetchTMMs();
-    });
+  saveTMM(): void {
+    const data = this.tmmForm.value;
+    if (this.isEdit && this.editedId !== null) {
+      data.id = this.editedId;
+      this.tmmService.updateTMM(this.editedId, data).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'TMM modifié avec succès' });
+        this.displayModal = false;
+        this.fetchTMMs();
+      });
+    } else {
+      this.tmmService.addTMM(data).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'Ajouté', detail: 'TMM ajouté avec succès' });
+        this.displayModal = false;
+        this.fetchTMMs();
+      });
+    }
   }
-}
-
 
   confirmDelete(id: number): void {
     this.confirmationService.confirm({
@@ -107,21 +142,17 @@ saveTMM(): void {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => this.deleteTMM(id),
-      reject: () => {
-        this.messageService.add({ severity: 'info', summary: 'Annulé', detail: 'Suppression annulée' });
-        this.fetchTMMs();
-      }
+      reject: () => this.fetchTMMs()
     });
   }
 
   deleteTMM(id: number): void {
     this.tmmService.deleteTMM(id).subscribe(
       () => {
-        this.tmmList = this.tmmList.filter(t => t.id !== id);
         this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'TMM supprimé avec succès' });
         this.fetchTMMs();
       },
-      (err) => {
+      err => {
         console.error('Erreur de suppression :', err);
         this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de la suppression' });
         this.fetchTMMs();
@@ -136,9 +167,36 @@ saveTMM(): void {
 
   getUserImagePath(): string {
     if (!this.user) return '';
-    if (this.user.image) return `/assets/uploads-images/${this.user.image}`;
+    if (this.user.image)                  return `/assets/uploads-images/${this.user.image}`;
     if (this.user.attributes?.image?.[0]) return `/assets/uploads-images/${this.user.attributes.image[0]}`;
-    if (this.user.attributes?.picture) return `/assets/uploads-images/${this.user.attributes.picture}`;
+    if (this.user.attributes?.picture)    return `/assets/uploads-images/${this.user.attributes.picture}`;
     return '';
+  }
+
+  
+  /** Appelé depuis le bouton Exporter en PDF */
+  generatePDF(): void {
+    this.tmmService.downloadPdf().subscribe(blob => {
+      // Créer un URL temporaire
+      const url = window.URL.createObjectURL(blob);
+      // Créer un <a> pour forcer le téléchargement
+      const a = document.createElement('a');
+      a.href = url;
+      // Vous pouvez adapter le nom si besoin
+      a.download = this.makeFileName();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      // Libérer la mémoire
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+  /** Génère un nom de fichier horodaté (sans caractères interdits) */
+  private makeFileName(): string {
+    const now = new Date();
+    // format ISO sans ms, remplacer ":" par "." pour Windows
+    const ts = now.toISOString().slice(0,19).replace(/:/g, '.');
+    return `TMM-${ts}.pdf`;
   }
 }
