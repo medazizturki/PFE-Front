@@ -26,27 +26,10 @@ export class NatureReferentielsComponent implements OnInit {
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
   groupes: any[]         = [];
   filteredGroupes: any[] = [];
+  // unified search filter
+  searchTerm = '';
 
-  /** table filters **/
-  filterCodeBvmt = '';
-  filterLibelle  = '';
-  filterGroupe   = '';
-  filterDesc     = '';
-
-  showFilterCodeBvmt = false;
-  showFilterLibelle = false;
-  showFilterGroupe  = false;
-  showFilterDesc    = false;
-
-  @ViewChild('codeToggler')     codeToggler!: ElementRef;
-  @ViewChild('codeFilter')      codeFilter!: ElementRef;
-  @ViewChild('libelleToggler')  libelleToggler!: ElementRef;
-  @ViewChild('libelleFilter')   libelleFilter!: ElementRef;
-  @ViewChild('groupeToggler')   groupeToggler!: ElementRef;
-  @ViewChild('groupeFilter')    groupeFilter!: ElementRef;
-  @ViewChild('descToggler')     descToggler!: ElementRef;
-  @ViewChild('descFilter')      descFilter!: ElementRef;
-
+  
   constructor(
     private fb: FormBuilder,
     private svc: NatureReferentielsService,
@@ -91,48 +74,16 @@ export class NatureReferentielsComponent implements OnInit {
     );
   }
 
-  /** Table filtering **/
   get filteredItems() {
+    const term = this.searchTerm.toLowerCase();
     return this.items.filter(x =>
-      x.codeBvmt.toLowerCase().includes(this.filterCodeBvmt.toLowerCase()) &&
-      x.libelle.toLowerCase().includes(this.filterLibelle.toLowerCase()) &&
-      (x.groupes?.code ?? '').toLowerCase().includes(this.filterGroupe.toLowerCase()) &&
-      x.description.toLowerCase().includes(this.filterDesc.toLowerCase())
+      x.codeBvmt.toLowerCase().includes(term) ||
+      x.libelle.toLowerCase().includes(term) ||
+      (x.groupes?.code ?? '').toLowerCase().includes(term) ||
+      x.description.toLowerCase().includes(term)
     );
   }
 
-  toggleFilter(col: string) {
-    switch (col) {
-      case 'code':    this.showFilterCodeBvmt = !this.showFilterCodeBvmt; if (!this.showFilterCodeBvmt) this.filterCodeBvmt = ''; break;
-      case 'libelle': this.showFilterLibelle = !this.showFilterLibelle; if (!this.showFilterLibelle) this.filterLibelle  = ''; break;
-      case 'groupe':  this.showFilterGroupe  = !this.showFilterGroupe;  if (!this.showFilterGroupe)  this.filterGroupe   = ''; break;
-      case 'desc':    this.showFilterDesc    = !this.showFilterDesc;    if (!this.showFilterDesc)    this.filterDesc     = ''; break;
-    }
-  }
-
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterCodeBvmt &&
-        !this.codeToggler.nativeElement.contains(target) &&
-        !this.codeFilter.nativeElement.contains(target)) {
-      this.showFilterCodeBvmt = false;
-    }
-    if (this.showFilterLibelle &&
-        !this.libelleToggler.nativeElement.contains(target) &&
-        !this.libelleFilter.nativeElement.contains(target)) {
-      this.showFilterLibelle = false;
-    }
-    if (this.showFilterGroupe &&
-        !this.groupeToggler.nativeElement.contains(target) &&
-        !this.groupeFilter.nativeElement.contains(target)) {
-      this.showFilterGroupe = false;
-    }
-    if (this.showFilterDesc &&
-        !this.descToggler.nativeElement.contains(target) &&
-        !this.descFilter.nativeElement.contains(target)) {
-      this.showFilterDesc = false;
-    }
-  }
 
   openModal() {
     this.displayModal = true;

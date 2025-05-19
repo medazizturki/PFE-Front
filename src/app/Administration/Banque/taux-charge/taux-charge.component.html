@@ -86,6 +86,21 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurnational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur National</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurinternational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur International</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/intermediaire">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">intermediaire</span>
+                </a>
+            </li>
         </ul>
     </div>
   </nav>
@@ -103,7 +118,7 @@
                    class="avatar img-fluid rounded me-1"
                    style="width:32px;height:32px;object-fit:cover;"
                    onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
-              <span class="text-dark" *ngIf="user">{{ user.username || user.name }}</span>
+              <span class="text-dark" *ngIf="user">{{ user.username || user.preferred_username || user.name }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
               <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
@@ -128,6 +143,17 @@
 
       <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
+
+                    <div class="search-wrapper">
+  <i class="pi pi-search"></i>
+  <input
+    pInputText
+    type="text"
+    placeholder="Recherche…"
+    class="form-control form-control-sm"
+    [(ngModel)]="searchTerm" />
+</div>
+
           <p-table
             [value]="filteredTaux"
             [paginator]="true"
@@ -141,35 +167,15 @@
               <tr>
                 <th class="position-relative">
                   Date
-                  <span #dateToggler class="search-toggler" (click)="toggleFilter('date')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterDate" #dateFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par date…"
-                           [(ngModel)]="filterDate" />
-                  </div>
                 </th>
                 <th class="position-relative">
                   Valeur
-                  <span #valueToggler class="search-toggler" (click)="toggleFilter('value')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterValue" #valueFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par valeur…"
-                           [(ngModel)]="filterValue" />
-                  </div>
                 </th>
                 <th class="position-relative">
                   Variation Annuelle
-                  <span #variationToggler class="search-toggler" (click)="toggleFilter('variation')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterVariation" #variationFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par variation…"
-                           [(ngModel)]="filterVariation" />
-                  </div>
                 </th>
                 <th class="position-relative">
                   Devise
-                  <span #deviseToggler class="search-toggler" (click)="toggleFilter('devise')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterDevise" #deviseFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par devise…"
-                           [(ngModel)]="filterDevise" />
-                  </div>
                 </th>
                 <th>Modifier</th>
                 <th>Supprimer</th>

@@ -17,30 +17,9 @@ export class CommisionHorsElecComponent implements OnInit {
   displayModal = false;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // ─── Filters ────────────────────────────────────────────────────────────────
-  filterTitre   = '';
-  filterType    = '';
-  filterRate    = '';
-  filterMinimum = '';
-  filterMaximum = '';
-
-  showFilterTitre   = false;
-  showFilterType    = false;
-  showFilterRate    = false;
-  showFilterMinimum = false;
-  showFilterMaximum = false;
-
-  @ViewChild('titreToggler')   titreToggler!: ElementRef;
-  @ViewChild('titreFilter')    titreFilter!: ElementRef;
-  @ViewChild('typeToggler')    typeToggler!: ElementRef;
-  @ViewChild('typeFilter')     typeFilter!: ElementRef;
-  @ViewChild('rateToggler')    rateToggler!: ElementRef;
-  @ViewChild('rateFilter')     rateFilter!: ElementRef;
-  @ViewChild('minToggler')     minToggler!: ElementRef;
-  @ViewChild('minFilter')      minFilter!: ElementRef;
-  @ViewChild('maxToggler')     maxToggler!: ElementRef;
-  @ViewChild('maxFilter')      maxFilter!: ElementRef;
-
+  // unified search filter
+  searchTerm = '';
+  
   constructor(
     private fb: FormBuilder,
     private service: CommisionHorsElecService,
@@ -63,86 +42,27 @@ export class CommisionHorsElecComponent implements OnInit {
     });
   }
 
+
   loadCommissions(): void {
     this.service.getAll().subscribe(data => {
-      // newest first
       this.commissions = data.sort((a, b) => b.id - a.id);
     });
   }
 
-  // ─── Filtered getter ──────────────────────────────────────────────────────
   get filteredCommissions(): any[] {
+    const term = this.searchTerm.toLowerCase();
     return this.commissions.filter(c => {
-      const titre   = (c.titre   || '').toLowerCase();
-      const type    = (c.type    || '').toLowerCase();
+      const titre   = (c.titre || '').toLowerCase();
+      const type    = (c.type  || '').toLowerCase();
       const rate    = String(c.rate);
-      const minimum = String(c.minimum);
-      const maximum = String(c.maximum);
-
-      const okTitre   = !this.filterTitre   || titre.includes(this.filterTitre.toLowerCase());
-      const okType    = !this.filterType    || type.includes(this.filterType.toLowerCase());
-      const okRate    = !this.filterRate    || rate.includes(this.filterRate);
-      const okMin     = !this.filterMinimum || minimum.includes(this.filterMinimum);
-      const okMax     = !this.filterMaximum || maximum.includes(this.filterMaximum);
-
-      return okTitre && okType && okRate && okMin && okMax;
+      const min     = String(c.minimum);
+      const max     = String(c.maximum);
+      return titre.includes(term) ||
+             type.includes(term)  ||
+             rate.includes(term)  ||
+             min.includes(term)   ||
+             max.includes(term);
     });
-  }
-
-  // ─── Toggle Filters ───────────────────────────────────────────────────────
-  toggleFilter(col: 'titre'|'type'|'rate'|'min'|'max'): void {
-    switch(col) {
-      case 'titre':
-        this.showFilterTitre = !this.showFilterTitre;
-        if (!this.showFilterTitre) this.filterTitre = '';
-        break;
-      case 'type':
-        this.showFilterType = !this.showFilterType;
-        if (!this.showFilterType) this.filterType = '';
-        break;
-      case 'rate':
-        this.showFilterRate = !this.showFilterRate;
-        if (!this.showFilterRate) this.filterRate = '';
-        break;
-      case 'min':
-        this.showFilterMinimum = !this.showFilterMinimum;
-        if (!this.showFilterMinimum) this.filterMinimum = '';
-        break;
-      case 'max':
-        this.showFilterMaximum = !this.showFilterMaximum;
-        if (!this.showFilterMaximum) this.filterMaximum = '';
-        break;
-    }
-  }
-
-  // ─── Close on Outside Click ───────────────────────────────────────────────
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterTitre &&
-        !this.titreToggler.nativeElement.contains(target) &&
-        !this.titreFilter.nativeElement.contains(target)) {
-      this.showFilterTitre = false;
-    }
-    if (this.showFilterType &&
-        !this.typeToggler.nativeElement.contains(target) &&
-        !this.typeFilter.nativeElement.contains(target)) {
-      this.showFilterType = false;
-    }
-    if (this.showFilterRate &&
-        !this.rateToggler.nativeElement.contains(target) &&
-        !this.rateFilter.nativeElement.contains(target)) {
-      this.showFilterRate = false;
-    }
-    if (this.showFilterMinimum &&
-        !this.minToggler.nativeElement.contains(target) &&
-        !this.minFilter.nativeElement.contains(target)) {
-      this.showFilterMinimum = false;
-    }
-    if (this.showFilterMaximum &&
-        !this.maxToggler.nativeElement.contains(target) &&
-        !this.maxFilter.nativeElement.contains(target)) {
-      this.showFilterMaximum = false;
-    }
   }
 
   // ─── Modal / CRUD (unchanged) ─────────────────────────────────────────────

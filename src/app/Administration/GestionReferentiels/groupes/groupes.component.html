@@ -86,6 +86,21 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurnational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur National</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurinternational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur International</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/intermediaire">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">intermediaire</span>
+                </a>
+            </li>
             <li>a</li>
             <li>bb</li>
         </ul>
@@ -137,75 +152,41 @@
 
       <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
+          <div class="search-wrapper">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              placeholder="Recherche…"
+              class="form-control form-control-sm"
+              [(ngModel)]="searchTerm" />
+          </div>
   <p-table [value]="filteredGroupes" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5,10,20]"
                tableStyleClass="table table-striped mb-0"
                    headerStyleClass="bg-primary text-white"
                    [responsiveLayout]="'scroll'">
         <ng-template pTemplate="header">
           <tr>
-            <th class="position-relative">
+            <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
               Code
-              <span #codeToggler class="search-toggler" (click)="toggleFilter('code')">
-                <i class="pi pi-search"></i>
-              </span>
-              <div *ngIf="showFilterCode" #codeFilter class="filter-container">
-                <input type="text" class="filter-input" placeholder="Filtrer…" [(ngModel)]="filterCode"/>
-              </div>
-            </th>
             <!-- similarly for Marche, Categorie, etc… -->
-            <th class="position-relative">
+            <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
               Marché
-              <span #marcheToggler class="search-toggler" (click)="toggleFilter('marche')">
-                <i class="pi pi-search"></i>
-              </span>
-              <div *ngIf="showFilterMarche" #marcheFilter class="filter-container">
-                <input type="text" class="filter-input" [(ngModel)]="filterMarche"/>
-              </div>
             </th>
-            <th class="position-relative">
+            <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
               Catégorie
-              <span #catToggler class="search-toggler" (click)="toggleFilter('categorie')">
-                <i class="pi pi-search"></i>
-              </span>
-              <div *ngIf="showFilterCategorie" #catFilter class="filter-container">
-                <input type="text" class="filter-input" [(ngModel)]="filterCategorie"/>
-              </div>
             </th>
-            <th class="position-relative">
+            <th class="position-relative" style="white-space: nowrap; max-width: 180px;">
               Unité Cotation
-              <span #uniteToggler class="search-toggler" (click)="toggleFilter('unite')">
-                <i class="pi pi-search"></i>
-              </span>
-              <div *ngIf="showFilterUnite" #uniteFilter class="filter-container">
-                <input type="text" class="filter-input" [(ngModel)]="filterUnite"/>
-              </div>
             </th>
-            <th class="position-relative">
+            <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
               Devise
-              <span #deviseToggler class="search-toggler" (click)="toggleFilter('devise')">
-                <i class="pi pi-search"></i>
-              </span>
-              <div *ngIf="showFilterDevise" #deviseFilter class="filter-container">
-                <input type="text" class="filter-input" [(ngModel)]="filterDevise"/>
-              </div>
             </th>
-            <th class="position-relative">
+            <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
               Mode
-              <span #modeToggler class="search-toggler" (click)="toggleFilter('mode')">
-                <i class="pi pi-search"></i>
-              </span>
-              <div *ngIf="showFilterMode" #modeFilter class="filter-container">
-                <input type="text" class="filter-input" [(ngModel)]="filterMode"/>
-              </div>
             </th>
-            <th class="position-relative">
+            <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
               Description
-              <span #descToggler class="search-toggler" (click)="toggleFilter('desc')">
-                <i class="pi pi-search"></i>
-              </span>
-              <div *ngIf="showFilterDesc" #descFilter class="filter-container">
-                <input type="text" class="filter-input" [(ngModel)]="filterDesc"/>
-              </div>
             </th>
             <th class="text-center">Modifier</th>
             <th class="text-center">Supprimer</th>

@@ -86,6 +86,21 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurnational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur National</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurinternational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur International</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/intermediaire">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">intermediaire</span>
+                </a>
+            </li>
             <li>a</li>
             <li>bb</li>
         </ul>
@@ -137,6 +152,16 @@
 
       <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
+
+          <div class="search-wrapper">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              placeholder="Recherche…"
+              class="form-control form-control-sm"
+              [(ngModel)]="searchTerm" />
+          </div>
             <p-table
   [value]="filteredIndices"
   [paginator]="true"
@@ -147,77 +172,29 @@
   [responsiveLayout]="'scroll'">
   <ng-template pTemplate="header">
     <tr>
-      <th class="position-relative">
+      <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
         ISIN
-        <span #codeIsinToggler class="search-toggler" (click)="toggleFilter('codeIsin')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterCodeIsin" #codeIsinFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterCodeIsin" placeholder="Filtrer Par ISIN"/>
-        </div>
       </th>
-      <th class="position-relative">
+      <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
         ICB
-        <span #codeICBToggler class="search-toggler" (click)="toggleFilter('codeICB')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterCodeICB" #codeICBFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterCodeICB" placeholder="Filtrer Par ICB"/>
-        </div>
       </th>
-      <th class="position-relative">
+      <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
         Groupe
-        <span #groupeToggler class="search-toggler" (click)="toggleFilter('groupe')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterGroupe" #groupeFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterGroupe" placeholder="Filtrer Par Groupe"/>
-        </div>
       </th>
-      <th class="position-relative">
+      <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
         Mnemonique
-        <span #mnemoniqueToggler class="search-toggler" (click)="toggleFilter('mnemonique')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterMnemonique" #mnemoniqueFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterMnemonique" placeholder="Filtrer Par Mnemonique"/>
-        </div>
       </th>
-      <th class="position-relative">
-        Libellé FR
-        <span #libellefrToggler class="search-toggler" (click)="toggleFilter('libellefr')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterLibellefr" #libellefrFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterLibellefr" placeholder="Filtrer Par Libelle (FR)"/>
-        </div>
+      <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+        Libellé (FR)
       </th>
-      <th class="position-relative">
-        Libellé AR
-        <span #libellearToggler class="search-toggler" (click)="toggleFilter('libellear')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterLibellear" #libellearFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterLibellear" placeholder="Filtrer Par Libelle (AR)"/>
-        </div>
+      <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+        Libellé (AR)
       </th>
-      <th class="position-relative">
-        Libellé EN
-        <span #libelleenToggler class="search-toggler" (click)="toggleFilter('libelleen')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterLibelleen" #libelleenFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterLibelleen" placeholder="Filtrer Par Libelle (EN)"/>
-        </div>
+      <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+        Libellé (EN)
       </th>
-      <th class="position-relative">
+      <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
         Description
-        <span #descToggler class="search-toggler" (click)="toggleFilter('desc')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterDesc" #descFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterDesc" placeholder="Filtrer Par Description"/>
-        </div>
       </th>
       <th class="text-center">Modifier</th>
       <th class="text-center">Supprimer</th>

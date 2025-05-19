@@ -220,3 +220,36 @@
   color: black !important;
   
 }
+
+
+.search-wrapper {
+  position: relative;
+  max-width: 250px;
+  margin-bottom: 1rem;
+}
+
+.search-wrapper .pi-search {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  color: #6c757d;
+  pointer-events: none;
+}
+
+.search-wrapper input.form-control {
+  padding-left: 2.5rem;         /* make room for the icon */
+  border-radius: 1.5rem;        /* fully rounded */
+  background-color: #f8f9fa;    /* very light gray */
+  border: 1px solid #ced4da;
+  height: 2rem;                 /* consistent small height */
+  transition: box-shadow 0.2s;
+}
+
+.search-wrapper input.form-control:focus {
+  background-color: white;
+  box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25); /* Bootstrap primary focus ring */
+  border-color: #86b7fe;
+}
+

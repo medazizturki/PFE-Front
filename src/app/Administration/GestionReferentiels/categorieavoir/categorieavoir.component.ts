@@ -18,65 +18,8 @@ export class CategorieavoirComponent implements OnInit {
   displayModal = false;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // ─── Filters ────────────────────────────────────────────────────────────────
-  filterCodeBVMT           = '';
-  filterCodeNSC            = '';
-  filterCodeOptique        = '';
-  filterCodeTc             = '';
-  filterLibFr              = '';
-  filterLibCFr             = '';
-  filterLibAr              = '';
-  filterLibCAr             = '';
-  filterLibEn              = '';
-  filterLibCEn             = '';
-  filterTauxCTB            = '';
-  filterTauxRUS            = '';
-  filterTauxCEB_ENR        = '';
-  filterTauxRUS_ENR        = '';
-
-  showFilterCodeBVMT        = false;
-  showFilterCodeNSC         = false;
-  showFilterCodeOptique     = false;
-  showFilterCodeTc          = false;
-  showFilterLibFr           = false;
-  showFilterLibCFr          = false;
-  showFilterLibAr           = false;
-  showFilterLibCAr          = false;
-  showFilterLibEn           = false;
-  showFilterLibCEn          = false;
-  showFilterTauxCTB         = false;
-  showFilterTauxRUS         = false;
-  showFilterTauxCEB_ENR     = false;
-  showFilterTauxRUS_ENR     = false;
-
-  @ViewChild('codeBVMTToggler')       codeBVMTToggler!: ElementRef;
-  @ViewChild('codeBVMTFilter')        codeBVMTFilter!: ElementRef;
-  @ViewChild('codeNSCToggler')        codeNSCToggler!: ElementRef;
-  @ViewChild('codeNSCFilter')         codeNSCFilter!: ElementRef;
-  @ViewChild('codeOptiqueToggler')    codeOptiqueToggler!: ElementRef;
-  @ViewChild('codeOptiqueFilter')     codeOptiqueFilter!: ElementRef;
-  @ViewChild('codeTcToggler')         codeTcToggler!: ElementRef;
-  @ViewChild('codeTcFilter')          codeTcFilter!: ElementRef;
-  @ViewChild('libFrToggler')          libFrToggler!: ElementRef;
-  @ViewChild('libFrFilter')           libFrFilter!: ElementRef;
-  @ViewChild('libCFrToggler')         libCFrToggler!: ElementRef;
-  @ViewChild('libCFrFilter')          libCFrFilter!: ElementRef;
-  @ViewChild('libArToggler')          libArToggler!: ElementRef;
-  @ViewChild('libArFilter')           libArFilter!: ElementRef;
-  @ViewChild('libCArToggler')         libCArToggler!: ElementRef;
-  @ViewChild('libCArFilter')          libCArFilter!: ElementRef;
-  @ViewChild('libEnToggler')          libEnToggler!: ElementRef;
-  @ViewChild('libEnFilter')           libEnFilter!: ElementRef;
-  @ViewChild('libCEnToggler')         libCEnToggler!: ElementRef;
-  @ViewChild('libCEnFilter')          libCEnFilter!: ElementRef;
-  @ViewChild('tauxCTBToggler')        tauxCTBToggler!: ElementRef;
-  @ViewChild('tauxCTBFilter')         tauxCTBFilter!: ElementRef;
-  @ViewChild('tauxRUSToggler')        tauxRUSToggler!: ElementRef;
-  @ViewChild('tauxRUSFilter')         tauxRUSFilter!: ElementRef;
-  @ViewChild('tauxCEB_ENRToggler')    tauxCEB_ENRToggler!: ElementRef;
-  @ViewChild('tauxCEB_ENRFilter')     tauxCEB_ENRFilter!: ElementRef;
-  @ViewChild('tauxRUS_ENRToggler')    tauxRUS_ENRToggler!: ElementRef;
-  @ViewChild('tauxRUS_ENRFilter')     tauxRUS_ENRFilter!: ElementRef;
+  // unified search filter
+  searchTerm = '';
 
   constructor(
     private fb: FormBuilder,
@@ -110,173 +53,32 @@ export class CategorieavoirComponent implements OnInit {
     });
   }
 
-  loadCategories(): void {
-  this.service.getAll().subscribe(data => {
-    this.categories = data.sort((a, b) => b.id - a.id); // Sort newest first
-  });
-}
-
-  // ─── Filtered getter ───────────────────────────────────────────────────────
-  get filteredCategories(): any[] {
-    return this.categories.filter(c => {
-      return c.codeBVMT          .toLowerCase().includes(this.filterCodeBVMT.toLowerCase())    &&
-             c.codeNSC           .toLowerCase().includes(this.filterCodeNSC.toLowerCase())     &&
-             c.codeOptique       .toLowerCase().includes(this.filterCodeOptique.toLowerCase()) &&
-             c.codeTc            .toLowerCase().includes(this.filterCodeTc.toLowerCase())      &&
-             c.libellefr         .toLowerCase().includes(this.filterLibFr.toLowerCase())       &&
-             c.libellecourtefr   .toLowerCase().includes(this.filterLibCFr.toLowerCase())      &&
-             c.libellear         .toLowerCase().includes(this.filterLibAr.toLowerCase())       &&
-             c.libellecourtear   .toLowerCase().includes(this.filterLibCAr.toLowerCase())      &&
-             c.libelleen         .toLowerCase().includes(this.filterLibEn.toLowerCase())       &&
-             c.libellecourteen   .toLowerCase().includes(this.filterLibCEn.toLowerCase())      &&
-             String(c.tauxreductionCTB).includes(this.filterTauxCTB)                         &&
-             String(c.tauxreductionRUS).includes(this.filterTauxRUS)                         &&
-             String(c.tauxreductionCEB_ENR).includes(this.filterTauxCEB_ENR)                 &&
-             String(c.tauxreductionRUS_ENR).includes(this.filterTauxRUS_ENR);
+ loadCategories(): void {
+    this.service.getAll().subscribe(data => {
+      this.categories = data.sort((a, b) => b.id - a.id);
     });
   }
 
-  // ─── Toggle filters ────────────────────────────────────────────────────────
-  toggleFilter(col:
-    'codeBVMT'|'codeNSC'|'codeOptique'|'codeTc'|
-    'libFr'|'libCFr'|'libAr'|'libCAr'|
-    'libEn'|'libCEn'|'tauxCTB'|'tauxRUS'|
-    'tauxCEB_ENR'|'tauxRUS_ENR'
-  ): void {
-    switch (col) {
-      case 'codeBVMT':
-        this.showFilterCodeBVMT = !this.showFilterCodeBVMT;
-        if (!this.showFilterCodeBVMT) this.filterCodeBVMT = '';
-        break;
-      case 'codeNSC':
-        this.showFilterCodeNSC = !this.showFilterCodeNSC;
-        if (!this.showFilterCodeNSC) this.filterCodeNSC = '';
-        break;
-      case 'codeOptique':
-        this.showFilterCodeOptique = !this.showFilterCodeOptique;
-        if (!this.showFilterCodeOptique) this.filterCodeOptique = '';
-        break;
-      case 'codeTc':
-        this.showFilterCodeTc = !this.showFilterCodeTc;
-        if (!this.showFilterCodeTc) this.filterCodeTc = '';
-        break;
-      case 'libFr':
-        this.showFilterLibFr = !this.showFilterLibFr;
-        if (!this.showFilterLibFr) this.filterLibFr = '';
-        break;
-      case 'libCFr':
-        this.showFilterLibCFr = !this.showFilterLibCFr;
-        if (!this.showFilterLibCFr) this.filterLibCFr = '';
-        break;
-      case 'libAr':
-        this.showFilterLibAr = !this.showFilterLibAr;
-        if (!this.showFilterLibAr) this.filterLibAr = '';
-        break;
-      case 'libCAr':
-        this.showFilterLibCAr = !this.showFilterLibCAr;
-        if (!this.showFilterLibCAr) this.filterLibCAr = '';
-        break;
-      case 'libEn':
-        this.showFilterLibEn = !this.showFilterLibEn;
-        if (!this.showFilterLibEn) this.filterLibEn = '';
-        break;
-      case 'libCEn':
-        this.showFilterLibCEn = !this.showFilterLibCEn;
-        if (!this.showFilterLibCEn) this.filterLibCEn = '';
-        break;
-      case 'tauxCTB':
-        this.showFilterTauxCTB = !this.showFilterTauxCTB;
-        if (!this.showFilterTauxCTB) this.filterTauxCTB = '';
-        break;
-      case 'tauxRUS':
-        this.showFilterTauxRUS = !this.showFilterTauxRUS;
-        if (!this.showFilterTauxRUS) this.filterTauxRUS = '';
-        break;
-      case 'tauxCEB_ENR':
-        this.showFilterTauxCEB_ENR = !this.showFilterTauxCEB_ENR;
-        if (!this.showFilterTauxCEB_ENR) this.filterTauxCEB_ENR = '';
-        break;
-      case 'tauxRUS_ENR':
-        this.showFilterTauxRUS_ENR = !this.showFilterTauxRUS_ENR;
-        if (!this.showFilterTauxRUS_ENR) this.filterTauxRUS_ENR = '';
-        break;
-    }
+  get filteredCategories(): any[] {
+    const term = this.searchTerm.toLowerCase();
+    return this.categories.filter(c =>
+      c.codeBVMT.toLowerCase().includes(term) ||
+      c.codeNSC.toLowerCase().includes(term)  ||
+      c.codeOptique.toLowerCase().includes(term) ||
+      c.codeTc.toLowerCase().includes(term)   ||
+      c.libellefr.toLowerCase().includes(term) ||
+      c.libellecourtefr.toLowerCase().includes(term) ||
+      c.libellear.toLowerCase().includes(term) ||
+      c.libellecourtear.toLowerCase().includes(term) ||
+      c.libelleen.toLowerCase().includes(term) ||
+      c.libellecourteen.toLowerCase().includes(term) ||
+      String(c.tauxreductionCTB).includes(term) ||
+      String(c.tauxreductionRUS).includes(term) ||
+      String(c.tauxreductionCEB_ENR).includes(term) ||
+      String(c.tauxreductionRUS_ENR).includes(term)
+    );
   }
 
-  // ─── Close on outside click ────────────────────────────────────────────────
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterCodeBVMT &&
-        !this.codeBVMTToggler.nativeElement.contains(target) &&
-        !this.codeBVMTFilter.nativeElement.contains(target)) {
-      this.showFilterCodeBVMT = false;
-    }
-    if (this.showFilterCodeNSC &&
-        !this.codeNSCToggler.nativeElement.contains(target) &&
-        !this.codeNSCFilter.nativeElement.contains(target)) {
-      this.showFilterCodeNSC = false;
-    }
-    if (this.showFilterCodeOptique &&
-        !this.codeOptiqueToggler.nativeElement.contains(target) &&
-        !this.codeOptiqueFilter.nativeElement.contains(target)) {
-      this.showFilterCodeOptique = false;
-    }
-    if (this.showFilterCodeTc &&
-        !this.codeTcToggler.nativeElement.contains(target) &&
-        !this.codeTcFilter.nativeElement.contains(target)) {
-      this.showFilterCodeTc = false;
-    }
-    if (this.showFilterLibFr &&
-        !this.libFrToggler.nativeElement.contains(target) &&
-        !this.libFrFilter.nativeElement.contains(target)) {
-      this.showFilterLibFr = false;
-    }
-    if (this.showFilterLibCFr &&
-        !this.libCFrToggler.nativeElement.contains(target) &&
-        !this.libCFrFilter.nativeElement.contains(target)) {
-      this.showFilterLibCFr = false;
-    }
-    if (this.showFilterLibAr &&
-        !this.libArToggler.nativeElement.contains(target) &&
-        !this.libArFilter.nativeElement.contains(target)) {
-      this.showFilterLibAr = false;
-    }
-    if (this.showFilterLibCAr &&
-        !this.libCArToggler.nativeElement.contains(target) &&
-        !this.libCArFilter.nativeElement.contains(target)) {
-      this.showFilterLibCAr = false;
-    }
-    if (this.showFilterLibEn &&
-        !this.libEnToggler.nativeElement.contains(target) &&
-        !this.libEnFilter.nativeElement.contains(target)) {
-      this.showFilterLibEn = false;
-    }
-    if (this.showFilterLibCEn &&
-        !this.libCEnToggler.nativeElement.contains(target) &&
-        !this.libCEnFilter.nativeElement.contains(target)) {
-      this.showFilterLibCEn = false;
-    }
-    if (this.showFilterTauxCTB &&
-        !this.tauxCTBToggler.nativeElement.contains(target) &&
-        !this.tauxCTBFilter.nativeElement.contains(target)) {
-      this.showFilterTauxCTB = false;
-    }
-    if (this.showFilterTauxRUS &&
-        !this.tauxRUSToggler.nativeElement.contains(target) &&
-        !this.tauxRUSFilter.nativeElement.contains(target)) {
-      this.showFilterTauxRUS = false;
-    }
-    if (this.showFilterTauxCEB_ENR &&
-        !this.tauxCEB_ENRToggler.nativeElement.contains(target) &&
-        !this.tauxCEB_ENRFilter.nativeElement.contains(target)) {
-      this.showFilterTauxCEB_ENR = false;
-    }
-    if (this.showFilterTauxRUS_ENR &&
-        !this.tauxRUS_ENRToggler.nativeElement.contains(target) &&
-        !this.tauxRUS_ENRFilter.nativeElement.contains(target)) {
-      this.showFilterTauxRUS_ENR = false;
-    }
-  }
 
   // ─── CRUD & modal (unchanged) ─────────────────────────────────────────────
   openSignupModal(): void {

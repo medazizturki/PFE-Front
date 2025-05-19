@@ -87,6 +87,21 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurnational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur National</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurinternational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur International</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/intermediaire">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">intermediaire</span>
+                </a>
+            </li>
         </ul>
     </div>
   </nav>
@@ -139,6 +154,15 @@
 
       <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
+          <div class="search-wrapper">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              placeholder="Recherche…"
+              class="form-control form-control-sm"
+              [(ngModel)]="searchTerm" />
+          </div>
           <p-table
             [value]="filteredCommissions"
             [paginator]="true"
@@ -150,61 +174,29 @@
           >
             <ng-template pTemplate="header">
               <tr>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Groupe
-                  <span #groupeToggler class="search-toggler" (click)="toggleFilter('groupe')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterGroupe" #groupeFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par groupe…" [(ngModel)]="filterGroupe"/>
-                  </div>
                 </th>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Rang
-                  <span #rangToggler class="search-toggler" (click)="toggleFilter('rang')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterRang" #rangFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par rang…" [(ngModel)]="filterRang"/>
-                  </div>
                 </th>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Taux CTB
-                  <span #tauxCTBToggler class="search-toggler" (click)="toggleFilter('tauxCTB')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterTauxCTB" #tauxCTBFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par Taux CTB…" [(ngModel)]="filterTauxCTB"/>
-                  </div>
                 </th>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Min CTB
-                  <span #minCTBToggler class="search-toggler" (click)="toggleFilter('minCTB')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterMinCTB" #minCTBFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par Min CTB…" [(ngModel)]="filterMinCTB"/>
-                  </div>
                 </th>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Max CTB
-                  <span #maxCTBToggler class="search-toggler" (click)="toggleFilter('maxCTB')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterMaxCTB" #maxCTBFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par Max CTB…" [(ngModel)]="filterMaxCTB"/>
-                  </div>
                 </th>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Taux RUS
-                  <span #tauxRUSToggler class="search-toggler" (click)="toggleFilter('tauxRUS')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterTauxRUS" #tauxRUSFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par Taux RUS…" [(ngModel)]="filterTauxRUS"/>
-                  </div>
                 </th>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Min RUS
-                  <span #minRUSToggler class="search-toggler" (click)="toggleFilter('minRUS')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterMinRUS" #minRUSFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par Min RUS…" [(ngModel)]="filterMinRUS"/>
-                  </div>
                 </th>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Max RUS
-                  <span #maxRUSToggler class="search-toggler" (click)="toggleFilter('maxRUS')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterMaxRUS" #maxRUSFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par Max RUS…" [(ngModel)]="filterMaxRUS"/>
-                  </div>
                 </th>
                 <th class="text-center">Modifier</th>
                 <th class="text-center">Supprimer</th>

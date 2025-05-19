@@ -86,6 +86,21 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurnational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur National</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurinternational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur International</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/intermediaire">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">intermediaire</span>
+                </a>
+            </li>
             <li>a</li>
             <li>bb</li>
         </ul>
@@ -137,47 +152,43 @@
 
       <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
+
+          <div class="search-wrapper">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              placeholder="Recherche…"
+              class="form-control form-control-sm"
+              [(ngModel)]="searchTerm" />
+          </div>
+
             <p-table [value]="filteredItems" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5,10,20]"
          tableStyleClass="table table-striped mb-0"
          headerStyleClass="bg-primary text-white"
          [responsiveLayout]="'scroll'">
   <ng-template pTemplate="header">
     <tr>
-      <th class="position-relative">
+      <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
         Code BVMT
-        <span #codeToggler class="search-toggler" (click)="toggleFilter('code')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterCodeBvmt" #codeFilter class="filter-container">
-          <input type="text" class="filter-input" placeholder="Filter…" [(ngModel)]="filterCodeBvmt"/>
-        </div>
       </th>
-      <th class="position-relative">
+      <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
         Libellé
-        <span #libelleToggler class="search-toggler" (click)="toggleFilter('libelle')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterLibelle" #libelleFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterLibelle"/>
-        </div>
       </th>
-      <th class="position-relative">
+      <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
         Groupe
-        <span #groupeToggler class="search-toggler" (click)="toggleFilter('groupe')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterGroupe" #groupeFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterGroupe"/>
-        </div>
       </th>
-      <th class="position-relative">
+      <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
+        Libellé (FR)
+      </th>
+      <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
+        Libellé (AR)
+      </th>
+      <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
+        Libellé (EN)
+      </th>
+      <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
         Description
-        <span #descToggler class="search-toggler" (click)="toggleFilter('desc')">
-          <i class="pi pi-search"></i>
-        </span>
-        <div *ngIf="showFilterDesc" #descFilter class="filter-container">
-          <input type="text" class="filter-input" [(ngModel)]="filterDesc"/>
-        </div>
       </th>
       <th class="text-center">Modifier</th>
       <th class="text-center">Supprimer</th>
@@ -188,6 +199,9 @@
       <td>{{row.codeBvmt}}</td>
       <td>{{row.libelle}}</td>
       <td>{{row.groupes?.code}}</td>
+      <td>{{row.libellefr}}</td>
+      <td>{{row.libellear}}</td>
+      <td>{{row.libelleen}}</td>
       <td>{{row.description}}</td>
       <td class="text-center">
         <button class="btn btn-light btn-sm me-2" (click)="edit(row)"

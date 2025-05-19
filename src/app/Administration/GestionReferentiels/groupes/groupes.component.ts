@@ -20,6 +20,9 @@ export class GroupesComponent implements OnInit {
   devises: any[] = [];
   filteredDevises: any[] = [];
 
+  // unified search filter
+  searchTerm = '';
+
   marcheOptions = [
     { label: 'Marché Principal', value: 'Marches_des_Titre_de_capital_Marche_Principale' },
     { label: 'Marché Alternatif', value: 'Marches_des_Titre_de_capital_Marche_Alternatif' },
@@ -39,38 +42,6 @@ export class GroupesComponent implements OnInit {
     { label: 'Continu', value: 'Continu' },
     { label: 'Fixing',  value: 'Fixing' }
   ];
-
-  // Filters
-  filterCode = '';
-  filterMarche = '';
-  filterCategorie = '';
-  filterUnite = '';
-  filterDevise = '';
-  filterMode = '';
-  filterDesc = '';
-
-  showFilterCode = false;
-  showFilterMarche = false;
-  showFilterCategorie = false;
-  showFilterUnite = false;
-  showFilterDevise = false;
-  showFilterMode = false;
-  showFilterDesc = false;
-
-  @ViewChild('codeToggler')    codeToggler!: ElementRef;
-  @ViewChild('codeFilter')     codeFilter!: ElementRef;
-  @ViewChild('marcheToggler')  marcheToggler!: ElementRef;
-  @ViewChild('marcheFilter')   marcheFilter!: ElementRef;
-  @ViewChild('catToggler')     catToggler!: ElementRef;
-  @ViewChild('catFilter')      catFilter!: ElementRef;
-  @ViewChild('uniteToggler')   uniteToggler!: ElementRef;
-  @ViewChild('uniteFilter')    uniteFilter!: ElementRef;
-  @ViewChild('deviseToggler')  deviseToggler!: ElementRef;
-  @ViewChild('deviseFilter')   deviseFilter!: ElementRef;
-  @ViewChild('modeToggler')    modeToggler!: ElementRef;
-  @ViewChild('modeFilter')     modeFilter!: ElementRef;
-  @ViewChild('descToggler')    descToggler!: ElementRef;
-  @ViewChild('descFilter')     descFilter!: ElementRef;
 
   constructor(
     private fb: FormBuilder,
@@ -114,83 +85,6 @@ export class GroupesComponent implements OnInit {
     });
   }
 
-  get filteredGroupes(): any[] {
-    return this.groupes.filter(g =>
-      g.code
-        .toLowerCase()
-        .includes(this.filterCode.toLowerCase()) &&
-      (g.marche ?? '')
-        .toLowerCase()
-        .includes(this.filterMarche.toLowerCase()) &&
-      (g.categorie ?? '')
-        .toLowerCase()
-        .includes(this.filterCategorie.toLowerCase()) &&
-      g.unitecotation
-        .toLowerCase()
-        .includes(this.filterUnite.toLowerCase()) &&
-      (g.devises?.code ?? '')
-        .toLowerCase()
-        .includes(this.filterDevise.toLowerCase()) &&
-      (g.modeCotation ?? '')
-        .toLowerCase()
-        .includes(this.filterMode.toLowerCase()) &&
-      g.description
-        .toLowerCase()
-        .includes(this.filterDesc.toLowerCase())
-    );
-  }
-
-  toggleFilter(field: 'code'|'marche'|'categorie'|'unite'|'devise'|'mode'|'desc'): void {
-    switch (field) {
-      case 'code':      this.showFilterCode      = !this.showFilterCode;      if (!this.showFilterCode) this.filterCode = ''; break;
-      case 'marche':    this.showFilterMarche    = !this.showFilterMarche;    if (!this.showFilterMarche) this.filterMarche = ''; break;
-      case 'categorie': this.showFilterCategorie = !this.showFilterCategorie; if (!this.showFilterCategorie) this.filterCategorie = ''; break;
-      case 'unite':     this.showFilterUnite     = !this.showFilterUnite;     if (!this.showFilterUnite) this.filterUnite = ''; break;
-      case 'devise':    this.showFilterDevise    = !this.showFilterDevise;    if (!this.showFilterDevise) this.filterDevise = ''; break;
-      case 'mode':      this.showFilterMode      = !this.showFilterMode;      if (!this.showFilterMode) this.filterMode = ''; break;
-      case 'desc':      this.showFilterDesc      = !this.showFilterDesc;      if (!this.showFilterDesc) this.filterDesc = ''; break;
-    }
-  }
-
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterCode &&
-        !this.codeToggler.nativeElement.contains(target) &&
-        !this.codeFilter.nativeElement.contains(target)) {
-      this.showFilterCode = false;
-    }
-    if (this.showFilterMarche &&
-        !this.marcheToggler.nativeElement.contains(target) &&
-        !this.marcheFilter.nativeElement.contains(target)) {
-      this.showFilterMarche = false;
-    }
-    if (this.showFilterCategorie &&
-        !this.catToggler.nativeElement.contains(target) &&
-        !this.catFilter.nativeElement.contains(target)) {
-      this.showFilterCategorie = false;
-    }
-    if (this.showFilterUnite &&
-        !this.uniteToggler.nativeElement.contains(target) &&
-        !this.uniteFilter.nativeElement.contains(target)) {
-      this.showFilterUnite = false;
-    }
-    if (this.showFilterDevise &&
-        !this.deviseToggler.nativeElement.contains(target) &&
-        !this.deviseFilter.nativeElement.contains(target)) {
-      this.showFilterDevise = false;
-    }
-    if (this.showFilterMode &&
-        !this.modeToggler.nativeElement.contains(target) &&
-        !this.modeFilter.nativeElement.contains(target)) {
-      this.showFilterMode = false;
-    }
-    if (this.showFilterDesc &&
-        !this.descToggler.nativeElement.contains(target) &&
-        !this.descFilter.nativeElement.contains(target)) {
-      this.showFilterDesc = false;
-    }
-  }
-
 
   
   // after:
@@ -201,7 +95,18 @@ export class GroupesComponent implements OnInit {
     );
   }
 
-  
+  get filteredGroupes(): any[] {
+    const term = this.searchTerm.toLowerCase();
+    return this.groupes.filter(g =>
+      g.code.toLowerCase().includes(term) ||
+      (g.marche ?? '').toLowerCase().includes(term) ||
+      (g.categorie ?? '').toLowerCase().includes(term) ||
+      g.unitecotation.toLowerCase().includes(term) ||
+      (g.devises?.code ?? '').toLowerCase().includes(term) ||
+      (g.modeCotation ?? '').toLowerCase().includes(term) ||
+      g.description.toLowerCase().includes(term)
+    );
+  }
   openModal(): void {
     this.displayModal = true;
     this.isEdit = false;

@@ -87,6 +87,21 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurnational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur National</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurinternational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur International</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/intermediaire">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">intermediaire</span>
+                </a>
+            </li>
         </ul>
     </div>
   </nav>
@@ -135,6 +150,16 @@
       </div>
  <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
+
+                              <div class="search-wrapper">
+  <i class="pi pi-search"></i>
+  <input
+    pInputText
+    type="text"
+    placeholder="Recherche…"
+    class="form-control form-control-sm"
+    [(ngModel)]="searchTerm" />
+</div>
           <p-table
             [value]="filteredCommissions"
             [paginator]="true"
@@ -148,38 +173,18 @@
               <tr>
                 <th class="position-relative">
                   Titre
-                  <span #titreToggler class="search-toggler" (click)="toggleFilter('titre')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterTitre" #titreFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par titre…" [(ngModel)]="filterTitre"/>
-                  </div>
                 </th>
                 <th class="position-relative">
                   Type
-                  <span #typeToggler class="search-toggler" (click)="toggleFilter('type')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterType" #typeFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par type…" [(ngModel)]="filterType"/>
-                  </div>
                 </th>
                 <th class="position-relative">
                   Rate
-                  <span #rateToggler class="search-toggler" (click)="toggleFilter('rate')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterRate" #rateFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par rate…" [(ngModel)]="filterRate"/>
-                  </div>
                 </th>
                 <th class="position-relative">
                   Minimum
-                  <span #minToggler class="search-toggler" (click)="toggleFilter('min')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterMinimum" #minFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par minimum…" [(ngModel)]="filterMinimum"/>
-                  </div>
                 </th>
                 <th class="position-relative">
                   Maximum
-                  <span #maxToggler class="search-toggler" (click)="toggleFilter('max')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterMaximum" #maxFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par maximum…" [(ngModel)]="filterMaximum"/>
-                  </div>
                 </th>
                 <th class="text-center">Modifier</th>
                 <th class="text-center">Supprimer</th>

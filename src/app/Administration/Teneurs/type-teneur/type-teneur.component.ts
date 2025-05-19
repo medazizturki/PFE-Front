@@ -17,16 +17,8 @@ export class TypeTeneurComponent implements OnInit {
   displayModal = false;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // Filtrage
-  filterCode = '';
-  filterLibelle = '';
-  showFilterCode = false;
-  showFilterLibelle = false;
-
-  @ViewChild('codeToggler')    codeToggler!: ElementRef;
-  @ViewChild('codeFilter')     codeFilter!: ElementRef;
-  @ViewChild('libelleToggler') libelleToggler!: ElementRef;
-  @ViewChild('libelleFilter')  libelleFilter!: ElementRef;
+  searchTerm = '';
+  
 
   constructor(
     private fb: FormBuilder,
@@ -48,53 +40,22 @@ export class TypeTeneurComponent implements OnInit {
     });
   }
 
+
+  
   loadTypes(): void {
     this.service.getAll().subscribe(data => {
-      // newest first
       this.types = data.sort((a, b) => b.id - a.id);
     });
   }
 
-  get filteredTypes(): any[] {
-    return this.types
-      .filter(t =>
-        t.code.toLowerCase().includes(this.filterCode.toLowerCase()) &&
-        t.libelle.toLowerCase().includes(this.filterLibelle.toLowerCase())
-      )
-      .sort((a, b) => b.id - a.id);
+    get filteredTypes(): any[] {
+    const term = this.searchTerm.toLowerCase();
+    return this.types.filter(t =>
+      t.code.toLowerCase().includes(term) ||
+      t.libelle.toLowerCase().includes(term)
+    );
   }
 
-  toggleFilter(column: 'code' | 'libelle'): void {
-    if (column === 'code') {
-      this.showFilterCode = !this.showFilterCode;
-      if (!this.showFilterCode) this.filterCode = '';
-    } else {
-      this.showFilterLibelle = !this.showFilterLibelle;
-      if (!this.showFilterLibelle) this.filterLibelle = '';
-    }
-  }
-
-  clearFilter(column: 'code' | 'libelle') {
-    if (column === 'code') {
-      this.filterCode = '';
-    } else {
-      this.filterLibelle = '';
-    }
-  }
-
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterCode &&
-        !this.codeToggler.nativeElement.contains(target) &&
-        !this.codeFilter.nativeElement.contains(target)) {
-      this.showFilterCode = false;
-    }
-    if (this.showFilterLibelle &&
-        !this.libelleToggler.nativeElement.contains(target) &&
-        !this.libelleFilter.nativeElement.contains(target)) {
-      this.showFilterLibelle = false;
-    }
-  }
 
   openSignupModal(): void {
     this.isEdit = false;

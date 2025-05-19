@@ -17,17 +17,10 @@ export class TMMComponent implements OnInit {
   displayModal = false;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // ─── Filtrage ───────────────────────────────────────────────────────────────
-  filterMois = '';
-  filterTMM  = '';
-  showFilterMois = false;
-  showFilterTMM  = false;
+  // unified search filter
+  searchTerm = '';
 
-  @ViewChild('moisToggler') moisToggler!: ElementRef;
-  @ViewChild('moisFilter')  moisFilter!: ElementRef;
-  @ViewChild('tmmToggler')  tmmToggler!: ElementRef;
-  @ViewChild('tmmFilter')   tmmFilter!: ElementRef;
-
+ 
   constructor(
     private fb: FormBuilder,
     private tmmService: TMMService,
@@ -49,47 +42,18 @@ export class TMMComponent implements OnInit {
 
   fetchTMMs(): void {
     this.tmmService.getAllTMM().subscribe(data => {
-      // newest first by id
       this.tmmList = data.sort((a, b) => b.id - a.id);
     });
   }
 
   get filteredTMMs(): any[] {
+    const term = this.searchTerm.toLowerCase();
     return this.tmmList
       .filter(item => {
-        const moisText = item.mois?.split('T')[0] || '';
-        return moisText.includes(this.filterMois)
-            && String(item.tmm).includes(this.filterTMM);
+        const moisText = item.mois?.split('T')[0].toLowerCase() || '';
+        return moisText.includes(term) ||
+               String(item.tmm).toLowerCase().includes(term);
       });
-  }
-
-  toggleFilter(column: 'mois' | 'tmm'): void {
-    if (column === 'mois') {
-      this.showFilterMois = !this.showFilterMois;
-      if (!this.showFilterMois) this.filterMois = '';
-    } else {
-      this.showFilterTMM = !this.showFilterTMM;
-      if (!this.showFilterTMM) this.filterTMM = '';
-    }
-  }
-
-  clearFilter(column: 'mois' | 'tmm'): void {
-    if (column === 'mois') this.filterMois = '';
-    else this.filterTMM = '';
-  }
-
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterMois &&
-        !this.moisToggler.nativeElement.contains(target) &&
-        !this.moisFilter.nativeElement.contains(target)) {
-      this.showFilterMois = false;
-    }
-    if (this.showFilterTMM &&
-        !this.tmmToggler.nativeElement.contains(target) &&
-        !this.tmmFilter.nativeElement.contains(target)) {
-      this.showFilterTMM = false;
-    }
   }
 
   openSignupModal(): void {

@@ -86,6 +86,21 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurnational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur National</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurinternational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur International</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/intermediaire">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">intermediaire</span>
+                </a>
+            </li>
             <li>a</li>
             <li>bb</li>
         </ul>
@@ -138,6 +153,15 @@
 
       <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
+          <div class="search-wrapper">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              placeholder="Recherche…"
+              class="form-control form-control-sm"
+              [(ngModel)]="searchTerm" />
+          </div>
           <p-table [value]="filteredCategories"
                    [paginator]="true"
                    [rows]="10"
@@ -148,91 +172,51 @@
 
             <ng-template pTemplate="header">
               <tr>
-                <th class="position-relative">Code BVMT
-                  <span #codeBVMTToggler class="search-toggler" (click)="toggleFilter('codeBVMT')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterCodeBVMT" #codeBVMTFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par code BVMT ..." [(ngModel)]="filterCodeBVMT">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+                  Code BVMT
                 </th>
-                <th class="position-relative">Code NSC
-                  <span #codeNSCToggler class="search-toggler" (click)="toggleFilter('codeNSC')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterCodeNSC" #codeNSCFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par code NSC ..." [(ngModel)]="filterCodeNSC">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+                  Code NSC
                 </th>
-                <th class="position-relative">Code Optique
-                  <span #codeOptiqueToggler class="search-toggler" (click)="toggleFilter('codeOptique')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterCodeOptique" #codeOptiqueFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par code Optique ..." [(ngModel)]="filterCodeOptique">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 180px;">
+                  Code Optique
                 </th>
-                <th class="position-relative">Code TC
-                  <span #codeTcToggler class="search-toggler" (click)="toggleFilter('codeTc')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterCodeTc" #codeTcFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par Code TC" [(ngModel)]="filterCodeTc">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+                  Code TC
                 </th>
-                <th class="position-relative">Libellé FR
-                  <span #libFrToggler class="search-toggler" (click)="toggleFilter('libFr')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibFr" #libFrFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par libelle (FR)" [(ngModel)]="filterLibFr">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+                  Libellé (FR)
                 </th>
-                <th class="position-relative">Libellé C FR
-                  <span #libCFrToggler class="search-toggler" (click)="toggleFilter('libCFr')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibCFr" #libCFrFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par libelle C (FR)" [(ngModel)]="filterLibCFr">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
+                  Libellé C (FR)
                 </th>
-                <th class="position-relative">Libellé AR
-                  <span #libArToggler class="search-toggler" (click)="toggleFilter('libAr')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibAr" #libArFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par libelle (AR)" [(ngModel)]="filterLibAr">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+                  Libellé (AR)
                 </th>
-                <th class="position-relative">Libellé C AR
-                  <span #libCArToggler class="search-toggler" (click)="toggleFilter('libCAr')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibCAr" #libCArFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par libelle C (AR)" [(ngModel)]="filterLibCAr">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
+                  Libellé C (AR)
                 </th>
-                <th class="position-relative">Libellé EN
-                  <span #libEnToggler class="search-toggler" (click)="toggleFilter('libEn')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibEn" #libEnFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par libelle (EN)" [(ngModel)]="filterLibEn">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+                  Libellé (EN)
                 </th>
-                <th class="position-relative">Libellé C EN
-                  <span #libCEnToggler class="search-toggler" (click)="toggleFilter('libCEn')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibCEn" #libCEnFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par libelle C (EN)" [(ngModel)]="filterLibCEn">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 160px;">
+                  Libellé C (EN)
                 </th>
-                <th class="position-relative">Taux CTB
-                  <span #tauxCTBToggler class="search-toggler" (click)="toggleFilter('tauxCTB')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterTauxCTB" #tauxCTBFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par Taux CTB" [(ngModel)]="filterTauxCTB">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+                  Taux CTB
                 </th>
-                <th class="position-relative">Taux RUS
-                  <span #tauxRUSToggler class="search-toggler" (click)="toggleFilter('tauxRUS')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterTauxRUS" #tauxRUSFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer Par Taux RUS" [(ngModel)]="filterTauxRUS">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
+                  Taux RUS
                 </th>
-                <th class="position-relative">Taux CEB_ENR
-                  <span #tauxCEB_ENRToggler class="search-toggler" (click)="toggleFilter('tauxCEB_ENR')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterTauxCEB_ENR" #tauxCEB_ENRFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer pat Taux CEB_ENR " [(ngModel)]="filterTauxCEB_ENR">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 170px;">
+                  Taux CEB_ENR
                 </th>
-                <th class="position-relative">Taux RUS_ENR
-                  <span #tauxRUS_ENRToggler class="search-toggler" (click)="toggleFilter('tauxRUS_ENR')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterTauxRUS_ENR" #tauxRUS_ENRFilter class="filter-container">
-                    <input class="filter-input" placeholder="Filtrer par Taux RUS_ENR" [(ngModel)]="filterTauxRUS_ENR">
-                  </div>
+                <th class="position-relative" style="white-space: nowrap; max-width: 180px;">
+                  Taux RUS_ENR
                 </th>
-                <th>Modifier</th>
+                <th class="position-relative" style="white-space: nowrap; max-width: 130px;">
+                  Modifier
+                </th>
                 <th>Supprimer</th>
               </tr>
             </ng-template>

@@ -38,6 +38,9 @@ import { TableModule } from 'primeng/table';
 import { GroupesComponent } from './Administration/GestionReferentiels/groupes/groupes.component';
 import { IndiceSectorielComponent } from './Administration/GestionReferentiels/indice-sectoriel/indice-sectoriel.component';
 import { NatureReferentielsComponent } from './Administration/GestionReferentiels/nature-referentiels/nature-referentiels.component';
+import { SecteurNationalComponent } from './Administration/Secteur/secteur-national/secteur-national.component';
+import { SecteurInternationalComponent } from './Administration/Secteur/secteur-international/secteur-international.component';
+import { IntermediaireComponent } from './Administration/GestionReferentiels/intermediaire/intermediaire.component';
 
 
 @NgModule({
@@ -61,6 +64,9 @@ import { NatureReferentielsComponent } from './Administration/GestionReferentiel
     GroupesComponent,
     IndiceSectorielComponent,
     NatureReferentielsComponent,
+    SecteurNationalComponent,
+    SecteurInternationalComponent,
+    IntermediaireComponent,
   ],
   imports: [
     BrowserModule,

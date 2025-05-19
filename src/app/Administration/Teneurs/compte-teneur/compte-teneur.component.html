@@ -104,15 +104,13 @@
       <div class="navbar-collapse collapse">
         <ul class="navbar-nav navbar-align">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-none d-sm-inline-block"
-               href="#"
-               data-bs-toggle="dropdown">
+            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown" aria-expanded="false">
               <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'"
                    class="avatar img-fluid rounded me-1"
                    style="width: 32px; height: 32px; object-fit: cover;"
                    onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
               <span class="text-dark" *ngIf="user">
-                {{ user.username || user.name }}
+                {{ user.username || user.preferred_username || user.name || 'No username' }}
               </span>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
@@ -133,8 +131,8 @@
         <div class="header-blue-line"></div>
         <div class="header-bar">
           <h2>Liste des Comptes des Teneurs</h2>
-          <button class="btn-add" (click)="openModal()">
-            <span class="add-icon">+</span> Ajouter un Compte Teneur
+          <button class="btn-add2" (click)="openModal()">
+            <span class="add-icon">+</span> Ajouter
           </button>
           <button class="btn-add" (click)="generatePDF()">
             <i class="pi pi-file-pdf"></i> Exporter en PDF
@@ -144,6 +142,15 @@
 
       <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
+          <div class="search-wrapper my-3">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              placeholder="Recherche…"
+              class="form-control form-control-sm"
+              [(ngModel)]="searchTerm" />
+          </div>
           <p-table
             [value]="filteredComptes"
             [paginator]="true"
@@ -156,47 +163,14 @@
             <!-- HEADER -->
             <ng-template pTemplate="header">
               <tr>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Code
-                  <span #codeToggler class="search-toggler" (click)="toggleFilter('code')">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <div *ngIf="showFilterCode" #codeFilter class="filter-container">
-                    <input
-                      type="text"
-                      class="filter-input"
-                      placeholder="Filtrer par code…"
-                      [(ngModel)]="filterCode"
-                    />
-                  </div>
                 </th>
-                <th class="position-relative">
+                <th  class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Libellé
-                  <span #libelleToggler class="search-toggler" (click)="toggleFilter('libelle')">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <div *ngIf="showFilterLibelle" #libelleFilter class="filter-container">
-                    <input
-                      type="text"
-                      class="filter-input"
-                      placeholder="Filtrer par libellé…"
-                      [(ngModel)]="filterLibelle"
-                    />
-                  </div>
                 </th>
-                <th class="position-relative">
+                <th  class="position-relative" style="white-space: nowrap; max-width: 150px;" >
                   Type Teneur
-                  <span #typeTeneurToggler class="search-toggler" (click)="toggleFilter('typeTeneur')">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <div *ngIf="showFilterTypeTeneur" #typeTeneurFilter class="filter-container">
-                    <input
-                      type="text"
-                      class="filter-input"
-                      placeholder="Filtrer par type…"
-                      [(ngModel)]="filterTypeTeneur"
-                    />
-                  </div>
                 </th>
                 <th class="text-center">Modifier</th>
                 <th class="text-center">Supprimer</th>

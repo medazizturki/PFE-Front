@@ -19,6 +19,9 @@ import { CategorieavoirComponent } from './Administration/GestionReferentiels/ca
 import { GroupesComponent } from './Administration/GestionReferentiels/groupes/groupes.component';
 import { IndiceSectorielComponent } from './Administration/GestionReferentiels/indice-sectoriel/indice-sectoriel.component';
 import { NatureReferentielsComponent } from './Administration/GestionReferentiels/nature-referentiels/nature-referentiels.component';
+import { SecteurNationalComponent } from './Administration/Secteur/secteur-national/secteur-national.component';
+import { SecteurInternationalComponent } from './Administration/Secteur/secteur-international/secteur-international.component';
+import { IntermediaireComponent } from './Administration/GestionReferentiels/intermediaire/intermediaire.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -39,6 +42,9 @@ const routes: Routes = [
   { path: 'groupes', component: GroupesComponent, canActivate: [AuthGuard] },
   { path: 'indicesectoriel', component: IndiceSectorielComponent, canActivate: [AuthGuard] },
   { path: 'naturereferentiel', component: NatureReferentielsComponent, canActivate: [AuthGuard] },
+  { path: 'secteurnational', component: SecteurNationalComponent, canActivate: [AuthGuard] },
+  { path: 'secteurinternational', component: SecteurInternationalComponent, canActivate: [AuthGuard] },
+  { path: 'intermediaire', component: IntermediaireComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
 

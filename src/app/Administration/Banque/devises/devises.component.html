@@ -86,6 +86,21 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
                 </a>
             </li>
+            <li class="sidebar-item active">
+                <a class="sidebar-link" href="/secteurnational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur National</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurinternational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur International</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/intermediaire">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">intermediaire</span>
+                </a>
+            </li>
         </ul>
     </div>
   </nav>
@@ -102,7 +117,7 @@
                    class="avatar img-fluid rounded me-1"
                    style="width:32px;height:32px;object-fit:cover;"
                    onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
-              <span class="text-dark" *ngIf="user">{{ user.username || user.name }}</span>
+              <span class="text-dark" *ngIf="user">{{ user.username || user.preferred_username || user.name }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
               <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
@@ -127,6 +142,16 @@
 
       <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
+                    <div class="search-wrapper">
+  <i class="pi pi-search"></i>
+  <input
+    pInputText
+    type="text"
+    placeholder="Recherche…"
+    class="form-control form-control-sm"
+    [(ngModel)]="searchTerm" />
+</div>
+
           <p-table
             [value]="filteredDevises"
             [paginator]="true"
@@ -138,54 +163,26 @@
           >
             <ng-template pTemplate="header">
               <tr>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Code
-                  <span #codeToggler class="search-toggler" (click)="toggleFilter('code')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterCode" #codeFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par code…" [(ngModel)]="filterCode"/>
-                  </div>
                 </th>
                 <th class="position-relative">
                   Libellé (Fr)
-                  <span #libFrToggler class="search-toggler" (click)="toggleFilter('libFr')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibFr" #libFrFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par libellé Fr…" [(ngModel)]="filterLibFr"/>
-                  </div>
                 </th>
                 <th class="position-relative">
                   Libellé courte (Fr)
-                  <span #libCfrToggler class="search-toggler" (click)="toggleFilter('libCfr')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibCfr" #libCfrFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par lib courte Fr…" [(ngModel)]="filterLibCfr"/>
-                  </div>
                 </th>
                 <th class="position-relative">
                   Libellé (Ar)
-                  <span #libArToggler class="search-toggler" (click)="toggleFilter('libAr')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibAr" #libArFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par lib Ar…" [(ngModel)]="filterLibAr"/>
-                  </div>
                 </th>
                 <th class="position-relative">
                   Lib courte (Ar)
-                  <span #libCarToggler class="search-toggler" (click)="toggleFilter('libCar')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibCar" #libCarFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par lib courte Ar…" [(ngModel)]="filterLibCar"/>
-                  </div>
                 </th>
                 <th class="position-relative">
                   Libellé (En)
-                  <span #libEnToggler class="search-toggler" (click)="toggleFilter('libEn')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibEn" #libEnFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par lib En…" [(ngModel)]="filterLibEn"/>
-                  </div>
                 </th>
                 <th class="position-relative">
                   Lib courte (En)
-                  <span #libCenToggler class="search-toggler" (click)="toggleFilter('libCen')"><i class="pi pi-search"></i></span>
-                  <div *ngIf="showFilterLibCen" #libCenFilter class="filter-container">
-                    <input type="text" class="filter-input" placeholder="Filtrer par lib courte En…" [(ngModel)]="filterLibCen"/>
-                  </div>
                 </th>
                 <th>Modifier</th>
                 <th>Supprimer</th>

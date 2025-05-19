@@ -17,29 +17,9 @@ export class TypeMarcheComponent implements OnInit {
   displayModal = false;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // ─── Filters ──────────────────────────────────────────────────────────────
-  filterCodeBVMT = '';
-  filterSuperType = '';
-  filterLibFr    = '';
-  filterLibAr    = '';
-  filterLibEn    = '';
+  // unified search filter
+  searchTerm = '';
 
-  showFilterCodeBVMT = false;
-  showFilterSuperType = false;
-  showFilterLibFr = false;
-  showFilterLibAr = false;
-  showFilterLibEn = false;
-
-  @ViewChild('codeToggler')      codeToggler!: ElementRef;
-  @ViewChild('codeFilter')       codeFilter!: ElementRef;
-  @ViewChild('superTypeToggler') superTypeToggler!: ElementRef;
-  @ViewChild('superTypeFilter')  superTypeFilter!: ElementRef;
-  @ViewChild('libFrToggler')     libFrToggler!: ElementRef;
-  @ViewChild('libFrFilter')      libFrFilter!: ElementRef;
-  @ViewChild('libArToggler')     libArToggler!: ElementRef;
-  @ViewChild('libArFilter')      libArFilter!: ElementRef;
-  @ViewChild('libEnToggler')     libEnToggler!: ElementRef;
-  @ViewChild('libEnFilter')      libEnFilter!: ElementRef;
 
   constructor(
     private fb: FormBuilder,
@@ -70,71 +50,16 @@ export class TypeMarcheComponent implements OnInit {
     });
   }
 
-  // ─── Filtered & sorted getter ───────────────────────────────────────────────
+
   get filteredTypeMarches(): any[] {
-    return this.typeMarches.filter(t => {
-      return t.codeBVMT.toLowerCase().includes(this.filterCodeBVMT.toLowerCase())
-          && t.superType.toLowerCase().includes(this.filterSuperType.toLowerCase())
-          && t.libellefr.toLowerCase().includes(this.filterLibFr.toLowerCase())
-          && t.libellear.toLowerCase().includes(this.filterLibAr.toLowerCase())
-          && t.libelleen.toLowerCase().includes(this.filterLibEn.toLowerCase());
-    });
-  }
-
-  // ─── Toggle filters ───────────────────────────────────────────────────────
-  toggleFilter(col: 'codeBVMT'|'superType'|'libFr'|'libAr'|'libEn'): void {
-    switch (col) {
-      case 'codeBVMT':
-        this.showFilterCodeBVMT = !this.showFilterCodeBVMT;
-        if (!this.showFilterCodeBVMT) this.filterCodeBVMT = '';
-        break;
-      case 'superType':
-        this.showFilterSuperType = !this.showFilterSuperType;
-        if (!this.showFilterSuperType) this.filterSuperType = '';
-        break;
-      case 'libFr':
-        this.showFilterLibFr = !this.showFilterLibFr;
-        if (!this.showFilterLibFr) this.filterLibFr = '';
-        break;
-      case 'libAr':
-        this.showFilterLibAr = !this.showFilterLibAr;
-        if (!this.showFilterLibAr) this.filterLibAr = '';
-        break;
-      case 'libEn':
-        this.showFilterLibEn = !this.showFilterLibEn;
-        if (!this.showFilterLibEn) this.filterLibEn = '';
-        break;
-    }
-  }
-
-  // ─── Close on outside click ───────────────────────────────────────────────
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterCodeBVMT &&
-        !this.codeToggler.nativeElement.contains(target) &&
-        !this.codeFilter.nativeElement.contains(target)) {
-      this.showFilterCodeBVMT = false;
-    }
-    if (this.showFilterSuperType &&
-        !this.superTypeToggler.nativeElement.contains(target) &&
-        !this.superTypeFilter.nativeElement.contains(target)) {
-      this.showFilterSuperType = false;
-    }
-    if (this.showFilterLibFr &&
-        !this.libFrToggler.nativeElement.contains(target) &&
-        !this.libFrFilter.nativeElement.contains(target)) {
-      this.showFilterLibFr = false;
-    }
-    if (this.showFilterLibAr &&
-        !this.libArToggler.nativeElement.contains(target) &&
-        !this.libArFilter.nativeElement.contains(target)) {
-      this.showFilterLibAr = false;
-    }
-    if (this.showFilterLibEn &&
-        !this.libEnToggler.nativeElement.contains(target) &&
-        !this.libEnFilter.nativeElement.contains(target)) {
-      this.showFilterLibEn = false;
-    }
+    const term = this.searchTerm.toLowerCase();
+    return this.typeMarches.filter(t =>
+      t.codeBVMT.toLowerCase().includes(term) ||
+      t.superType.toLowerCase().includes(term) ||
+      t.libellefr.toLowerCase().includes(term) ||
+      t.libellear.toLowerCase().includes(term) ||
+      t.libelleen.toLowerCase().includes(term)
+    );
   }
 
   // ─── CRUD modal ────────────────────────────────────────────────────────────

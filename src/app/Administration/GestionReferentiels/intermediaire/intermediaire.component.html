@@ -1,0 +1,441 @@
+<div class="wrapper">
+  <nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+      <a class="sidebar-brand" href="/home">
+        <img src="assets/images/logo_BDMS.png" class="align-middle" style="height: 30px;">
+      </a>
+      <ul class="sidebar-nav">
+            <li class="sidebar-header">
+                Pages
+            </li>            
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="home">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/users">
+                <i class="align-middle" data-feather="user"></i> <span class="align-middle">Liste des utilisateurs</span>
+                </a>
+            </li>
+            <li class="sidebar-header">
+                Administration
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/jourferie">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Jour Férié</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/typeteneur">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Type Teneur</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/compteteneur">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Compte Teneur</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/tmm">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">TMM</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/devises">
+                <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Devises</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/tauxcharge">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Taux Charges</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/typemarche">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Type Marche</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/commissionHE">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Commision HorsElec</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/commissionE">
+                <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Commision Elec</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/categorieavoir">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Categorie d'Avoir</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/groupes">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Groupes</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/indicesectoriel">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Indice Sectoriel</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/naturereferentiel">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurnational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur National</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurinternational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur International</span>
+                </a>
+            </li>
+            <li class="sidebar-item active">
+                <a class="sidebar-link" href="/intermediaire">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">intermediaire</span>
+                </a>
+            </li>
+            <li>a</li>
+            <li>bb</li>
+        </ul>
+    </div>
+  </nav>
+
+      <div class="main">
+    <div class="main">
+    <nav class="navbar navbar-expand navbar-light navbar-bg">
+      <a class="sidebar-toggle js-sidebar-toggle"><i class="hamburger align-self-center"></i></a>
+      <div class="navbar-collapse collapse">
+        <ul class="navbar-nav navbar-align">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+              <img [src]="getUserImagePath() || '/assets/images/default-avatar.png'"
+                   class="avatar img-fluid rounded me-1"
+                   style="width:32px; height:32px; object-fit:cover;"
+                   onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
+              <span class="text-dark" *ngIf="user">{{ user.preferred_username  }}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+              <a class="dropdown-item" href="/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+              <a class="dropdown-item" href="#" (click)="logout(); $event.preventDefault()"><i class="align-middle me-1" data-feather="log-out"></i> Log out</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="header-container">
+        <div class="header-blue-line"></div>
+        <div class="header-bar">
+          <h2>Liste des Intermédiaires</h2>
+          <button class="btn-add" (click)="openModal()"><span class="add-icon">+</span> Ajouter un Intermédiaire</button>
+          <button class="btn-add" (click)="generatePDF()"><i class="pi pi-file-pdf"></i> Exporter en PDF</button>
+        </div>
+      </div>
+
+      <div class="card shadow-sm card-square bg-white">
+        <div class="card-body">
+
+            <div class="search-wrapper">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              placeholder="Recherche…"
+              class="form-control form-control-sm"
+              [(ngModel)]="searchTerm" />
+          </div>
+          <p-table
+            [value]="filteredIntermediaires"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[5,10,20]"
+            tableStyleClass="table table-striped mb-0"
+            headerStyleClass="bg-primary text-white"
+            [responsiveLayout]="'scroll'">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <!-- Code -->
+                <th class="position-relative" style="white-space:nowrap; max-width:120px;">
+                  Code
+                </th>
+                <!-- Libellé FR -->
+                <th class="position-relative" style="white-space:nowrap; max-width:150px;">
+                  Libellé (FR)
+                </th>
+                <!-- Symbole Français -->
+                <th class="position-relative" style="white-space:nowrap; max-width:160px;">
+                  Symbole (FR)
+                </th>
+                <!-- Libellé AR -->
+                <th class="position-relative" style="white-space:nowrap; max-width:150px;">
+                  Libellé (AR)
+                </th>
+                <!-- Symbole Arabe -->
+                <th class="position-relative" style="white-space:nowrap; max-width:160px;">
+                  Symbole (AR)
+                </th>
+                <!-- Libellé EN -->
+                <th class="position-relative" style="white-space:nowrap; max-width:150px;">
+                  Libellé (EN)
+                </th>
+                <!-- Symbole Anglais -->
+                <th class="position-relative" style="white-space:nowrap; max-width:160px;">
+                  Symbole (EN)
+                </th>
+                <!-- Adresse -->
+                <th class="position-relative" style="white-space:nowrap; max-width:200px;">
+                  Adresse
+                </th>
+                <!-- Fax -->
+                <th class="position-relative" style="white-space:nowrap; max-width:150px;">
+                  Fax
+                </th>
+                <!-- Téléphone -->
+                <th class="position-relative" style="white-space:nowrap; max-width:150px;">
+                  Téléphone
+                </th>
+                <!-- CEO -->
+                <th class="position-relative" style="white-space:nowrap; max-width:200px;">
+                  CEO
+                </th>
+                <!-- Compte Bancaire -->
+                <th class="position-relative" style="white-space:nowrap; max-width:200px;">
+                  Compte Bancaire
+                </th>
+                <!-- Banque -->
+                <th class="position-relative" style="white-space:nowrap; max-width:150px;">
+                  Banque
+                </th>
+                <!-- Type Banque -->
+                <th class="position-relative" style="white-space:nowrap; max-width:150px;">
+                  Type Banque
+                </th>
+                <!-- Date Début -->
+                <th class="position-relative" style="white-space:nowrap; max-width:150px;">
+                  Date Début
+                </th>
+                <!-- Date Fin -->
+                <th class="position-relative" style="white-space:nowrap; max-width:150px;">
+                  Date Fin
+                </th>
+                <th class="text-center">Modifier</th>
+                <th class="text-center">Supprimer</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-i>
+              <tr>
+                <td>{{ i.code }}</td>
+                <td>{{ i.libellefr }}</td>
+                <td>{{ i.symbolefrancais }}</td>
+                <td>{{ i.libellear }}</td>
+                <td>{{ i.symbolearabe }}</td>
+                <td>{{ i.libelleen }}</td>
+                <td>{{ i.symboleanglais }}</td>
+                <td>{{ i.adresse }}</td>
+                <td>{{ i.fax }}</td>
+                <td>{{ i.telephone }}</td>
+                <td>{{ i.ceo }}</td>
+                <td>{{ i.comptebanquaire }}</td>
+                <td>{{ i.banque }}</td>
+                <td>{{ i.typebanque }}</td>
+                <td>{{ i.dateDebut | date:'dd/MM/yyyy' }}</td>
+                <td>{{ i.dateFin   | date:'dd/MM/yyyy' }}</td>
+                <td class="text-center">
+                  <button class="btn btn-light btn-sm me-2" (click)="editIntermediaire(i)" title="Modifier" style="padding:6px 12px;border:none;">
+                    <i class="pi pi-pencil" style="font-size:1.1rem;color:#0d6efd;"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-light btn-sm" (click)="confirmDelete(i.id)" title="Supprimer" style="padding:6px 12px;border:none;">
+                    <i class="pi pi-trash" style="font-size:1.1rem;color:#dc3545;"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+
+          </p-table>
+
+<p-dialog
+            [(visible)]="displayModal"
+            [modal]="true"
+            [style]="{ width: '50vw' }"
+            [draggable]="false"
+            [resizable]="false"
+            [header]="isEdit ? 'Modifier un Intermédiaire' : 'Ajouter un Intermédiaire'">
+            <form [formGroup]="interForm" (ngSubmit)="confirmSave()">
+              <div class="row">
+                <!-- code -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Code</label>
+                  <input type="text" class="form-control" formControlName="code" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('code')!.touched && interForm.get('code')!.hasError('required')">
+                    Le champ Code est requis.
+                  </small>
+                </div>
+
+                <!-- libellefr -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Libellé FR</label>
+                  <input type="text" class="form-control" formControlName="libellefr" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('libellefr')!.touched && interForm.get('libellefr')!.hasError('required')">
+                    Le champ Libellé FR est requis.
+                  </small>
+                </div>
+
+                <!-- symbolefrancais -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Symbole FR</label>
+                  <input type="text" class="form-control" formControlName="symbolefrancais" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('symbolefrancais')!.touched && interForm.get('symbolefrancais')!.hasError('required')">
+                    Le champ Symbole FR est requis.
+                  </small>
+                </div>
+
+                <!-- libellear -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Libellé AR</label>
+                  <input type="text" class="form-control" formControlName="libellear" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('libellear')!.touched && interForm.get('libellear')!.hasError('required')">
+                    Le champ Libellé AR est requis.
+                  </small>
+                </div>
+
+                <!-- symbolearabe -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Symbole AR</label>
+                  <input type="text" class="form-control" formControlName="symbolearabe" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('symbolearabe')!.touched && interForm.get('symbolearabe')!.hasError('required')">
+                    Le champ Symbole AR est requis.
+                  </small>
+                </div>
+
+                <!-- libelleen -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Libellé EN</label>
+                  <input type="text" class="form-control" formControlName="libelleen" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('libelleen')!.touched && interForm.get('libelleen')!.hasError('required')">
+                    Le champ Libellé EN est requis.
+                  </small>
+                </div>
+
+                <!-- symboleanglais -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Symbole EN</label>
+                  <input type="text" class="form-control" formControlName="symboleanglais" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('symboleanglais')!.touched && interForm.get('symboleanglais')!.hasError('required')">
+                    Le champ Symbole EN est requis.
+                  </small>
+                </div>
+
+                <!-- adresse -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Adresse</label>
+                  <input type="text" class="form-control" formControlName="adresse" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('adresse')!.touched && interForm.get('adresse')!.hasError('required')">
+                    Le champ Adresse est requis.
+                  </small>
+                </div>
+
+                <!-- fax -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Fax</label>
+                    <input type="text" class="form-control" formControlName="fax" />
+                    <small class="text-danger"
+                        *ngIf="interForm.get('fax')!.touched && interForm.get('fax')!.hasError('required')">
+                        Le champ Fax est requis.
+                    </small>
+                    <small class="text-danger"
+                        *ngIf="interForm.get('fax')!.touched && interForm.get('fax')!.hasError('pattern')">
+                        Le Fax doit contenir exactement 8 chiffres.
+                    </small>
+                </div>
+
+
+                <!-- telephone -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Téléphone</label>
+                  <input type="text" class="form-control" formControlName="telephone" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('telephone')!.touched && interForm.get('telephone')!.hasError('required')">
+                    Le champ Téléphone est requis.
+                  </small>
+                  <small class="text-danger"
+                    *ngIf="interForm.get('telephone')!.touched && interForm.get('telephone')!.hasError('pattern')">
+                    Le téléphone doit contenir exactement 8 chiffres.
+                  </small>
+                </div>
+
+                <!-- ceo -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">CEO</label>
+                  <input type="text" class="form-control" formControlName="ceo" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('ceo')!.touched && interForm.get('ceo')!.hasError('required')">
+                    Le champ CEO est requis.
+                  </small>
+                </div>
+
+                <!-- comptebanquaire -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Compte Bancaire</label>
+                  <input type="text" class="form-control" formControlName="comptebanquaire" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('comptebanquaire')!.touched && interForm.get('comptebanquaire')!.hasError('required')">
+                    Le champ Compte Bancaire est requis.
+                  </small>
+                </div>
+
+                <!-- banque -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Banque</label>
+                  <input type="text" class="form-control" formControlName="banque" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('banque')!.touched && interForm.get('banque')!.hasError('required')">
+                    Le champ Banque est requis.
+                  </small>
+                </div>
+
+                <!-- typebanque -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Type Banque</label>
+                  <input type="text" class="form-control" formControlName="typebanque" />
+                  <small class="text-danger"
+                    *ngIf="interForm.get('typebanque')!.touched && interForm.get('typebanque')!.hasError('required')">
+                    Le champ Type Banque est requis.
+                  </small>
+                </div>
+              </div>
+
+              <div class="text-end">
+                <button type="submit" class="btn btn-success" [disabled]="interForm.invalid">
+                  {{ isEdit ? 'Modifier' : 'Ajouter' }}
+                </button>
+              </div>
+            </form>
+          </p-dialog>
+
+          <p-toast></p-toast>
+          <p-confirmDialog></p-confirmDialog>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  

@@ -20,21 +20,8 @@ export class CompteTeneurComponent implements OnInit {
   editedId: number | null = null;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // ─── Filtrage ───────────────────────────────────────────────────────────────
-  filterCode = '';
-  filterLibelle = '';
-  filterTypeTeneur = '';
-
-  showFilterCode = false;
-  showFilterLibelle = false;
-  showFilterTypeTeneur = false;
-
-  @ViewChild('codeToggler')       codeToggler!: ElementRef;
-  @ViewChild('codeFilter')        codeFilter!: ElementRef;
-  @ViewChild('libelleToggler')    libelleToggler!: ElementRef;
-  @ViewChild('libelleFilter')     libelleFilter!: ElementRef;
-  @ViewChild('typeTeneurToggler') typeTeneurToggler!: ElementRef;
-  @ViewChild('typeTeneurFilter')  typeTeneurFilter!: ElementRef;
+  // unified search filter
+  searchTerm = '';
 
   constructor(
     private service: CompteTeneurService,
@@ -60,7 +47,6 @@ export class CompteTeneurComponent implements OnInit {
 
   loadComptes(): void {
     this.service.getAll().subscribe(data => {
-      // newest first
       this.comptes = data.sort((a, b) => b.id - a.id);
     });
   }
@@ -72,56 +58,15 @@ export class CompteTeneurComponent implements OnInit {
     });
   }
 
-  // ─── Filtrage logic ────────────────────────────────────────────────────────
   get filteredComptes(): any[] {
+    const term = this.searchTerm.toLowerCase();
     return this.comptes
       .filter(c =>
-        c.code.toLowerCase().includes(this.filterCode.toLowerCase()) &&
-        c.libelle.toLowerCase().includes(this.filterLibelle.toLowerCase()) &&
-        (c.typeTeneur?.libelle ?? '')
-          .toLowerCase()
-          .includes(this.filterTypeTeneur.toLowerCase())
+        c.code.toLowerCase().includes(term) ||
+        c.libelle.toLowerCase().includes(term) ||
+        (c.typeTeneur?.libelle ?? '').toLowerCase().includes(term)
       )
-      // keep newest on top after filtering
       .sort((a, b) => b.id - a.id);
-  }
-
-  toggleFilter(column: 'code' | 'libelle' | 'typeTeneur'): void {
-    if (column === 'code') {
-      this.showFilterCode = !this.showFilterCode;
-      if (!this.showFilterCode) this.filterCode = '';
-    } else if (column === 'libelle') {
-      this.showFilterLibelle = !this.showFilterLibelle;
-      if (!this.showFilterLibelle) this.filterLibelle = '';
-    } else {
-      this.showFilterTypeTeneur = !this.showFilterTypeTeneur;
-      if (!this.showFilterTypeTeneur) this.filterTypeTeneur = '';
-    }
-  }
-
-  clearFilter(column: 'code' | 'libelle' | 'typeTeneur') {
-    if (column === 'code') this.filterCode = '';
-    if (column === 'libelle') this.filterLibelle = '';
-    if (column === 'typeTeneur') this.filterTypeTeneur = '';
-  }
-
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterCode &&
-        !this.codeToggler.nativeElement.contains(target) &&
-        !this.codeFilter.nativeElement.contains(target)) {
-      this.showFilterCode = false;
-    }
-    if (this.showFilterLibelle &&
-        !this.libelleToggler.nativeElement.contains(target) &&
-        !this.libelleFilter.nativeElement.contains(target)) {
-      this.showFilterLibelle = false;
-    }
-    if (this.showFilterTypeTeneur &&
-        !this.typeTeneurToggler.nativeElement.contains(target) &&
-        !this.typeTeneurFilter.nativeElement.contains(target)) {
-      this.showFilterTypeTeneur = false;
-    }
   }
 
   filterTypeTeneurs(event: any): void {
@@ -130,6 +75,7 @@ export class CompteTeneurComponent implements OnInit {
       t.libelle.toLowerCase().includes(q)
     );
   }
+
 
   // ─── Modal / CRUD ────────────────────────────────────────────────────────
   openModal(): void {

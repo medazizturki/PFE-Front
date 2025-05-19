@@ -86,6 +86,21 @@
                 <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Nature Réferentiel</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurnational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur National</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/secteurinternational">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Secteur International</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/intermediaire">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">intermediaire</span>
+                </a>
+            </li>
         </ul>
     </div>
   </nav>
@@ -103,7 +118,7 @@
                    style="width:32px;height:32px;object-fit:cover;"
                    onerror="this.onerror=null;this.src='/assets/images/default-avatar.png'">
               <span class="text-dark" *ngIf="user">
-                {{ user.username || user.name }}
+                {{ user.username || user.preferred_username || user.name }}
               </span>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
@@ -131,6 +146,17 @@
 
       <div class="card shadow-sm card-square bg-white">
         <div class="card-body">
+
+          <div class="search-wrapper">
+  <i class="pi pi-search"></i>
+  <input
+    pInputText
+    type="text"
+    placeholder="Recherche…"
+    class="form-control form-control-sm"
+    [(ngModel)]="searchTerm" />
+</div>
+
           <p-table
             [value]="filteredTMMs"
             [paginator]="true"
@@ -142,35 +168,11 @@
           >
             <ng-template pTemplate="header">
               <tr>
-                <th class="position-relative">
+                <th class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   Mois
-                  <span #moisToggler class="search-toggler" (click)="toggleFilter('mois')">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <div *ngIf="showFilterMois" #moisFilter class="filter-container">
-                    <input
-                      type="text"
-                      class="filter-input"
-                      placeholder="Filtrer par mois…"
-                      [(ngModel)]="filterMois"
-                    />
-                    <i *ngIf="filterMois" class="pi pi-times clear-icon" (click)="clearFilter('mois')"></i>
-                  </div>
                 </th>
-                <th class="position-relative">
+                <th  class="position-relative" style="white-space: nowrap; max-width: 150px;">
                   TMM
-                  <span #tmmToggler class="search-toggler" (click)="toggleFilter('tmm')">
-                    <i class="pi pi-search"></i>
-                  </span>
-                  <div *ngIf="showFilterTMM" #tmmFilter class="filter-container">
-                    <input
-                      type="text"
-                      class="filter-input"
-                      placeholder="Filtrer par TMM…"
-                      [(ngModel)]="filterTMM"
-                    />
-                    <i *ngIf="filterTMM" class="pi pi-times clear-icon" (click)="clearFilter('tmm')"></i>
-                  </div>
                 </th>
                 <th class="text-center">Modifier</th>
                 <th class="text-center">Supprimer</th>

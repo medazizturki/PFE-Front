@@ -23,9 +23,10 @@ export class JourFerieService {
   }
 
   delete(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/delete/${id}`);
+    return this.http.delete<any>(`${this.baseUrl}/delete/${id}`, { 
+      responseType: 'text' as 'json' 
+    });
   }
-
     logout(userId: string): Observable<any> {
       const params = new HttpParams().set('userId', userId);
       return this.http.post(`${this.baseUrl}/logout`, null, { params, responseType: 'text' });

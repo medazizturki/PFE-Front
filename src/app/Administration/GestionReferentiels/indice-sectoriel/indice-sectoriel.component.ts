@@ -18,42 +18,8 @@ export class IndiceSectorielComponent implements OnInit {
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
   filteredGroupes: any[] = [];
 
-
-  // Filters
-  filterCodeIsin = '';
-  filterCodeICB = '';
-  filterGroupe = '';
-  filterMnemonique = '';
-  filterLibellefr = '';
-  filterLibellear = '';
-  filterLibelleen = '';
-  filterDesc = '';
-
-  showFilterCodeIsin = false;
-  showFilterCodeICB = false;
-  showFilterGroupe = false;
-  showFilterMnemonique = false;
-  showFilterLibellefr = false;
-  showFilterLibellear = false;
-  showFilterLibelleen = false;
-  showFilterDesc = false;
-
-  @ViewChild('codeIsinToggler')      codeIsinToggler!: ElementRef;
-  @ViewChild('codeIsinFilter')       codeIsinFilter!: ElementRef;
-  @ViewChild('codeICBToggler')       codeICBToggler!: ElementRef;
-  @ViewChild('codeICBFilter')        codeICBFilter!: ElementRef;
-  @ViewChild('groupeToggler')        groupeToggler!: ElementRef;
-  @ViewChild('groupeFilter')         groupeFilter!: ElementRef;
-  @ViewChild('mnemoniqueToggler')    mnemoniqueToggler!: ElementRef;
-  @ViewChild('mnemoniqueFilter')     mnemoniqueFilter!: ElementRef;
-  @ViewChild('libellefrToggler')     libellefrToggler!: ElementRef;
-  @ViewChild('libellefrFilter')      libellefrFilter!: ElementRef;
-  @ViewChild('libellearToggler')     libellearToggler!: ElementRef;
-  @ViewChild('libellearFilter')      libellearFilter!: ElementRef;
-  @ViewChild('libelleenToggler')     libelleenToggler!: ElementRef;
-  @ViewChild('libelleenFilter')      libelleenFilter!: ElementRef;
-  @ViewChild('descToggler')          descToggler!: ElementRef;
-  @ViewChild('descFilter')           descFilter!: ElementRef;
+  // unified search filter
+  searchTerm = '';
 
   constructor(
     private fb: FormBuilder,
@@ -86,100 +52,20 @@ export class IndiceSectorielComponent implements OnInit {
       this.indices = data.sort((a, b) => b.id - a.id);
     });
   }
-
-  get filteredIndices(): any[] {
+get filteredIndices(): any[] {
+    const term = this.searchTerm.toLowerCase();
     return this.indices.filter(i =>
-      i.codeIsin.toLowerCase().includes(this.filterCodeIsin.toLowerCase()) &&
-      i.codeICB.toLowerCase().includes(this.filterCodeICB.toLowerCase()) &&
-      i.groupe.toLowerCase().includes(this.filterGroupe.toLowerCase()) &&
-      i.mnemonique.toLowerCase().includes(this.filterMnemonique.toLowerCase()) &&
-      i.libellefr.toLowerCase().includes(this.filterLibellefr.toLowerCase()) &&
-      i.libellear.toLowerCase().includes(this.filterLibellear.toLowerCase()) &&
-      i.libelleen.toLowerCase().includes(this.filterLibelleen.toLowerCase()) &&
-      i.description.toLowerCase().includes(this.filterDesc.toLowerCase())
+      i.codeIsin.toLowerCase().includes(term) ||
+      i.codeICB.toLowerCase().includes(term)   ||
+      i.groupe.toLowerCase().includes(term)    ||
+      i.mnemonique.toLowerCase().includes(term)||
+      i.libellefr.toLowerCase().includes(term) ||
+      i.libellear.toLowerCase().includes(term) ||
+      i.libelleen.toLowerCase().includes(term) ||
+      i.description.toLowerCase().includes(term)
     );
   }
 
-  toggleFilter(col: string): void {
-    switch (col) {
-      case 'codeIsin':
-        this.showFilterCodeIsin = !this.showFilterCodeIsin;
-        if (!this.showFilterCodeIsin) this.filterCodeIsin = '';
-        break;
-      case 'codeICB':
-        this.showFilterCodeICB = !this.showFilterCodeICB;
-        if (!this.showFilterCodeICB) this.filterCodeICB = '';
-        break;
-      case 'groupe':
-        this.showFilterGroupe = !this.showFilterGroupe;
-        if (!this.showFilterGroupe) this.filterGroupe = '';
-        break;
-      case 'mnemonique':
-        this.showFilterMnemonique = !this.showFilterMnemonique;
-        if (!this.showFilterMnemonique) this.filterMnemonique = '';
-        break;
-      case 'libellefr':
-        this.showFilterLibellefr = !this.showFilterLibellefr;
-        if (!this.showFilterLibellefr) this.filterLibellefr = '';
-        break;
-      case 'libellear':
-        this.showFilterLibellear = !this.showFilterLibellear;
-        if (!this.showFilterLibellear) this.filterLibellear = '';
-        break;
-      case 'libelleen':
-        this.showFilterLibelleen = !this.showFilterLibelleen;
-        if (!this.showFilterLibelleen) this.filterLibelleen = '';
-        break;
-      case 'desc':
-        this.showFilterDesc = !this.showFilterDesc;
-        if (!this.showFilterDesc) this.filterDesc = '';
-        break;
-    }
-  }
-
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterCodeIsin &&
-        !this.codeIsinToggler.nativeElement.contains(target) &&
-        !this.codeIsinFilter.nativeElement.contains(target)) {
-      this.showFilterCodeIsin = false;
-    }
-    if (this.showFilterCodeICB &&
-        !this.codeICBToggler.nativeElement.contains(target) &&
-        !this.codeICBFilter.nativeElement.contains(target)) {
-      this.showFilterCodeICB = false;
-    }
-    if (this.showFilterGroupe &&
-        !this.groupeToggler.nativeElement.contains(target) &&
-        !this.groupeFilter.nativeElement.contains(target)) {
-      this.showFilterGroupe = false;
-    }
-    if (this.showFilterMnemonique &&
-        !this.mnemoniqueToggler.nativeElement.contains(target) &&
-        !this.mnemoniqueFilter.nativeElement.contains(target)) {
-      this.showFilterMnemonique = false;
-    }
-    if (this.showFilterLibellefr &&
-        !this.libellefrToggler.nativeElement.contains(target) &&
-        !this.libellefrFilter.nativeElement.contains(target)) {
-      this.showFilterLibellefr = false;
-    }
-    if (this.showFilterLibellear &&
-        !this.libellearToggler.nativeElement.contains(target) &&
-        !this.libellearFilter.nativeElement.contains(target)) {
-      this.showFilterLibellear = false;
-    }
-    if (this.showFilterLibelleen &&
-        !this.libelleenToggler.nativeElement.contains(target) &&
-        !this.libelleenFilter.nativeElement.contains(target)) {
-      this.showFilterLibelleen = false;
-    }
-    if (this.showFilterDesc &&
-        !this.descToggler.nativeElement.contains(target) &&
-        !this.descFilter.nativeElement.contains(target)) {
-      this.showFilterDesc = false;
-    }
-  }
 
   openModal(): void {
     this.displayModal = true;

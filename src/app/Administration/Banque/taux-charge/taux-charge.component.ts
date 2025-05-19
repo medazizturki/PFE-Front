@@ -20,25 +20,8 @@ export class TauxChargeComponent implements OnInit {
   editedId: number | null = null;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // ─── Filters ────────────────────────────────────────────────────────────────
-  filterDate = '';
-  filterValue = '';
-  filterVariation = '';
-  filterDevise = '';
-
-  showFilterDate = false;
-  showFilterValue = false;
-  showFilterVariation = false;
-  showFilterDevise = false;
-
-  @ViewChild('dateToggler')      dateToggler!: ElementRef;
-  @ViewChild('dateFilter')       dateFilter!: ElementRef;
-  @ViewChild('valueToggler')     valueToggler!: ElementRef;
-  @ViewChild('valueFilter')      valueFilter!: ElementRef;
-  @ViewChild('variationToggler') variationToggler!: ElementRef;
-  @ViewChild('variationFilter')  variationFilter!: ElementRef;
-  @ViewChild('deviseToggler')    deviseToggler!: ElementRef;
-  @ViewChild('deviseFilter')     deviseFilter!: ElementRef;
+  // unified search term
+  searchTerm = '';
 
   constructor(
     private tauxService: TauxChargeService,
@@ -84,62 +67,20 @@ export class TauxChargeComponent implements OnInit {
     );
   }
 
-  // ─── Filtered getter ───────────────────────────────────────────────────────
   get filteredTaux(): any[] {
+    const term = this.searchTerm.toLowerCase();
     return this.tauxList
       .filter(t => {
-        const dateStr    = t.date?.split('T')[0]      ?? '';
+        const dateStr    = t.date?.split('T')[0].toLowerCase()      ?? '';
         const valueStr   = String(t.value);
         const varStr     = String(t.variationAnnuelle);
-        const deviseCode = t.devises?.code            ?? '';
+        const deviseCode = t.devises?.code.toLowerCase()            ?? '';
 
-        return (!this.filterDate      || dateStr.includes(this.filterDate)) &&
-               (!this.filterValue     || valueStr.includes(this.filterValue)) &&
-               (!this.filterVariation || varStr.includes(this.filterVariation)) &&
-               (!this.filterDevise    || deviseCode.toLowerCase().includes(this.filterDevise.toLowerCase()));
+        return dateStr.includes(term) ||
+               valueStr.includes(term) ||
+               varStr.includes(term) ||
+               deviseCode.includes(term);
       });
-  }
-
-  // ─── Toggler ───────────────────────────────────────────────────────────────
-  toggleFilter(col: 'date'|'value'|'variation'|'devise'): void {
-    if (col === 'date') {
-      this.showFilterDate = !this.showFilterDate;
-      if (!this.showFilterDate) this.filterDate = '';
-    } else if (col === 'value') {
-      this.showFilterValue = !this.showFilterValue;
-      if (!this.showFilterValue) this.filterValue = '';
-    } else if (col === 'variation') {
-      this.showFilterVariation = !this.showFilterVariation;
-      if (!this.showFilterVariation) this.filterVariation = '';
-    } else {
-      this.showFilterDevise = !this.showFilterDevise;
-      if (!this.showFilterDevise) this.filterDevise = '';
-    }
-  }
-
-  // ─── Close on outside click ───────────────────────────────────────────────
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterDate &&
-        !this.dateToggler.nativeElement.contains(target) &&
-        !this.dateFilter.nativeElement.contains(target)) {
-      this.showFilterDate = false;
-    }
-    if (this.showFilterValue &&
-        !this.valueToggler.nativeElement.contains(target) &&
-        !this.valueFilter.nativeElement.contains(target)) {
-      this.showFilterValue = false;
-    }
-    if (this.showFilterVariation &&
-        !this.variationToggler.nativeElement.contains(target) &&
-        !this.variationFilter.nativeElement.contains(target)) {
-      this.showFilterVariation = false;
-    }
-    if (this.showFilterDevise &&
-        !this.deviseToggler.nativeElement.contains(target) &&
-        !this.deviseFilter.nativeElement.contains(target)) {
-      this.showFilterDevise = false;
-    }
   }
 
   // ─── Modal / CRUD ───────────────────────────────────────────────────────

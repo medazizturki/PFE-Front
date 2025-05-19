@@ -17,42 +17,8 @@ export class CommissionElecComponent implements OnInit {
   editedId: number | null = null;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // ─── Filters ────────────────────────────────────────────────────────────────
-  filterGroupe   = '';
-  filterRang     = '';
-  filterTauxCTB  = '';
-  filterMinCTB   = '';
-  filterMaxCTB   = '';
-  filterTauxRUS  = '';
-  filterMinRUS   = '';
-  filterMaxRUS   = '';
-
-  showFilterGroupe  = false;
-  showFilterRang    = false;
-  showFilterTauxCTB = false;
-  showFilterMinCTB  = false;
-  showFilterMaxCTB  = false;
-  showFilterTauxRUS = false;
-  showFilterMinRUS  = false;
-  showFilterMaxRUS  = false;
-
-  @ViewChild('groupeToggler')   groupeToggler!: ElementRef;
-  @ViewChild('groupeFilter')    groupeFilter!: ElementRef;
-  @ViewChild('rangToggler')     rangToggler!: ElementRef;
-  @ViewChild('rangFilter')      rangFilter!: ElementRef;
-  @ViewChild('tauxCTBToggler')  tauxCTBToggler!: ElementRef;
-  @ViewChild('tauxCTBFilter')   tauxCTBFilter!: ElementRef;
-  @ViewChild('minCTBToggler')   minCTBToggler!: ElementRef;
-  @ViewChild('minCTBFilter')    minCTBFilter!: ElementRef;
-  @ViewChild('maxCTBToggler')   maxCTBToggler!: ElementRef;
-  @ViewChild('maxCTBFilter')    maxCTBFilter!: ElementRef;
-  @ViewChild('tauxRUSToggler')  tauxRUSToggler!: ElementRef;
-  @ViewChild('tauxRUSFilter')   tauxRUSFilter!: ElementRef;
-  @ViewChild('minRUSToggler')   minRUSToggler!: ElementRef;
-  @ViewChild('minRUSFilter')    minRUSFilter!: ElementRef;
-  @ViewChild('maxRUSToggler')   maxRUSToggler!: ElementRef;
-  @ViewChild('maxRUSFilter')    maxRUSFilter!: ElementRef;
-
+  // unified search filter
+  searchTerm = '';
   constructor(
     private fb: FormBuilder,
     private service: CommissionElecService,
@@ -78,110 +44,24 @@ export class CommissionElecComponent implements OnInit {
     });
   }
 
-  loadCommissions(): void {
+   loadCommissions(): void {
     this.service.getAll().subscribe(data => {
       this.commissions = data.sort((a, b) => b.id - a.id);
     });
   }
 
-  // ─── Filtered getter ───────────────────────────────────────────────────────
   get filteredCommissions(): any[] {
+    const term = this.searchTerm.toLowerCase();
     return this.commissions.filter(c => {
-      const okG = !this.filterGroupe  || c.groupe.toLowerCase().includes(this.filterGroupe.toLowerCase());
-      const okR = !this.filterRang    || String(c.rang).includes(this.filterRang);
-      const okC = !this.filterTauxCTB || String(c.tauxCTB).includes(this.filterTauxCTB);
-      const okm = !this.filterMinCTB  || String(c.valeurminCTB).includes(this.filterMinCTB);
-      const okM = !this.filterMaxCTB  || String(c.valeurmaxCTB).includes(this.filterMaxCTB);
-      const okT = !this.filterTauxRUS || String(c.tauxRUS).includes(this.filterTauxRUS);
-      const okn = !this.filterMinRUS  || String(c.valeurminRUS).includes(this.filterMinRUS);
-      const okX = !this.filterMaxRUS  || String(c.valeurmaxRUS).includes(this.filterMaxRUS);
-      return okG && okR && okC && okm && okM && okT && okn && okX;
+      return c.groupe.toLowerCase().includes(term) ||
+             String(c.rang).includes(term)       ||
+             String(c.tauxCTB).includes(term)    ||
+             String(c.valeurminCTB).includes(term) ||
+             String(c.valeurmaxCTB).includes(term) ||
+             String(c.tauxRUS).includes(term)    ||
+             String(c.valeurminRUS).includes(term) ||
+             String(c.valeurmaxRUS).includes(term);
     });
-  }
-
-  // ─── Toggle Filters ────────────────────────────────────────────────────────
-  toggleFilter(col:
-    'groupe'|'rang'|'tauxCTB'|'minCTB'|'maxCTB'|
-    'tauxRUS'|'minRUS'|'maxRUS'
-  ): void {
-    switch (col) {
-      case 'groupe':
-        this.showFilterGroupe = !this.showFilterGroupe;
-        if (!this.showFilterGroupe) this.filterGroupe = '';
-        break;
-      case 'rang':
-        this.showFilterRang = !this.showFilterRang;
-        if (!this.showFilterRang) this.filterRang = '';
-        break;
-      case 'tauxCTB':
-        this.showFilterTauxCTB = !this.showFilterTauxCTB;
-        if (!this.showFilterTauxCTB) this.filterTauxCTB = '';
-        break;
-      case 'minCTB':
-        this.showFilterMinCTB = !this.showFilterMinCTB;
-        if (!this.showFilterMinCTB) this.filterMinCTB = '';
-        break;
-      case 'maxCTB':
-        this.showFilterMaxCTB = !this.showFilterMaxCTB;
-        if (!this.showFilterMaxCTB) this.filterMaxCTB = '';
-        break;
-      case 'tauxRUS':
-        this.showFilterTauxRUS = !this.showFilterTauxRUS;
-        if (!this.showFilterTauxRUS) this.filterTauxRUS = '';
-        break;
-      case 'minRUS':
-        this.showFilterMinRUS = !this.showFilterMinRUS;
-        if (!this.showFilterMinRUS) this.filterMinRUS = '';
-        break;
-      case 'maxRUS':
-        this.showFilterMaxRUS = !this.showFilterMaxRUS;
-        if (!this.showFilterMaxRUS) this.filterMaxRUS = '';
-        break;
-    }
-  }
-
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterGroupe &&
-        !this.groupeToggler.nativeElement.contains(target) &&
-        !this.groupeFilter.nativeElement.contains(target)) {
-      this.showFilterGroupe = false;
-    }
-    if (this.showFilterRang &&
-        !this.rangToggler.nativeElement.contains(target) &&
-        !this.rangFilter.nativeElement.contains(target)) {
-      this.showFilterRang = false;
-    }
-    if (this.showFilterTauxCTB &&
-        !this.tauxCTBToggler.nativeElement.contains(target) &&
-        !this.tauxCTBFilter.nativeElement.contains(target)) {
-      this.showFilterTauxCTB = false;
-    }
-    if (this.showFilterMinCTB &&
-        !this.minCTBToggler.nativeElement.contains(target) &&
-        !this.minCTBFilter.nativeElement.contains(target)) {
-      this.showFilterMinCTB = false;
-    }
-    if (this.showFilterMaxCTB &&
-        !this.maxCTBToggler.nativeElement.contains(target) &&
-        !this.maxCTBFilter.nativeElement.contains(target)) {
-      this.showFilterMaxCTB = false;
-    }
-    if (this.showFilterTauxRUS &&
-        !this.tauxRUSToggler.nativeElement.contains(target) &&
-        !this.tauxRUSFilter.nativeElement.contains(target)) {
-      this.showFilterTauxRUS = false;
-    }
-    if (this.showFilterMinRUS &&
-        !this.minRUSToggler.nativeElement.contains(target) &&
-        !this.minRUSFilter.nativeElement.contains(target)) {
-      this.showFilterMinRUS = false;
-    }
-    if (this.showFilterMaxRUS &&
-        !this.maxRUSToggler.nativeElement.contains(target) &&
-        !this.maxRUSFilter.nativeElement.contains(target)) {
-      this.showFilterMaxRUS = false;
-    }
   }
 
   // ─── CRUD & modal (unchanged) ─────────────────────────────────────────────

@@ -17,38 +17,9 @@ export class DevisesComponent implements OnInit {
   displayModal = false;
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // ─── Filters ────────────────────────────────────────────────────────────────
-  filterCode   = '';
-  filterLibFr  = '';
-  filterLibCfr = '';
-  filterLibAr  = '';
-  filterLibCar = '';
-  filterLibEn  = '';
-  filterLibCen = '';
-
-  showFilterCode   = false;
-  showFilterLibFr  = false;
-  showFilterLibCfr = false;
-  showFilterLibAr  = false;
-  showFilterLibCar = false;
-  showFilterLibEn  = false;
-  showFilterLibCen = false;
-
-  @ViewChild('codeToggler')    codeToggler!: ElementRef;
-  @ViewChild('codeFilter')     codeFilter!: ElementRef;
-  @ViewChild('libFrToggler')   libFrToggler!: ElementRef;
-  @ViewChild('libFrFilter')    libFrFilter!: ElementRef;
-  @ViewChild('libCfrToggler')  libCfrToggler!: ElementRef;
-  @ViewChild('libCfrFilter')   libCfrFilter!: ElementRef;
-  @ViewChild('libArToggler')   libArToggler!: ElementRef;
-  @ViewChild('libArFilter')    libArFilter!: ElementRef;
-  @ViewChild('libCarToggler')  libCarToggler!: ElementRef;
-  @ViewChild('libCarFilter')   libCarFilter!: ElementRef;
-  @ViewChild('libEnToggler')   libEnToggler!: ElementRef;
-  @ViewChild('libEnFilter')    libEnFilter!: ElementRef;
-  @ViewChild('libCenToggler')  libCenToggler!: ElementRef;
-  @ViewChild('libCenFilter')   libCenFilter!: ElementRef;
-
+  // unified search term
+  searchTerm = '';
+  
   constructor(
     private fb: FormBuilder,
     private service: DevisesService,
@@ -75,100 +46,22 @@ export class DevisesComponent implements OnInit {
 
   loadDevises(): void {
     this.service.getAll().subscribe(data => {
-      // newest first
       this.devisesList = data.sort((a, b) => b.id - a.id);
     });
   }
 
-  // ─── Filtered & sorted getter ───────────────────────────────────────────────
   get filteredDevises(): any[] {
+    const term = this.searchTerm.toLowerCase();
     return this.devisesList
       .filter(d =>
-        d.code.toLowerCase().includes(this.filterCode.toLowerCase()) &&
-        d.libellefr.toLowerCase().includes(this.filterLibFr.toLowerCase()) &&
-        d.libelleCfr.toLowerCase().includes(this.filterLibCfr.toLowerCase()) &&
-        d.libellear.toLowerCase().includes(this.filterLibAr.toLowerCase()) &&
-        d.libelleCar.toLowerCase().includes(this.filterLibCar.toLowerCase()) &&
-        d.libelleen.toLowerCase().includes(this.filterLibEn.toLowerCase()) &&
-        d.libelleCen.toLowerCase().includes(this.filterLibCen.toLowerCase())
+        d.code.toLowerCase().includes(term) ||
+        d.libellefr.toLowerCase().includes(term) ||
+        d.libelleCfr.toLowerCase().includes(term) ||
+        d.libellear.toLowerCase().includes(term) ||
+        d.libelleCar.toLowerCase().includes(term) ||
+        d.libelleen.toLowerCase().includes(term) ||
+        d.libelleCen.toLowerCase().includes(term)
       );
-  }
-
-  // ─── Toggler ───────────────────────────────────────────────────────────────
-  toggleFilter(col:
-    'code' | 'libFr' | 'libCfr' | 'libAr' |
-    'libCar' | 'libEn' | 'libCen'
-  ): void {
-    switch (col) {
-      case 'code':
-        this.showFilterCode = !this.showFilterCode;
-        if (!this.showFilterCode) this.filterCode = '';
-        break;
-      case 'libFr':
-        this.showFilterLibFr = !this.showFilterLibFr;
-        if (!this.showFilterLibFr) this.filterLibFr = '';
-        break;
-      case 'libCfr':
-        this.showFilterLibCfr = !this.showFilterLibCfr;
-        if (!this.showFilterLibCfr) this.filterLibCfr = '';
-        break;
-      case 'libAr':
-        this.showFilterLibAr = !this.showFilterLibAr;
-        if (!this.showFilterLibAr) this.filterLibAr = '';
-        break;
-      case 'libCar':
-        this.showFilterLibCar = !this.showFilterLibCar;
-        if (!this.showFilterLibCar) this.filterLibCar = '';
-        break;
-      case 'libEn':
-        this.showFilterLibEn = !this.showFilterLibEn;
-        if (!this.showFilterLibEn) this.filterLibEn = '';
-        break;
-      case 'libCen':
-        this.showFilterLibCen = !this.showFilterLibCen;
-        if (!this.showFilterLibCen) this.filterLibCen = '';
-        break;
-    }
-  }
-
-  // ─── Close on outside click ───────────────────────────────────────────────
-  @HostListener('document:click', ['$event.target'])
-  onClickOutside(target: HTMLElement) {
-    if (this.showFilterCode &&
-        !this.codeToggler.nativeElement.contains(target) &&
-        !this.codeFilter.nativeElement.contains(target)) {
-      this.showFilterCode = false;
-    }
-    if (this.showFilterLibFr &&
-        !this.libFrToggler.nativeElement.contains(target) &&
-        !this.libFrFilter.nativeElement.contains(target)) {
-      this.showFilterLibFr = false;
-    }
-    if (this.showFilterLibCfr &&
-        !this.libCfrToggler.nativeElement.contains(target) &&
-        !this.libCfrFilter.nativeElement.contains(target)) {
-      this.showFilterLibCfr = false;
-    }
-    if (this.showFilterLibAr &&
-        !this.libArToggler.nativeElement.contains(target) &&
-        !this.libArFilter.nativeElement.contains(target)) {
-      this.showFilterLibAr = false;
-    }
-    if (this.showFilterLibCar &&
-        !this.libCarToggler.nativeElement.contains(target) &&
-        !this.libCarFilter.nativeElement.contains(target)) {
-      this.showFilterLibCar = false;
-    }
-    if (this.showFilterLibEn &&
-        !this.libEnToggler.nativeElement.contains(target) &&
-        !this.libEnFilter.nativeElement.contains(target)) {
-      this.showFilterLibEn = false;
-    }
-    if (this.showFilterLibCen &&
-        !this.libCenToggler.nativeElement.contains(target) &&
-        !this.libCenFilter.nativeElement.contains(target)) {
-      this.showFilterLibCen = false;
-    }
   }
 
   // ─── Modal / CRUD ────────────────────────────────────────────────────────
